@@ -4,7 +4,7 @@ use std::{
 
 use thiserror::Error;
 
-use crate::{bmg_message::{self, MessageAttributes, MessageParser, MessageSingleLang, MessageText, Tag, TextPart}, utils::{self}};
+use crate::{message::{self, MessageAttributes, MessageParser, MessageSingleLang, MessageText, Tag, TextPart}, utils::{self}};
 
 
 #[derive(Error, Debug)]
@@ -217,7 +217,7 @@ pub struct BMGRawParser {
 impl BMGRawParser {
     fn new(data: Vec<u8>, big_endian : bool) -> Self {
 
-        let parsed = BMGRawParser::parse_data(&data, big_endian).unwrap_or_else(|_| BMGData {
+        let parsed = BMGRawParser::parse_data(&data, big_endian).unwrap_or( BMGData {
             header: BMGHeader {
                 magic: String::new(),
                 filesize: 0,
@@ -475,7 +475,7 @@ impl BMGRawParser {
             match &flw1.nodes[flow_node_idx] {
                 FLW1Node::Continuation { id : _, doorquery : _, inf1_idx, next_node, _pad } =>  {
                     let m = self.get_msg(*inf1_idx as usize);
-                    println!("INF1 {:X} : {}",inf1_idx,  bmg_message::get_raw_msg(&m.text, None));
+                    println!("INF1 {:X} : {}",inf1_idx,  message::get_raw_msg(&m.text, None));
     
                     if *next_node != 0xFFFF {
                         self.print_flow_chain(*next_node as usize, visited);

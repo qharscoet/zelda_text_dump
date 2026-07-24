@@ -1,15 +1,18 @@
 use std::{fmt, fs::File, io::{self, Write}, path::Path};
 use rust_xlsxwriter::{Color, Format, FormatAlign};
 
+mod message;
+
 mod bmg_raw_parser;
 mod bmg_text_parser;
-mod bmg_message;
+mod msbt_parser;
+
 mod utils;
 mod game_configs;
 
-use bmg_message::{Message, Tag, TextPart};
+use message::{Message, Tag, TextPart};
 
-use crate::{bmg_message::{MessageParser, MessageSingleLang}, game_configs::{GameConfig, StyleTagType, TagType}};
+use crate::{message::{MessageParser, MessageSingleLang}, game_configs::{GameConfig, StyleTagType, TagType}};
 
 
 const BANK_COUNT : usize = 32;
@@ -29,10 +32,10 @@ const DEFAULT_COLORS : [&str; 9] = [
 
 impl Tag {
     
-    fn get_simple_replacement(&self, config: Option<&GameConfig>) -> &str {
+    fn get_simple_replacement(&self, config: Option<&GameConfig>) -> String {
         match config {
             Some(conf) => (conf.get_tag_replacement)(&self),
-            None => "[Tag]"
+            None => String::from("[Tag]")
         }
     }
 }
@@ -48,7 +51,7 @@ impl fmt::Display for Tag {
                     _ => "",
                 }
             },
-            _ => self.get_simple_replacement(None)
+            _ => "[Tag]"
         })
     }
 }
@@ -63,7 +66,7 @@ impl Message {
 
             let mut res_str = String::new();
 
-            let mut current_color = 0;
+            let mut current_color = "#ffffff";
             let mut current_size = 100;
 
             let mut needs_ruby : Option<(u8, String)> = None;
@@ -89,25 +92,21 @@ impl Message {
                             let get_tag_type = config.map(|c| c.get_tag_type).unwrap_or(game_configs::get_tag_type_default);
                             match get_tag_type(&tag) {
                                 TagType::Style(style_type) => {
-                                    //let real_number = if config.map(|c| c.big_endian).unwrap_or(true) { tag.number} else {tag.number.swap_bytes()};
                                     match style_type {
-                                        StyleTagType::Color => { // change color
-                                            let new_color = tag.payload[0] as usize;
-                                            if current_color != 0 {
+                                        StyleTagType::Color(id) => { // change color
+                                            if current_color != "#ffffff" {
                                                 res_str += "</span>";
                                             }
-                                            if new_color != 0 {
-                                                let c = if let Some(conf) = config { (conf.get_color_hex)(new_color)} else { DEFAULT_COLORS[new_color]};
+
+                                            let new_color = id as usize;
+                                            let c = if let Some(conf) = config { (conf.get_color_hex)(new_color)} else { "#ffffff"};
+                                            if c != "#ffffff" {
                                                 res_str += &format!("<span style='color:{};'>", c);
                                             }
-                                            current_color = new_color;
+                                            current_color = c;
                                         },
-                                        StyleTagType::Size => {
-    
-                                            let big_endian = config.map(|c| c.big_endian).unwrap_or(true);
-                                            let get_u16 = if big_endian { utils::get_u16_be } else {utils::get_u16_le};
-
-                                            let new_size = get_u16(&tag.payload, 0);
+                                        StyleTagType::Size(percent) => {
+                                            let new_size = percent;// get_u16(&tag.payload, 0);
                                             if current_size != 100 {
                                                 res_str += "</span>"
                                             }
@@ -117,27 +116,27 @@ impl Message {
                     
                                             current_size = new_size;
                                         },
-                                        StyleTagType::Ruby => {
-                                            let over_count = tag.payload[0];
-                                            let last_is_zero = tag.payload[tag.payload.len() -1] == 0x00;
-                                            let slice_end = tag.payload.len() - (last_is_zero as usize);
-                                            let raw_bytes = &tag.payload[1..slice_end];
+                                        StyleTagType::Ruby(over_count, decoded_ruby) => {
+                                            // let over_count = tag.payload[0];
+                                            // let last_is_zero = tag.payload[tag.payload.len() -1] == 0x00;
+                                            // let slice_end = tag.payload.len() - (last_is_zero as usize);
+                                            // let raw_bytes = &tag.payload[1..slice_end];
 
-                                            let encoding = config.map(|c| 
-                                                match c.id  {
-                                                   "ph" | "st" => encoding_rs::UTF_16LE,
-                                                   _ => encoding_rs::SHIFT_JIS, 
-                                                }).unwrap_or(encoding_rs::SHIFT_JIS);
+                                            // let encoding = config.map(|c| 
+                                            //     match c.id  {
+                                            //        "ph" | "st" => encoding_rs::UTF_16LE,
+                                            //        _ => encoding_rs::SHIFT_JIS, 
+                                            //     }).unwrap_or(encoding_rs::SHIFT_JIS);
 
 
 
-                                            let decoded_ruby = encoding.decode(&raw_bytes).0;
-                                            needs_ruby = Some((over_count, decoded_ruby.to_string()));
+                                            // let decoded_ruby = encoding.decode(&raw_bytes).0;
+                                            needs_ruby = Some((over_count, decoded_ruby));
                                         },
                                         _ => {}
                                     }
                                 }
-                                TagType::Replace => { res_str += tag.get_simple_replacement(config); }
+                                TagType::Replace => { res_str += &tag.get_simple_replacement(config); }
                             }
                         }
                     }                
@@ -156,7 +155,7 @@ impl Message {
             segments.push((Format::new(), self.get_raw(lang_id, config)));
         } else {
             
-            let mut current_color = 0;
+            let mut current_color = "#ffffff";
             let mut current_size = 100;
 
             const DEFAULT_SIZE : f32 = 11.0;
@@ -167,8 +166,8 @@ impl Message {
                     match part {
                         TextPart::Text(text) => {
                             if !text.is_empty() {
-                                let config_color = if let Some(conf) = config { (conf.get_color_hex)(current_color)} else { DEFAULT_COLORS[current_color]};
-                                let color = if current_color == 0 { default_color } else { Color::from(config_color)};
+                                // let config_color = if let Some(conf) = config { (conf.get_color_hex)(current_color)} else { DEFAULT_COLORS[current_color]};
+                                let color = if current_color == "#ffffff" { default_color } else { Color::from(current_color)};
                                 let size = DEFAULT_SIZE * (current_size as f32/100.0);
                                 let format = Format::new().set_font_color(color).set_font_size(size);
                                 segments.push((format, text.to_string()));
@@ -179,21 +178,16 @@ impl Message {
                             match get_tag_type(&tag) {
                                 TagType::Style(style_type) => {
                                     match style_type {
-                                        StyleTagType::Color => { // change color
-                                            //color
-    
-                                            current_color = tag.payload[0] as usize;
+                                        StyleTagType::Color(id) => { // change color
+                                            let c = if let Some(conf) = config { (conf.get_color_hex)(id as usize)} else { "#ffffff"};
+                                            current_color = c
                                         },
-                                        StyleTagType::Size => {
-    
-                                            let big_endian = config.map(|c| c.big_endian).unwrap_or(true);
-                                            let get_u16 = if big_endian { utils::get_u16_be } else {utils::get_u16_le};
+                                        StyleTagType::Size(percent) => {                          
+                                            current_size = percent;
+
+                                        },
+                                        StyleTagType::Ruby(_,_) => {
                                             
-                                            current_size = get_u16(&tag.payload, 0);
-                                            //Size
-                                        },
-                                        StyleTagType::Ruby => {
-                                            //ruby
                                         },
                                         _ => {}
                                     }
@@ -201,7 +195,7 @@ impl Message {
                                 TagType::Replace => { 
                                     let s = tag.get_simple_replacement(config).to_string();
                                     if !s.is_empty() {
-                                        let color = if current_color == 0 { default_color } else { Color::from(DEFAULT_COLORS[current_color])};
+                                        let color = if current_color == "#ffffff" { default_color } else { Color::from(current_color)};
                                         let size = DEFAULT_SIZE * (current_size as f32/100.0);
                                         let format = Format::new().set_font_color(color).set_font_size(size);
     
@@ -220,7 +214,7 @@ impl Message {
 
     fn get_raw(&self, lang_id : usize, config : Option<&GameConfig>) -> String {
         if self.text.len() > lang_id {
-            bmg_message::get_raw_msg(&self.text[lang_id], config)
+            message::get_raw_msg(&self.text[lang_id], config)
         } else {
             String::new()
         }
@@ -706,6 +700,7 @@ fn process_file(filename : &Path, lang_id : usize, bank_id : usize, parser : &mu
     let p : Box<dyn MessageParser> = match filename.extension().and_then(|s| s.to_str()) {
         Some("txt") => Box::new(bmg_text_parser::open_bmg(filename)?),
         Some("bmg") => Box::new(bmg_raw_parser::open_bmg(filename, big_endian)?),
+        Some("msbt") => Box::new(msbt_parser::open_msbt(filename)?),
         None => todo!(),
         _ => todo!()
     };
@@ -758,6 +753,7 @@ fn main() {
 
     generate_index(Path::new("./www/index.html"));
 
+    // for config in &[game_configs::ALBW] {
     for config in game_configs::ALL_CONFIGS {
         
         let id = config.id;
@@ -767,4 +763,8 @@ fn main() {
         parser.export_csv(Path::new(&format!("./www/download/{id}.csv")), &config);
         parser.export_xlsx(Path::new(&format!("./www/download/{id}.xlsx")), false, &config);
     }
+
+
+    //msbt_parser::print_msbt(Path::new("./res/albw/Japanese/Common.msbt"));
+
 }
