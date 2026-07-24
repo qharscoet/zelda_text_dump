@@ -1,4 +1,7 @@
-use crate::message::{MessageAttributes, Tag};
+use encoding_rs::Encoding;
+use itertools::Itertools;
+
+use crate::{message::{MessageAttributes, Tag}, utils};
 
 #[derive(Default)]
 pub struct StyleInfo {
@@ -10,9 +13,9 @@ pub struct StyleInfo {
 }
 
 pub enum StyleTagType {
-    Color,
-    Size,
-    Ruby,
+    Color(u16),
+    Size(u16),
+    Ruby(u8, String),
     Unknown
 }
 
@@ -23,15 +26,45 @@ pub enum TagType {
 
 
 pub fn get_tag_type_default(tag:&Tag) -> TagType {
-    get_tag_type_default_inner(tag.group, tag.number)
+    get_tag_type_default_inner(tag.group, tag.number,&tag.payload, true, encoding_rs::WINDOWS_1252)
 }
 
-fn get_tag_type_default_inner(tag_group : u8, tag_number : u16) -> TagType {
+fn get_tag_type_default_inner(tag_group : u8, tag_number : u16, payload : &[u8], big_endian : bool, encoding : &'static Encoding) -> TagType {
+    let tag_number = if big_endian { tag_number } else {tag_number.swap_bytes()};
+    let get_u16 = if big_endian { utils::get_u16_be } else {utils::get_u16_le};
     match tag_group {
         0xFF => match tag_number {
-            0x00 => TagType::Style(StyleTagType::Color),
-            0x01 => TagType::Style(StyleTagType::Size),
-            0x02 => TagType::Style(StyleTagType::Ruby),
+            0x00 => TagType::Style(StyleTagType::Color(payload[0] as u16)),
+            0x01 => TagType::Style(StyleTagType::Size(get_u16(payload, 0))),
+            0x02 => {
+                let over_count = payload[0];
+                let last_is_zero = payload[payload.len() -1] == 0x00;
+                let slice_end = payload.len() - (last_is_zero as usize);
+                let raw_bytes = &payload[1..slice_end];
+
+                let decoded_ruby = encoding.decode(&raw_bytes).0.to_string();
+                TagType::Style(StyleTagType::Ruby(over_count, decoded_ruby))
+            },
+            _ => TagType::Style(StyleTagType::Unknown)
+        },
+        _ => TagType::Replace
+    }
+}
+
+fn get_tag_type_default_msbt(tag : &Tag, big_endian : bool, encoding : &'static Encoding) -> TagType {
+    let get_u16 = if big_endian { utils::get_u16_be } else {utils::get_u16_le};
+    match tag.group {
+        0x0 => match tag.number {
+            0x00 =>  {
+                let over_count = get_u16(&tag.payload, 0)/2;
+                let ruby_bytes_count = get_u16(&tag.payload, 2);
+                let raw_bytes = &tag.payload[4..];
+
+                let decoded_ruby = encoding.decode(&raw_bytes).0.to_string();
+                TagType::Style(StyleTagType::Ruby(over_count as u8, decoded_ruby))
+            },
+            0x02 => TagType::Style(StyleTagType::Size(get_u16(&tag.payload, 0))),
+            0x03 => TagType::Style(StyleTagType::Color(get_u16(&tag.payload, 0))),
             _ => TagType::Style(StyleTagType::Unknown)
         },
         _ => TagType::Replace
@@ -46,7 +79,7 @@ pub struct GameConfig {
     pub big_endian : bool,
 
     pub get_color_hex: fn(usize) -> &'static str,
-    pub get_tag_replacement: fn(&Tag) -> &str,
+    pub get_tag_replacement: fn(&Tag) -> String,
     pub get_tag_type : fn(&Tag) -> TagType,
     pub get_message_style : fn(&MessageAttributes) -> StyleInfo,
 
@@ -54,7 +87,7 @@ pub struct GameConfig {
     pub get_filenames : fn() -> &'static [&'static str]
 }
 
-pub const ALL_CONFIGS  : [&GameConfig;5]= [&TP, &TWW, &PH, &ST, &FSA];
+pub const ALL_CONFIGS  : [&GameConfig;6]= [&TP, &TWW, &PH, &ST, &FSA, &ALBW];
 
 pub const TWW: GameConfig = GameConfig {
     name: "The Wind Waker",
@@ -96,7 +129,7 @@ pub const TWW: GameConfig = GameConfig {
         COLORS_RGB_TWW[id]
     },
     get_tag_type : |tag| {
-        get_tag_type_default_inner(tag.group, tag.number)
+        get_tag_type_default_inner(tag.group, tag.number, &tag.payload, true, encoding_rs::SHIFT_JIS)
     },
     get_tag_replacement : |tag| {
         match tag.group {
@@ -174,7 +207,7 @@ pub const TWW: GameConfig = GameConfig {
                 }
             }
             _=> ""
-        }
+        }.to_string()
     },
 
     get_message_style : |attribs: &MessageAttributes| {
@@ -252,7 +285,7 @@ pub const TP: GameConfig = GameConfig {
         COLORS_RGB[id]
     },
     get_tag_type : |tag| {
-        get_tag_type_default_inner(tag.group, tag.number)
+        get_tag_type_default_inner(tag.group, tag.number, &tag.payload, true, encoding_rs::SHIFT_JIS)
     },
     get_tag_replacement : |tag| {
         match tag.group {
@@ -378,7 +411,7 @@ pub const TP: GameConfig = GameConfig {
                 }
             },
             _=> "",
-        }
+        }.to_string()
     },
 
     get_message_style : |attribs: &MessageAttributes| {
@@ -477,7 +510,7 @@ pub const PH: GameConfig = GameConfig {
         COLORS_RGB_TWW[id]
     },
     get_tag_type : |tag| {
-        get_tag_type_default_inner(tag.group, tag.number.swap_bytes())
+        get_tag_type_default_inner(tag.group, tag.number, &tag.payload, false, encoding_rs::UTF_16LE)
     },
     get_tag_replacement : |tag| {
         let tag_number = tag.number.swap_bytes();
@@ -488,7 +521,7 @@ pub const PH: GameConfig = GameConfig {
                 _ => "[Unknown_Tag]"
             },
             _=> ""
-        }
+        }.to_string()
     },
 
     get_message_style : |_attribs: &MessageAttributes| {
@@ -583,7 +616,7 @@ pub const ST: GameConfig = GameConfig {
         COLORS_RGB_TWW[id]
     },
     get_tag_type : |tag| {
-        get_tag_type_default_inner(tag.group, tag.number.swap_bytes())
+        get_tag_type_default_inner(tag.group, tag.number, &tag.payload, false, encoding_rs::UTF_16LE)
     },
     get_tag_replacement : |tag| {
         let tag_number = tag.number.swap_bytes();
@@ -594,7 +627,7 @@ pub const ST: GameConfig = GameConfig {
                 _ => "[Unknown_Tag]"
             },
             _=> ""
-        }
+        }.to_string()
     },
 
     get_message_style : |_attribs: &MessageAttributes| {
@@ -662,14 +695,14 @@ pub const FSA: GameConfig = GameConfig {
     get_tag_type : |tag| {
         match tag.group {
             0x2 => match tag.number {
-                0x1E => TagType::Style(StyleTagType::Color),
+                0x1E => TagType::Style(StyleTagType::Color(tag.payload[0] as u16)),
                 _ => TagType::Replace
             },
             _ => TagType::Replace
         }
     },
     get_tag_replacement : |_tag| {
-        ""
+        "".to_string()
     },
 
     get_message_style : |_attribs: &MessageAttributes| {
@@ -687,6 +720,88 @@ pub const FSA: GameConfig = GameConfig {
         //     0x0E => { bg_color = String::from("#3F48CC"); }
         //     _ => {}
         // }
+        
+        
+        let style_id = String::new();
+
+        StyleInfo { centered, color, bg_color, alt_font : false, style_id }
+    }
+};
+
+pub const ALBW: GameConfig = GameConfig {
+    name: "A Link Between Worlds",
+    id: "albw",
+    logo : "https://www.nintendo.com/jp/character/zelda/history/img/branch-b/04/pc/logo.png",
+    big_endian : false,
+    get_languages : || {
+        const LANGUAGES : [(&str, &str);2] = [
+            ("jp", "Japanese"),
+            // ("us", "US English"),
+            ("fr", "French"),
+            // ("sp", "Spanish"),
+            // ("de", "German"),
+            // ("it" "Italian")
+        ];
+
+        &LANGUAGES
+    },
+    get_filenames : || {
+        const FILENAMES : [&str;6] = [
+            "Common.msbt",
+            "Field.msbt",
+            "FieldLight.msbt",
+            "FieldDark.msbt",
+            "Ganon.msbt",
+            "Ending.msbt",
+        ];
+
+        &FILENAMES
+    },
+    get_color_hex: |id| {
+
+        if id == 0xFFFF { 
+            "#ffffff" 
+        }
+        else {
+            const COLORS_RGB: [&str; 11] = [
+                "#ffffff",
+                "#ff6400",
+                "#00ff00",
+                "#7878ff",
+                "#ffff3c",
+                "#00ffff",
+                "#ff00ff",
+                "#828282",
+                "#ff8000",
+                "#123456",
+                "#789abc",
+            ];
+    
+            COLORS_RGB[id]
+        }
+    },
+    get_tag_type : |tag| {
+        get_tag_type_default_msbt(tag, false, encoding_rs::UTF_16LE)
+    },
+    get_tag_replacement : |tag| {
+        let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join(",");
+        format!("[Tag {}  {} ]", match tag.group {
+            0x0 => String::from(match tag.number {
+                0 => "Ruby ",
+                1 => "Font ",
+                2 => "Size ",
+                3 => "Color ",
+                _ => ""
+            }),
+            _ => format!("{}:{}", tag.group, tag.number)
+        }, payload)
+    },
+
+    get_message_style : |_attribs: &MessageAttributes| {
+        let centered = false;
+        let color = String::new();
+        let bg_color = String::new();
+    
         
         
         let style_id = String::new();

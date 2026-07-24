@@ -1,4 +1,4 @@
-use std::{cmp::min, fs::File, io::{self, Read}, path::Path, ops::Range, str::Utf8Error};
+use std::{cmp::min, env::temp_dir, fs::File, io::{self, Read}, ops::Range, path::Path, str::Utf8Error};
 
 use thiserror::Error;
 
@@ -268,7 +268,6 @@ impl MSBTParser {
                         let index = get_u32(section_data, label_range.end) as usize;
                         let label = str::from_utf8(&section_data[label_range])?.to_string();
 
-                        println!("idx {} label {}", index, label);
                         labels.push((label, index));
                     }
 
@@ -285,11 +284,11 @@ impl MSBTParser {
             },
             "TXT2" => {
                 let count = get_u32(section_data, 0);
-                let offsets = section_data[0x04..].chunks_exact(4).take(count as usize).map(|offset| get_u32(offset, 0)).collect();
+                let data_begin = 0x04 + count as usize * 4; 
+                let offsets = section_data[0x04..].chunks_exact(4).take(count as usize).map(|offset| get_u32(offset, 0) - data_begin as u32).collect();
 
-                let offsets_end = 0x04 + count as usize * 4;
 
-                let data = Vec::from(&section_data[offsets_end..]);
+                let data = Vec::from(&section_data[data_begin..]);
                     
                 Ok(MSBTBlockData::TXT2(TXT2Data { count, offsets, data }))
             },
@@ -313,13 +312,12 @@ impl MSBTParser {
     pub fn get_msg(&self, idx : usize) -> MessageSingleLang {
         if let Some(MSBTBlockData::LBL1(lbl1)) = self.get_block(MSBTData::LBL1) {
             let label = &lbl1.labels[idx];
-            println!("Label {}", label);
 
             if let Some(MSBTBlockData::TXT2(txt2)) = self.get_block(MSBTData::TXT2) {
                 let text = txt2.get_msg(idx, self.get_header().encoding);
                 
                 MessageSingleLang {
-                    id : 0,
+                    id : idx +1,
                     attribs : Default::default(),
                     text,
                 }
@@ -372,6 +370,10 @@ impl MSBTParser {
                 },
                 MSBTBlockData::TXT2(txt2_data) => {
                     println!("\tcount : {}", txt2_data.count);
+
+                    for i in 0..3 {
+                        println!("\t offset {} : {:X}", i, txt2_data.offsets[i]);
+                    }
                 }
                 MSBTBlockData::ATR1(atr1_data) => {
                     println!("\tnumber of attribs {}", atr1_data.attr_count);
@@ -386,11 +388,22 @@ impl MSBTParser {
 
 impl MessageParser for MSBTParser {
     fn get_all_messages(&self) -> Vec<crate::message::MessageSingleLang> {
-        todo!()
+        if let Some(MSBTBlockData::LBL1(lbl1)) = self.get_block(MSBTData::LBL1) {
+            (0..lbl1.labels.len()).map(|i| {
+                self.get_msg(i as usize)
+            }).collect()
+       } else {
+        Vec::new()
+       }
     }
 
     fn get_encoding(&self) -> &'static encoding_rs::Encoding {
-        todo!()
+        match self.get_header().encoding {
+            0 => encoding_rs::UTF_8,
+            1 => if self.get_header().big_endian { encoding_rs::UTF_16BE } else {encoding_rs::UTF_16LE}, // LE as the only cases we have now are LE, might need to generalise this
+            // 2 => encoding_rs::UTF_32; // does not seem to exists :'(
+            _ => encoding_rs::UTF_8, // Default to WINDOWS_1252 if unknown
+        }
     }
 }
 
@@ -410,7 +423,8 @@ pub fn print_msbt(path : &Path) {
         Ok(parser) => {
             parser.print();
             // parser.print_flow();
-            println!("Message 0 : {:?}", parser.get_msg(0).text);//parser.get_msg(0x66).text));
+            let i = 1;
+            println!("Message {i} : {:?}", parser.get_msg(i).text);//parser.get_msg(0x66).text));
         }
         Err(e) => {
             eprintln!("Error opening BMG file: {}", e);
