@@ -15,7 +15,7 @@ use message::{Message, Tag, TextPart};
 use crate::{message::{MessageParser, MessageSingleLang}, game_configs::{GameConfig, StyleTagType, TagType}};
 
 
-const BANK_COUNT : usize = 32;
+const BANK_COUNT : usize = 256;
 
 const DEFAULT_COLORS : [&str; 9] = [
     "#FFFFFF",
@@ -225,7 +225,7 @@ impl Message {
 
 #[derive(Default, Debug)]
 struct BMGParser {
-    msgs : [Vec<Message>; BANK_COUNT],
+    msgs : Vec<Vec<Message>>,
     encoding : Option<&'static encoding_rs::Encoding>,
 }
 
@@ -622,6 +622,10 @@ impl BMGParser {
 
         if msg.is_empty() {
             return;
+        }
+
+        if bank_id >= self.msgs.len() {
+            self.msgs.resize_with(bank_id + 1, || Vec::new());
         }
 
         let idx = msg.id - 1;//if msg.id > 0 {} else {self.msgs[bank_id].len()};
