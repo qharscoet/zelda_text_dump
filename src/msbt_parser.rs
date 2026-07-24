@@ -2,7 +2,7 @@ use std::{cmp::min, fs::File, io::{self, Read}, path::Path, ops::Range, str::Utf
 
 use thiserror::Error;
 
-use crate::{message::MessageParser, utils};
+use crate::{message::{MessageParser, MessageSingleLang, MessageText, Tag, TextPart}, utils};
 
 #[derive(Error, Debug)]
 pub enum MSBTParseError {
@@ -29,10 +29,108 @@ struct LMSHeader {
     filesize: u32,
 }
 
+struct LBL1Data {
+    label_groups:u32,
+    labels : Vec<String>,
+}
+
+struct TXT2Data {
+    count : u32,
+    offsets : Vec<u32>,
+    data : Vec<u8>
+}
+
+
+impl TXT2Data {
+
+    fn get_msg(&self, idx:usize, encoding : u8) -> MessageText {
+        
+        if idx > self.offsets.len(){
+            return Vec::new();
+        }
+
+        let offset = self.offsets[idx] as usize;
+        if self.data[offset] == 0x00 {
+            return Vec::new();
+        }
+
+        // TODO : generalise with bmg
+        
+        let encoding = match encoding {
+            0 => encoding_rs::UTF_8,
+            1 => encoding_rs::UTF_16LE, // LE as the only cases we have now are LE, might need to generalise this
+            _ => encoding_rs::UTF_8, // Default to WINDOWS_1252 if unknown
+        };
+
+        let mut it = self.data[offset..].iter();
+        let mut end = false;
+        let mut full_string = String::new();
+        let mut text_parts : Vec<TextPart> = Vec::new();
+
+
+        while !end {
+            let mut stop_value = 0u16;
+            let str_bytes = if encoding == encoding_rs::UTF_16LE {
+                
+                // is easier to try to iterate properly by step of 2 bytes without iterator typing weirdness
+                let mut str_end = false;
+                let mut str = Vec::new();
+                while !str_end {
+                    let b1 = *it.next().unwrap();
+                    let b2 = *it.next().unwrap();
+                    let v = utils::get_u16_le(&[b1,b2], 0);
+
+                    if v != 0x00000 && v != 0x000E {
+                        str.push(b1);
+                        str.push(b2);
+                    } else {
+                        stop_value = v;
+                        str_end = true;
+                    }
+                }
+                str
+            } else {
+                it.by_ref().take_while(|&&b| { stop_value = b as u16; b!=0x00 && b!=0x0E }).map(|b| *b).collect::<Vec<_>>()
+            };
+
+            let str = encoding.decode(&str_bytes).0;
+
+            full_string += &str;
+            text_parts.push(TextPart::Text(str.to_string()));
+            
+            match stop_value {
+                0x00 => end = true,
+                0x0E => {
+                    let mut read_u16 = || {utils::get_u16_le(&it.by_ref().take(2).map(|b| *b).collect::<Vec<_>>(), 0)};
+                    let group = read_u16() as u8;
+                    let number = read_u16();
+                    let params_size = read_u16();
+                    let payload = it.by_ref().take(params_size as usize).map(|b| *b).collect::<Vec<_>>();
+
+                    text_parts.push(TextPart::Tag(Tag{
+                        group,number, payload
+                    }));
+                },
+                _ => {}
+            }
+
+        }
+
+        text_parts
+    }
+}
+
+struct ATR1Data {
+    attr_count : u32,
+    attr_size : u32,
+    attribs : Vec<u8>,
+    strings : Vec<u8>
+}
+
 enum MSBTBlockData {
-    LBL1,
-    TXT2,
-    ATR1,
+    LBL1(LBL1Data),
+    TXT2(TXT2Data),
+    ATR1(ATR1Data),
 }
 
 struct MSBTBlock {
@@ -96,7 +194,7 @@ impl MSBTParser {
                 let section_type = str::from_utf8(&data[offset..offset + 4])?.to_string();
                 let section_size = get_u32(&data, offset + 4);
     
-                let range_start = offset + 8;
+                let range_start = offset + 0x10;
                 let range_end = min(range_start + section_size as usize, data.len()); //size includes the header
                 let range = range_start..range_end as usize;
                 
@@ -149,18 +247,90 @@ impl MSBTParser {
         let range_end = min(range_start + section_size as usize, data.len()); //size includes the header
         let range = range_start..range_end as usize;
 
-
         let section_data = &data[range];
 
         match section_type {
-            "LBL1" => Ok(MSBTBlockData::LBL1),
-            "TXT2" => Ok(MSBTBlockData::TXT2),
-            "ATR1" => Ok(MSBTBlockData::ATR1),
+            "LBL1" => {
+                let label_groups = get_u32(section_data, 0x0);
+
+                let mut a : Vec<_>= section_data[0x04..].chunks_exact(8).take(label_groups as usize).flat_map(|bucket| {
+                    let label_count = get_u32(bucket, 0x0) as usize;
+                    let offset = get_u32(bucket, 0x4) as usize;
+
+                    let mut labels = Vec::new();
+                    //labels.resize(label_count, String::new());
+                    
+
+                    for _ in 0..label_count {
+                        let label_len = section_data[offset] as usize;
+                        let label_range = (offset+1)..(offset+1+label_len);
+
+                        let index = get_u32(section_data, label_range.end) as usize;
+                        let label = str::from_utf8(&section_data[label_range])?.to_string();
+
+                        println!("idx {} label {}", index, label);
+                        labels.push((label, index));
+                    }
+
+                    Ok::<Vec<(String, usize)>, MSBTParseError>(labels)
+                }).flatten().collect();
+
+                a.sort_by_key(|e| e.1);
+                let labels = a.iter().map(|e| e.0.clone()).collect();
+
+                Ok(MSBTBlockData::LBL1(LBL1Data {
+                    label_groups,
+                    labels
+                }))
+            },
+            "TXT2" => {
+                let count = get_u32(section_data, 0);
+                let offsets = section_data[0x04..].chunks_exact(4).take(count as usize).map(|offset| get_u32(offset, 0)).collect();
+
+                let offsets_end = 0x04 + count as usize * 4;
+
+                let data = Vec::from(&section_data[offsets_end..]);
+                    
+                Ok(MSBTBlockData::TXT2(TXT2Data { count, offsets, data }))
+            },
+            "ATR1" => {
+                let attr_count = get_u32(section_data, 0);
+                let attr_size = get_u32(section_data, 0x4);
+                let total_size = attr_count as usize * attr_size as usize;
+                let attribs = Vec::from(&section_data[0x8..(0x8 + total_size)]);
+                let strings = Vec::from(&section_data[(0x08 + total_size)..]);
+
+                Ok(MSBTBlockData::ATR1(ATR1Data{
+                    attr_count,attr_size, attribs, strings
+                }))
+            },
             _ => Err(MSBTParseError::UnknownSectionID)
         }
 
     }
 
+
+    pub fn get_msg(&self, idx : usize) -> MessageSingleLang {
+        if let Some(MSBTBlockData::LBL1(lbl1)) = self.get_block(MSBTData::LBL1) {
+            let label = &lbl1.labels[idx];
+            println!("Label {}", label);
+
+            if let Some(MSBTBlockData::TXT2(txt2)) = self.get_block(MSBTData::TXT2) {
+                let text = txt2.get_msg(idx, self.get_header().encoding);
+                
+                MessageSingleLang {
+                    id : 0,
+                    attribs : Default::default(),
+                    text,
+                }
+            } else {
+                MessageSingleLang::default()
+            }
+        } else {
+            MessageSingleLang::default()
+        }
+    }
+    
     #[allow(dead_code)]
     fn get_header(&self) -> &LMSHeader {
         &self.data_parsed.header
@@ -193,6 +363,22 @@ impl MSBTParser {
             println!("Section type: {}", section.block_type);
             println!("Section size: {}", section.size);
             println!("Section data range: {:X?}", section.range);
+
+            match &section.data {
+                MSBTBlockData::LBL1(lbl1_data) => {
+                    for l in &lbl1_data.labels {
+                        println!("\t{}", l);
+                    }
+                },
+                MSBTBlockData::TXT2(txt2_data) => {
+                    println!("\tcount : {}", txt2_data.count);
+                }
+                MSBTBlockData::ATR1(atr1_data) => {
+                    println!("\tnumber of attribs {}", atr1_data.attr_count);
+                    println!("\tattribs size {}", atr1_data.attr_size);
+                }
+                _ => {}
+            }
         }
         
     }
@@ -224,7 +410,7 @@ pub fn print_msbt(path : &Path) {
         Ok(parser) => {
             parser.print();
             // parser.print_flow();
-            // println!("Message 0x66 : {}", get_raw_msg(parser.get_msg(0x66).text));
+            println!("Message 0 : {:?}", parser.get_msg(0).text);//parser.get_msg(0x66).text));
         }
         Err(e) => {
             eprintln!("Error opening BMG file: {}", e);
