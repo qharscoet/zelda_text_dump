@@ -21,7 +21,8 @@ pub enum StyleTagType {
 
 pub enum TagType {
     Style(StyleTagType),
-    Replace
+    Replace,
+    Insert((String, usize)) //Bank name, idx
 }
 
 
@@ -734,9 +735,9 @@ pub const ALBW: GameConfig = GameConfig {
     logo : "https://www.nintendo.com/jp/character/zelda/history/img/branch-b/04/pc/logo.png",
     big_endian : false,
     get_languages : || {
-        const LANGUAGES : [(&str, &str);2] = [
+        const LANGUAGES : [(&str, &str);3] = [
             ("jp", "Japanese"),
-            // ("us", "US English"),
+            ("en", "English"),
             ("fr", "French"),
             // ("sp", "Spanish"),
             // ("de", "German"),
@@ -746,13 +747,124 @@ pub const ALBW: GameConfig = GameConfig {
         &LANGUAGES
     },
     get_filenames : || {
-        const FILENAMES : [&str;6] = [
-            "Common.msbt",
-            "Field.msbt",
-            "FieldLight.msbt",
-            "FieldDark.msbt",
-            "Ganon.msbt",
-            "Ending.msbt",
+        const FILENAMES : [&str;117] = [
+            "Action.msbt",
+"Collect.msbt",
+"Common.msbt",
+"EventItemGet.msbt",
+"ExtraName.msbt",
+"HintGhost.msbt",
+"ItemName.msbt",
+"ItemNameUpper.msbt",
+"ItemSelect.msbt",
+"ItemTutorial.msbt",
+"LocationName.msbt",
+"LocationNameUpper.msbt",
+"NPCName.msbt",
+"Opening.msbt",
+"StaffCredit.msbt",
+"System.msbt",
+"Demo010.msbt",
+"Demo020.msbt",
+"Demo030.msbt",
+"Demo040.msbt",
+"Demo050.msbt",
+"Demo060.msbt",
+"Demo070.msbt",
+"Demo080.msbt",
+"Demo090.msbt",
+"Demo100.msbt",
+"Demo110.msbt",
+"Castle.msbt",
+"Dark.msbt",
+"Dokuro.msbt",
+"East.msbt",
+"Ganon.msbt",
+"Hagure.msbt",
+"Hera.msbt",
+"Ice.msbt",
+"Kame.msbt",
+"Sand.msbt",
+"Water.msbt",
+"Wind.msbt",
+"cl_Church_UG.msbt",
+"E3_message.msbt",
+"Cave.msbt",
+"CrossBattle.msbt",
+"CrossBoard.msbt",
+"CrossForceTalk.msbt",
+"CrossOldMan.msbt",
+"CrossRecordList.msbt",
+"DefaultShadowLink.msbt",
+"Ending.msbt",
+"Field.msbt",
+"FieldDark.msbt",
+"FieldDark_00.msbt",
+"FieldDark_02.msbt",
+"FieldDark_05.msbt",
+"FieldDark_0F.msbt",
+"FieldDark_13.msbt",
+"FieldDark_14.msbt",
+"FieldDark_16.msbt",
+"FieldDark_17.msbt",
+"FieldDark_18.msbt",
+"FieldDark_1A.msbt",
+"FieldDark_1B.msbt",
+"FieldDark_1E.msbt",
+"FieldDark_22.msbt",
+"FieldDark_28.msbt",
+"FieldDark_29.msbt",
+"FieldDark_2A.msbt",
+"FieldDark_2C.msbt",
+"FieldDark_33.msbt",
+"FieldDark_35.msbt",
+"FieldDark_3A.msbt",
+"FieldLight.msbt",
+"FieldLight_00.msbt",
+"FieldLight_02.msbt",
+"FieldLight_03.msbt",
+"FieldLight_05.msbt",
+"FieldLight_0A.msbt",
+"FieldLight_0F.msbt",
+"FieldLight_11.msbt",
+"FieldLight_12.msbt",
+"FieldLight_13.msbt",
+"FieldLight_14.msbt",
+"FieldLight_16.msbt",
+"FieldLight_17.msbt",
+"FieldLight_18.msbt",
+"FieldLight_1A.msbt",
+"FieldLight_1B.msbt",
+"FieldLight_1E.msbt",
+"FieldLight_22.msbt",
+"FieldLight_28.msbt",
+"FieldLight_29.msbt",
+"FieldLight_2A.msbt",
+"FieldLight_2B.msbt",
+"FieldLight_2C.msbt",
+"FieldLight_2D.msbt",
+"FieldLight_2E.msbt",
+"FieldLight_33.msbt",
+"FieldLight_35.msbt",
+"FieldLight_37.msbt",
+"FortuneMessage.msbt",
+"HintGhostDark.msbt",
+"HintGhostLight.msbt",
+"ToRentalShopBoard.msbt",
+"MiniDungeon_FieldDark_2B.msbt",
+"MiniDungeon_FieldLight_07.msbt",
+"MiniDungeon_FieldLight_15.msbt",
+"MiniDungeon_FieldLight_1E.msbt",
+"MiniDungeon_FieldLight_32.msbt",
+"MiniDungeon_FieldLight_33.msbt",
+"GirigiriGameTest.msbt",
+"NpcClimberTest.msbt",
+"NpcHinox.msbt",
+"NpcTestIwata.msbt",
+"StaffCreditTest.msbt",
+"npcTest00.msbt",
+"test.msbt",
+"yamazaki.msbt",
         ];
 
         &FILENAMES
@@ -763,38 +875,96 @@ pub const ALBW: GameConfig = GameConfig {
             "#ffffff" 
         }
         else {
-            const COLORS_RGB: [&str; 11] = [
-                "#ffffff",
-                "#ff6400",
-                "#00ff00",
-                "#7878ff",
-                "#ffff3c",
-                "#00ffff",
-                "#ff00ff",
-                "#828282",
-                "#ff8000",
-                "#123456",
-                "#789abc",
+            const COLORS_RGB: [&str; 12] = [
+                "#262626",
+                "#808080",
+                "#FFFFFF",
+                "#855C2F",
+                "#591710",
+                "#006400",
+                "#375960",
+                "#BAA800",
+                "#3A1B4C",
+                "#003F97",
+                "#F92300",
+                "#4AF0D1",
             ];
     
             COLORS_RGB[id]
         }
     },
     get_tag_type : |tag| {
-        get_tag_type_default_msbt(tag, false, encoding_rs::UTF_16LE)
+        match tag.group {
+            0x2 => {
+                let idx = tag.payload[0] as usize;
+                let bank_name = match tag.number {
+                    0 => "NPCName",
+                    1 => if tag.payload[2] == 1 {"LocationNameUpper"} else {"LocationName"},
+                    2 => if tag.payload[2] == 1 {"ItemNameUpper"} else {"ItemName"},
+                    _ => ""
+                };
+
+                TagType::Insert((bank_name.to_string(), idx))
+            },
+            _ => get_tag_type_default_msbt(tag, false, encoding_rs::UTF_16LE)
+        }
     },
     get_tag_replacement : |tag| {
-        let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join(",");
-        format!("[Tag {}  {} ]", match tag.group {
-            0x0 => String::from(match tag.number {
-                0 => "Ruby ",
-                1 => "Font ",
-                2 => "Size ",
-                3 => "Color ",
-                _ => ""
-            }),
-            _ => format!("{}:{}", tag.group, tag.number)
-        }, payload)
+        // let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join("");
+        // let default = format!("[Tag {} {} ]", match tag.group {
+        //     0x0 => String::from(match tag.number {
+        //         0 => "Ruby ",
+        //         1 => "Font ",
+        //         2 => "Size ",
+        //         3 => "Color ",
+        //         _ => ""
+        //     }),
+            
+        //     _ => format!("{}:{}", tag.group, tag.number)
+        // }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
+        
+        match tag.group {
+            0x1 => match tag.number {
+                0 => "[PlayerName]",
+                1 => "[UserName]",
+                2 => "[ShadowLinkPlayerName]",
+                3 => "[ShadowLinkUserName]",
+                4 => "[InsertMark]",
+                5 => "[IntNumberN]", //TODO : paramete]rs
+                6 => "[ChoiceN]", //TODO : paramete]rs
+                7 => "" , //AutoForward
+                8 => "", // Wa]it
+                9 => "[MyRecordNum]",
+                10 => "[ShadowLinkRecordNum]",
+                11 => "[ShadowLinkPrizeMoney]",
+                12 => "[ColoringStart]",
+                13 => "[ColoringEnd]",
+                14 => "[Flush]",
+                15 => "[Vibrate]",
+                16 => "[ChoicePositive]",
+                17 => "", // Cursor
+                _=> "",
+            }.to_string(),
+            0x2 => {
+                let idx = tag.payload[0] as usize;
+                match tag.number {
+                    0 => {
+                        let npc_names = ["[zelda]","[inpa]","[sahaspupil]","[zoraqueen]","[danpei]","[maple]","[priestgirl]","[miner]","[priest]","[sahas]","[ganon]","[darkzelda]","[darklink]","[darkganon]","[commander]","[hitghost]","[darklinkpet]","[blacksmithKid]","[shopmanmagic]","[kinstamother]"];
+                        npc_names[idx]
+                    },
+                    1 => {
+                        let location_names = ["[dgn_east]","[dgn_wind]","[dgn_hera]","[dgn_castle]","[dgn_dark]","[dgn_water]","[dgn_dokuro]","[dgn_hagure]","[dgn_ice]","[dgn_sand]","[dgn_kame]","[dgn_ganon]","[loc_name_church]","[loc_name_villagelight]","[loc_name_lake]","[loc_name_linkhouse]","[MtHebra]","[MagicShopLight]","[HoleofHyakkai]","[FortuneHouseDark]","[HakabaDark]","[MagicshopDark]","[BlackSmithDark]","[LinkHouseDark]","[milkbar]","[DevilsMarsh]","[ZorasVillage]","[DeathMountain]","[Boss]","[Cuccos]","[HyruleHotfoot]","[OctballDarby]","[RupeeRush]","[FortunesChoice]","[LostWoods]","[ThievesHideout]","[HyruleCastleCore]"];
+                        location_names[idx]
+                    },
+                    2 => {
+                        let item_names = ["[icerod]","[sandrod]","[tornaderod]","[bomb]","[firerod]","[hookshot]","[boomerang]","[hammer]","[bow]","[shield]","[bottle]","[potshop_red]","[potshop_blue]","[potshop_heart]","[item_name_bracelet]","[item_name_lantern]","[item_name_kinsta]","[item_name_gamecoin]","[item_name_stonebeauty]","[item_name_durian]","[item_name_doron]","[item_name_heartpiece]","[item_name_bee]","[item_name_beebadge]","[item_name_powergloves]","[item_name_powerfulglove]","[item_name_pegasus]","[item_name_bell]","[item_name_hintglass]","[item_name_goldenbee]","[item_name_potshop_yellow]","[item_name_potshop_purple]","[item_name_web]","[item_name_net]","[item_name_wisdom]","[item_name_courage]","[item_name_power]","[item_name_fairy]","[item_name_ore]","[postsword]","[charm]","[emptybracelet]","[bigbombflower]","[sword]","[mastersword]","[item_name_liver_blue]","[item_name_liver_purple]","[item_name_liver_yellow]","[item_name_clothes_blue]","[item_name_clothes_red]","[item_name_hyrule_shield]","[item_name_ganbari_power_up]","[item_name_pouch]","[keysmall]","[keyboss]","[heartcontioner]","[compass]","[apple_red]","[apple_blue]","[milk]","[mild_matured]","[message_bottle]","[special_move]","[clothes_blacksmith]","[clothes_green]","[lantern_lv2]","[net_lv2]","[bow_light]","[ganbaritubo]","[trifoce_wisdom]","[triforce_courage]","[triforce_power]","[icerod_LV2]","[sandrod_LV2]","[tornadrod_LV2]","[bomb_LV2]","[firerod_LV2]","[hookshot_LV2]","[boomerang_LV2]","[hammer_LV2]","[bow_LV2]","[icerod_rental]","[sandrod_rental]","[tornaderod_rental]","[bomb_rental]","[firerod_rental]","[hookshot_rental]","[boomerang_rental]","[hammer_rental]","[bow_rental]"];
+                        item_names[idx]
+                    },
+                    _ => "",
+                }.to_string()
+            },
+            _=> "".to_string()
+        }
     },
 
     get_message_style : |_attribs: &MessageAttributes| {
