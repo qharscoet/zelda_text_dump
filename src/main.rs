@@ -726,7 +726,12 @@ fn process_config(parser : &mut BMGParser, config : &GameConfig)
         let folder_path = Path::new(&str_path);
 
         for (bank_id,&basename) in (config.get_filenames)().iter().enumerate() {
-            let _ = process_file(&folder_path.join(&basename), lang_idx, bank_id, parser, config.big_endian);
+            let path = folder_path.join(&basename);
+            match process_file(&path, lang_idx, bank_id, parser, config.big_endian)
+            {
+                Ok(_) => {},
+                Err(e) => println!("Error opening  {} : {}", path.display(), e)
+            }
         }
     }
 }
