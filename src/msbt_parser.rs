@@ -379,7 +379,6 @@ impl MSBTParser {
                     println!("\tnumber of attribs {}", atr1_data.attr_count);
                     println!("\tattribs size {}", atr1_data.attr_size);
                 }
-                _ => {}
             }
         }
         

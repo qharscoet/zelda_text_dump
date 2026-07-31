@@ -21,7 +21,8 @@ pub enum StyleTagType {
 
 pub enum TagType {
     Style(StyleTagType),
-    Replace
+    Replace,
+    Insert((String, usize)) //Bank name, idx
 }
 
 
@@ -893,21 +894,34 @@ pub const ALBW: GameConfig = GameConfig {
         }
     },
     get_tag_type : |tag| {
-        get_tag_type_default_msbt(tag, false, encoding_rs::UTF_16LE)
+        match tag.group {
+            0x2 => {
+                let idx = tag.payload[0] as usize;
+                let bank_name = match tag.number {
+                    0 => "NPCName",
+                    1 => if tag.payload[2] == 1 {"LocationNameUpper"} else {"LocationName"},
+                    2 => if tag.payload[2] == 1 {"ItemNameUpper"} else {"ItemName"},
+                    _ => ""
+                };
+
+                TagType::Insert((bank_name.to_string(), idx))
+            },
+            _ => get_tag_type_default_msbt(tag, false, encoding_rs::UTF_16LE)
+        }
     },
     get_tag_replacement : |tag| {
-        let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join("");
-        let default = format!("[Tag {} {} ]", match tag.group {
-            0x0 => String::from(match tag.number {
-                0 => "Ruby ",
-                1 => "Font ",
-                2 => "Size ",
-                3 => "Color ",
-                _ => ""
-            }),
+        // let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join("");
+        // let default = format!("[Tag {} {} ]", match tag.group {
+        //     0x0 => String::from(match tag.number {
+        //         0 => "Ruby ",
+        //         1 => "Font ",
+        //         2 => "Size ",
+        //         3 => "Color ",
+        //         _ => ""
+        //     }),
             
-            _ => format!("{}:{}", tag.group, tag.number)
-        }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
+        //     _ => format!("{}:{}", tag.group, tag.number)
+        // }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
         
         match tag.group {
             0x1 => match tag.number {
@@ -949,7 +963,7 @@ pub const ALBW: GameConfig = GameConfig {
                     _ => "",
                 }.to_string()
             },
-            _=> default
+            _=> "".to_string()
         }
     },
 
