@@ -67,7 +67,7 @@ impl Message {
 
             let mut res_str = String::new();
 
-            let mut current_color = "#ffffff";
+            let mut current_color = 0xFFFFu16;
             let mut current_size = 100;
 
             let mut needs_ruby : Option<(u8, String)> = None;
@@ -95,16 +95,16 @@ impl Message {
                                 TagType::Style(style_type) => {
                                     match style_type {
                                         StyleTagType::Color(id) => { // change color
-                                            if current_color != "#ffffff" {
+                                            if current_color != 0xFFFF {
                                                 res_str += "</span>";
                                             }
 
-                                            let new_color = id as usize;
-                                            let c = if let Some(conf) = config { (conf.get_color_hex)(new_color)} else { "#ffffff"};
-                                            if c != "#ffffff" {
+                                            if id != 0xFFFF {
+                                                let new_color = id as usize;
+                                                let c = if let Some(conf) = config { (conf.get_color_hex)(new_color)} else { "#ffffff"};
                                                 res_str += &format!("<span style='color:{};'>", c);
                                             }
-                                            current_color = c;
+                                            current_color = id;
                                         },
                                         StyleTagType::Size(percent) => {
                                             let new_size = percent;// get_u16(&tag.payload, 0);
@@ -166,7 +166,7 @@ impl Message {
             segments.push((Format::new(), self.get_raw(lang_id, config,parent)));
         } else {
             
-            let mut current_color = "#ffffff";
+            let mut current_color = 0xFFFFu16;
             let mut current_size = 100;
 
             const DEFAULT_SIZE : f32 = 11.0;
@@ -177,8 +177,9 @@ impl Message {
                     match part {
                         TextPart::Text(text) => {
                             if !text.is_empty() {
-                                // let config_color = if let Some(conf) = config { (conf.get_color_hex)(current_color)} else { DEFAULT_COLORS[current_color]};
-                                let color = if current_color == "#ffffff" { default_color } else { Color::from(current_color)};
+                                let c = current_color as usize;
+                                let config_color = if let Some(conf) = config { (conf.get_color_hex)(c)} else { DEFAULT_COLORS[c]};
+                                let color = if current_color == 0xFFFF { default_color } else { Color::from(config_color)};
                                 let size = DEFAULT_SIZE * (current_size as f32/100.0);
                                 let format = Format::new().set_font_color(color).set_font_size(size);
                                 segments.push((format, text.to_string()));
@@ -190,8 +191,7 @@ impl Message {
                                 TagType::Style(style_type) => {
                                     match style_type {
                                         StyleTagType::Color(id) => { // change color
-                                            let c = if let Some(conf) = config { (conf.get_color_hex)(id as usize)} else { "#ffffff"};
-                                            current_color = c
+                                            current_color = id;
                                         },
                                         StyleTagType::Size(percent) => {                          
                                             current_size = percent;
@@ -206,7 +206,9 @@ impl Message {
                                 TagType::Replace => { 
                                     let s = tag.get_simple_replacement(config).to_string();
                                     if !s.is_empty() {
-                                        let color = if current_color == "#ffffff" { default_color } else { Color::from(current_color)};
+                                        let c = current_color as usize;
+                                        let config_color = if let Some(conf) = config { (conf.get_color_hex)(c)} else { DEFAULT_COLORS[c]};
+                                        let color = if current_color == 0xFFFF { default_color } else { Color::from(config_color)};
                                         let size = DEFAULT_SIZE * (current_size as f32/100.0);
                                         let format = Format::new().set_font_color(color).set_font_size(size);
     
@@ -222,7 +224,9 @@ impl Message {
                                     };
 
                                     if !s.is_empty() {
-                                        let color = if current_color == "#ffffff" { default_color } else { Color::from(current_color)};
+                                        let c = current_color as usize;
+                                        let config_color = if let Some(conf) = config { (conf.get_color_hex)(c)} else { DEFAULT_COLORS[c]};
+                                        let color = if current_color == 0xFFFF { default_color } else { Color::from(config_color)};
                                         let size = DEFAULT_SIZE * (current_size as f32/100.0);
                                         let format = Format::new().set_font_color(color).set_font_size(size);
     

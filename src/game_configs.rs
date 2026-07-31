@@ -35,7 +35,13 @@ fn get_tag_type_default_inner(tag_group : u8, tag_number : u16, payload : &[u8],
     let get_u16 = if big_endian { utils::get_u16_be } else {utils::get_u16_le};
     match tag_group {
         0xFF => match tag_number {
-            0x00 => TagType::Style(StyleTagType::Color(payload[0] as u16)),
+            0x00 => TagType::Style(StyleTagType::Color(
+                if payload[0] == 0 {
+                    0xFFFF
+                } else {
+                    payload[0] as u16
+                }
+            )),
             0x01 => TagType::Style(StyleTagType::Size(get_u16(payload, 0))),
             0x02 => {
                 let over_count = payload[0];
@@ -115,6 +121,7 @@ pub const TWW: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB_TWW: [&str; 9] = [
             "#ffffff",
             "#ff6400",
@@ -127,7 +134,7 @@ pub const TWW: GameConfig = GameConfig {
             "#ff8000",
         ];
 
-        COLORS_RGB_TWW[id]
+        COLORS_RGB_TWW[idx]
     },
     get_tag_type : |tag| {
         get_tag_type_default_inner(tag.group, tag.number, &tag.payload, true, encoding_rs::SHIFT_JIS)
@@ -271,8 +278,9 @@ pub const TP: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB : [&str; 9] = [
-            "#FFFFFF",
+            "#ffffff",
             "#f07878",
             "#aadc8c",
             "#a0b4dc",
@@ -283,7 +291,7 @@ pub const TP: GameConfig = GameConfig {
             "#dcaa78",
         ];
 
-        COLORS_RGB[id]
+        COLORS_RGB[idx]
     },
     get_tag_type : |tag| {
         get_tag_type_default_inner(tag.group, tag.number, &tag.payload, true, encoding_rs::SHIFT_JIS)
@@ -496,6 +504,7 @@ pub const PH: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB_TWW: [&str; 9] = [
             "#ffffff",
             "#ff6400",
@@ -508,7 +517,7 @@ pub const PH: GameConfig = GameConfig {
             "#ff8000",
         ];
 
-        COLORS_RGB_TWW[id]
+        COLORS_RGB_TWW[idx]
     },
     get_tag_type : |tag| {
         get_tag_type_default_inner(tag.group, tag.number, &tag.payload, false, encoding_rs::UTF_16LE)
@@ -602,6 +611,7 @@ pub const ST: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB_TWW: [&str; 9] = [
             "#ffffff",
             "#ff6400",
@@ -614,7 +624,7 @@ pub const ST: GameConfig = GameConfig {
             "#ff8000",
         ];
 
-        COLORS_RGB_TWW[id]
+        COLORS_RGB_TWW[idx]
     },
     get_tag_type : |tag| {
         get_tag_type_default_inner(tag.group, tag.number, &tag.payload, false, encoding_rs::UTF_16LE)
@@ -679,6 +689,7 @@ pub const FSA: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB_TWW: [&str; 9] = [
             "#ffffff",
             "#ff6400",
@@ -691,7 +702,7 @@ pub const FSA: GameConfig = GameConfig {
             "#ff8000",
         ];
 
-        COLORS_RGB_TWW[id]
+        COLORS_RGB_TWW[idx]
     },
     get_tag_type : |tag| {
         match tag.group {
@@ -735,12 +746,12 @@ pub const ALBW: GameConfig = GameConfig {
     logo : "https://www.nintendo.com/jp/character/zelda/history/img/branch-b/04/pc/logo.png",
     big_endian : false,
     get_languages : || {
-        const LANGUAGES : [(&str, &str);3] = [
+        const LANGUAGES : [(&str, &str);4] = [
             ("jp", "Japanese"),
             ("en", "English"),
             ("fr", "French"),
             // ("sp", "Spanish"),
-            // ("de", "German"),
+            ("de", "German"),
             // ("it" "Italian")
         ];
 
