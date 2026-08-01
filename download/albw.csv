@@ -149,14 +149,16 @@ vous permet de glisser à la
 surface des murs. Merci Lavio.";"Armreif, der dir erlaubt, dich
 als Wandbild fortzubewegen.
 Von Ravio erhalten.";
-"";"A glove that makes you feel
+"で小さい岩を持ち上げられる
+まるで気分は力持ち！";"A glove that makes you feel
 strong! Pick up small
 boulders by pressing .";"Vous permet de soulever
 des rochers avec  et de
 vous sentir grand et fort.";"Erhöht die Körperkraft,
 sodass du mit  kleine
 Felsen aufheben kannst.";
-"";"A powered-up version of the
+"で大きな岩を持ち上げられる
+最強のパワーグローブ";"A powered-up version of the
 Power Glove. Pick up large
 boulders by pressing !";"La version améliorée des
 gants de puissance. Soulevez
@@ -2592,7 +2594,9 @@ Yasuhisa Yamamura
 Minoru Narita
 Yasuhiro Akama";
 "DUNGEON PLANNING";"DUNGEON PLANNING";"DUNGEON PLANNING";"DUNGEON PLANNING";
-"";"Takayuki Ikkaku
+"一角 崇行
+竹内 康貴
+逆井 寛";"Takayuki Ikkaku
 Yasutaka Takeuchi
 Hiroshi Sakasai";"Takayuki Ikkaku
 Yasutaka Takeuchi
@@ -12588,7 +12592,10 @@ Das ist in Wirklichkeit 'ne echt
 riesige Karacho-Bombe.
 
 Yeah!♪";
-"";"♪ Just go on and touch it.
+"で連れてく♪
+　ついて来る～♪
+でっかいイワも～♪
+　ドッカン・ドカ～ン♪";"♪ Just go on and touch it.
 It'll be a following bloom.
 
 ♪ Big Bomb Flower gonna make big
@@ -15817,7 +15824,7 @@ Eager as ever, aren't you? Is there
 something I can help you with?";"Tiens, [PlayerName] ?
 Quel bon vent t'amène ?";"Hallo, [PlayerName]!
 Möchtest du zur Kirche?";
-"";"[Flush]AHHH—!";"[Flush]
+"　　[Flush]　キャーーーーー！！";"[Flush]AHHH—!";"[Flush]
 　　　           Aaaaah !!!";"[Flush]
                   Hilfeee!!!";
 "な、何事だべ！？";"Wh-what's happening in there?";"C... C'était quoi, ce cri ?!";"W-was war das denn?!";
@@ -20646,7 +20653,14 @@ now. Right this way, please.";"Jeune homme ! La princesse est prête
 empfangen.
 
 Hier entlang...";
-"";"
+"　[Flush]　　　　　　　　第一章
+　　　　　『黄金のトライフォース』
+神々から与えられたハイラル王国の礎。
+
+トライフォースは触れた者の願いを
+叶えると言われている。
+欲望にかられた者がトライフォースを求め
+この地は争いに満ちていた。";"
 Painting I: The Golden Triforce
 
 This gift from the gods, Hyrule's
@@ -20704,7 +20718,12 @@ Weise zusammen, um die ewige Heim-
 suchung durch Kriege zu beenden.
 Sie verbargen das Triforce im
 Heiligen Reich.";
-"";"
+"　　　[Flush]　　　　　　第三章
+　　　　　　  『大魔王 ガノン』
+悪名高き盗賊　ガノンドロフ。
+
+トライフォースの隠し場所を暴き、その力で
+大魔王ガノンとなりハイラル王国を襲った。";"
 Painting III: The Demon King
 
 The Demon King Ganon was once just
@@ -20732,7 +20751,12 @@ an dem es verborgen war.
 Durch seine Macht wurde er zum
 König der Finsternis, der Hyrule in
 Angst und Schrecken versetzte.";
-"";"
+"　[Flush]　　　　　　　　第四章
+　　　　　　　『勇者の目覚め』
+勇者は王女の導きにより
+目覚めると言われている。
+勇者は退魔の剣マスターソードを手にし
+七賢者と共に大魔王ガノンを封印した。";"
 Painting IV: The Hero Awakens
 
 A hero of legend arose from humble
@@ -20760,7 +20784,18 @@ Erwachen geleitet wurde.
 Der Held ergriff das Master-Schwert
 und bannte mit den Sieben Weisen
 den dämonischen Ganon.";
-"";"
+"　　[Flush]　　　　　　 　第五章
+　 　  　『眠りにつくトライフォース』
+勇者がガノンを封じた後、トライフォースは
+三つに分かれ眠りにつく。
+一つは大魔王ガノンの封印と共に……
+
+一つはハイラル王家に……
+
+そして最後の一つは勇者の心に……
+
+この伝説は今もハイラルの地で
+語り継がれている。";"
 Painting V: The Triforce, Split Apart
 
 The Triforce was split into three
