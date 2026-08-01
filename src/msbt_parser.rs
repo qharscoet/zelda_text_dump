@@ -50,7 +50,7 @@ impl TXT2Data {
         }
 
         let offset = self.offsets[idx] as usize;
-        if self.data[offset] == 0x00 {
+        if self.data[offset] == 0x00 && self.data[offset+1] == 0x00 {
             return Vec::new();
         }
 
@@ -422,8 +422,9 @@ pub fn print_msbt(path : &Path) {
         Ok(parser) => {
             parser.print();
             // parser.print_flow();
-            let i = 1;
-            println!("Message {i} : {:?}", parser.get_msg(i).text);//parser.get_msg(0x66).text));
+            for i in 2..3 {
+                println!("Message {i} : {:?}", parser.get_msg(i).text);//parser.get_msg(0x66).text));
+            }
         }
         Err(e) => {
             eprintln!("Error opening BMG file: {}", e);
