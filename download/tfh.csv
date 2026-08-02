@@ -195,6 +195,40 @@ version complète.";
 "本体にニンテンドーeショップがインストールされていません";"Nintendo eShop is not installed
 on this system.";"Le Nintendo eShop n'est pas installé
 sur cette console.";
+"『ゼルダの伝説　トライフォース３銃士　試勇版』のインターネット通信のプレイタイムではありません
+
+開催スケジュールは任天堂ホームページで確認してください";"Online Play in the demo version of
+The Legend of Zelda: Tri Force Heroes
+is not available at this time.
+For details of the demo schedule,
+visit the Nintendo website.";"Le mode en ligne de la version démo de
+The Legend of Zelda: Tri Force Heroes
+n'est pas disponible actuellement.
+Visitez le site Nintendo pour consulter
+les horaires de disponibilité.";
+"『ゼルダの伝説　トライフォース３銃士　試勇版』のインターネット通信のプレイタイムは終了しました";"Online Play in the demo version of
+The Legend of Zelda: Tri Force Heroes
+is no longer available.";"Le mode en ligne de la version démo de
+The Legend of Zelda: Tri Force Heroes
+n'est plus disponible.";
+"通信が切断されました
+
+何度も表示される場合は お客様の通信環境が不安定になっている可能性があります
+
+くわしくは 『ゼルダの伝説 トライフォース３銃士』公式サイトから「サポート情報」をご覧ください";"You have been disconnected.
+If you have received this message
+multiple times, there may be a problem
+with your network connection. For more
+information, visit the "Support" page
+on the official The Legend of Zelda:
+Tri Force Heroes website in your region.";"La communication a été interrompue.
+Si vous avez reçu ce message plusieurs
+fois, il se peut qu'il y ait un problème
+avec votre connexion Internet. Pour
+plus d'informations, visitez le site
+officiel The Legend of Zelda: Tri Force
+Heroes de votre région et accédez à la
+page Service consommateurs.";
 "[InsertMark]を手に入れた!";"You got [InsertMark]!";"Vous avez obtenu
 [InsertMark] !";
 "カギ";"a key";"une clé";
@@ -208,6 +242,9 @@ sur cette console.";
 "ハート3";"3 hearts";"trois cœurs";
 "ダサいタイツ";"the Semi-Cursed Tights";"un collant ringard";
 "50ルピー";"50 Rupees";"50 rubis";
+"ラインバックの服";"Linebeck's Uniform";"la tenue de Linebeck";
+"鬼神のよろい
+";"the Fierce Deity Mail";"l'armure Dieu démon";
 "アレ? まだ何かあるぞ";"
  Hey, there's something else here!";"
 Mh ? Il y a encore quelque chose !";
@@ -215,38 +252,49 @@ Mh ? Il y a encore quelque chose !";
 "毎日たからばこ屋";"Daily Riches";"Magotidien";
 "ミーバース写真館";"Miiverse Gallery";"Galerie Miiverse";
 "[ColoringStart][InsertMark][ColoringEnd]がハートゲット!";"[ColoringStart][InsertMark][ColoringEnd] got a heart!";"[ColoringStart][InsertMark][ColoringEnd] a trouvé un cœur !";
-"[ColoringStart][InsertMark][ColoringEnd]が[Number of Rupee]ゲット!";"[ColoringStart][InsertMark][ColoringEnd] got three hearts!";"[ColoringStart][InsertMark][ColoringEnd] a trouvé trois cœurs !";
-"[ColoringStart][InsertMark][ColoringEnd]がダメージをうけた";"[ColoringStart][InsertMark][ColoringEnd] got [Number of Rupee]!";"[ColoringStart][InsertMark][ColoringEnd] a obtenu [Number of Rupee] !";
-"[ColoringStart][InsertMark][ColoringEnd]が落ちた…";"[ColoringStart][InsertMark][ColoringEnd] took damage!";"[ColoringStart][InsertMark][ColoringEnd] a subi des dégâts !";
-"[ColoringStart][InsertMark][ColoringEnd]が宝箱をあけた!";"[ColoringStart][InsertMark][ColoringEnd] fell...";"[ColoringStart][InsertMark][ColoringEnd] est tombé...";
-"[ColoringStart][InsertMark][ColoringEnd]がカギを手に入れた!";"[ColoringStart][InsertMark][ColoringEnd] opened a treasure chest!";"[ColoringStart][InsertMark][ColoringEnd] a ouvert un coffre !";
-"ハートがすくない!";"[ColoringStart][InsertMark][ColoringEnd] got a key!";"[ColoringStart][InsertMark][ColoringEnd] a obtenu une clé !";
-"ピンチ!";"You're low on hearts!";"Vous n'avez plus beaucoup de cœurs !";
-"キケン!";"You're nearly done for!";"Attention !";
-"ヤバイ!";"You're barely holding on!";"Danger !";
-"[ColoringStart][InsertMark][ColoringEnd]がやってきました";"You're on your last legs!";"Aïe, aïe, aïe !";
-"仲間と合流しました";"[ColoringStart][InsertMark][ColoringEnd] has arrived!";"[ColoringStart][InsertMark][ColoringEnd] a rejoint le hall !";
-"注文した服が届きました";"The heroes have united!";"Les héros se sont rejoints !";
-"マダムテーラーに服が追加されました";"The outfit you ordered has arrived!";"La tenue que vous avez commandée est arrivée !";
-"新しいエリアがオープンしました";"New outfits are available at Madame Couture's!";"De nouvelles tenues sont disponibles chez Madame la couturière !";
-"[ColoringStart][InsertMark][ColoringEnd]は[ColoringStart][InsertMark][ColoringEnd]のことが気になっているようだ";"New areas have been unlocked!";"La carte des contrées maudites a été mise à jour !";
-"[ColoringStart]トーテム![ColoringEnd]";"[ColoringStart][InsertMark][ColoringEnd] is curious about [ColoringStart][InsertMark][ColoringEnd].";"[ColoringStart][InsertMark][ColoringEnd] est intrigué par [ColoringStart][InsertMark][ColoringEnd].";
-"君のコスチュームカラーは[ColoringStart]緑[ColoringEnd]だ!";"[ColoringStart]Totem time! [ColoringEnd]";"[ColoringStart]1, 2, 3, totem ! [ColoringEnd]";
-"君のコスチュームカラーは[ColoringStart]青[ColoringEnd]だ!";"Your colour is [ColoringStart]green[ColoringEnd]!";"Vous êtes en [ColoringStart]vert[ColoringEnd] !";
-"君のコスチュームカラーは[ColoringStart]赤[ColoringEnd]だ!";"Your colour is [ColoringStart]blue[ColoringEnd]!";"Vous êtes en [ColoringStart]bleu[ColoringEnd] !";
-"あと[Number of Second]!!";"Your colour is [ColoringStart]red[ColoringEnd]!";"Vous êtes en [ColoringStart]rouge[ColoringEnd] !";
-"残り[Number of Second]でロビーに戻ります";"[Number of Second] left!!";"Il reste [Number of Second] !";
-"[ColoringStart][InsertMark][ColoringEnd]がツボを落としてしまった";"Returning to lobby in [Number of Second].";"Retour au hall dans [Number of Second].";
-"[ColoringStart][InsertMark][ColoringEnd]がフォールマスターにつかまった";"[ColoringStart][InsertMark][ColoringEnd] dropped the pot!";"[ColoringStart][InsertMark][ColoringEnd] a fait tomber le vase !";
-"[ColoringStart][InsertMark][ColoringEnd]が風船を割ってしまった";"[ColoringStart][InsertMark][ColoringEnd] got caught by the Wallmaster!";"La Main a attrapé [ColoringStart][InsertMark][ColoringEnd] !";
-"[ColoringStart][InsertMark][ColoringEnd]がエリアの外に出てしまった";"[ColoringStart][InsertMark][ColoringEnd] popped a balloon!";"[ColoringStart][InsertMark][ColoringEnd] a fait éclater un ballon !";
-"[ColoringStart][InsertMark][ColoringEnd]が流砂にのみ込まれた";"[ColoringStart][InsertMark][ColoringEnd] left the designated area!";"[ColoringStart][InsertMark][ColoringEnd] a quitté la zone !";
-"[ColoringStart][InsertMark][ColoringEnd]がダウンした";"[ColoringStart][InsertMark][ColoringEnd] got swallowed up by quicksand!";"[ColoringStart][InsertMark][ColoringEnd] s'est fait engloutir par les sables !";
-"[ColoringStart][InsertMark][ColoringEnd]が敵につかまった";"[ColoringStart][InsertMark][ColoringEnd] fainted!";"[ColoringStart][InsertMark][ColoringEnd] est K.-O. !";
-"[ColoringStart][InsertMark][ColoringEnd]が火山弾にあたった";"[ColoringStart][InsertMark][ColoringEnd] got caught by an enemy!";"Un ennemi a capturé [ColoringStart][InsertMark][ColoringEnd] !";
-"[ColoringStart][InsertMark][ColoringEnd]が氷雪弾にあたった";"[ColoringStart][InsertMark][ColoringEnd] got hit by a volcanic rock!";"[ColoringStart][InsertMark][ColoringEnd] a été touché par une boule de lave !";
-"風船がわれてしまった…";"[ColoringStart][InsertMark][ColoringEnd] got hit by a snowball!";"[ColoringStart][InsertMark][ColoringEnd] a été touché par une boule de neige !";
-"";"A balloon got popped...";"Un ballon a éclaté...";
+"[ColoringStart][InsertMark][ColoringEnd]がハートゲット!";"[ColoringStart][InsertMark][ColoringEnd] got three hearts!";"[ColoringStart][InsertMark][ColoringEnd] a trouvé trois cœurs !";
+"[ColoringStart][InsertMark][ColoringEnd]が[Number of Rupee]ゲット!";"[ColoringStart][InsertMark][ColoringEnd] got [Number of Rupee]!";"[ColoringStart][InsertMark][ColoringEnd] a obtenu [Number of Rupee] !";
+"[ColoringStart][InsertMark][ColoringEnd]がダメージをうけた";"[ColoringStart][InsertMark][ColoringEnd] took damage!";"[ColoringStart][InsertMark][ColoringEnd] a subi des dégâts !";
+"[ColoringStart][InsertMark][ColoringEnd]が落ちた…";"[ColoringStart][InsertMark][ColoringEnd] fell...";"[ColoringStart][InsertMark][ColoringEnd] est tombé...";
+"[ColoringStart][InsertMark][ColoringEnd]が宝箱をあけた!";"[ColoringStart][InsertMark][ColoringEnd] opened a treasure chest!";"[ColoringStart][InsertMark][ColoringEnd] a ouvert un coffre !";
+"[ColoringStart][InsertMark][ColoringEnd]がカギを手に入れた!";"[ColoringStart][InsertMark][ColoringEnd] got a key!";"[ColoringStart][InsertMark][ColoringEnd] a obtenu une clé !";
+"ハートがすくない!";"You're low on hearts!";"Vous n'avez plus beaucoup de cœurs !";
+"ピンチ!";"You're nearly done for!";"Attention !";
+"キケン!";"You're barely holding on!";"Danger !";
+"ヤバイ!";"You're on your last legs!";"Aïe, aïe, aïe !";
+"[ColoringStart][InsertMark][ColoringEnd]がやってきました";"[ColoringStart][InsertMark][ColoringEnd] has arrived!";"[ColoringStart][InsertMark][ColoringEnd] a rejoint le hall !";
+"仲間と合流しました";"The heroes have united!";"Les héros se sont rejoints !";
+"注文した服が届きました";"The outfit you ordered has arrived!";"La tenue que vous avez commandée est arrivée !";
+"マダムテーラーに服が追加されました";"New outfits are available at Madame Couture's!";"De nouvelles tenues sont disponibles chez Madame la couturière !";
+"新しいエリアがオープンしました";"New areas have been unlocked!";"La carte des contrées maudites a été mise à jour !";
+"[ColoringStart][InsertMark][ColoringEnd]は[ColoringStart][InsertMark][ColoringEnd]のことが気になっているようだ";"[ColoringStart][InsertMark][ColoringEnd] is curious about [ColoringStart][InsertMark][ColoringEnd].";"[ColoringStart][InsertMark][ColoringEnd] est intrigué par [ColoringStart][InsertMark][ColoringEnd].";
+"[ColoringStart]トーテム![ColoringEnd]";"[ColoringStart]Totem time! [ColoringEnd]";"[ColoringStart]1, 2, 3, totem ! [ColoringEnd]";
+"君のコスチュームカラーは[ColoringStart]緑[ColoringEnd]だ!";"Your colour is [ColoringStart]green[ColoringEnd]!";"Vous êtes en [ColoringStart]vert[ColoringEnd] !";
+"君のコスチュームカラーは[ColoringStart]青[ColoringEnd]だ!";"Your colour is [ColoringStart]blue[ColoringEnd]!";"Vous êtes en [ColoringStart]bleu[ColoringEnd] !";
+"君のコスチュームカラーは[ColoringStart]赤[ColoringEnd]だ!";"Your colour is [ColoringStart]red[ColoringEnd]!";"Vous êtes en [ColoringStart]rouge[ColoringEnd] !";
+"あと[Number of Second]!!";"[Number of Second] left!!";"Il reste [Number of Second] !";
+"残り[Number of Second]でロビーに戻ります";"Returning to lobby in [Number of Second].";"Retour au hall dans [Number of Second].";
+"[ColoringStart][InsertMark][ColoringEnd]がツボを落としてしまった";"[ColoringStart][InsertMark][ColoringEnd] dropped the pot!";"[ColoringStart][InsertMark][ColoringEnd] a fait tomber le vase !";
+"[ColoringStart][InsertMark][ColoringEnd]がフォールマスターにつかまった";"[ColoringStart][InsertMark][ColoringEnd] got caught by the Wallmaster!";"La Main a attrapé [ColoringStart][InsertMark][ColoringEnd] !";
+"[ColoringStart][InsertMark][ColoringEnd]が風船を割ってしまった";"[ColoringStart][InsertMark][ColoringEnd] popped a balloon!";"[ColoringStart][InsertMark][ColoringEnd] a fait éclater un ballon !";
+"[ColoringStart][InsertMark][ColoringEnd]がエリアの外に出てしまった";"[ColoringStart][InsertMark][ColoringEnd] left the designated area!";"[ColoringStart][InsertMark][ColoringEnd] a quitté la zone !";
+"[ColoringStart][InsertMark][ColoringEnd]が流砂にのみ込まれた";"[ColoringStart][InsertMark][ColoringEnd] got swallowed up by quicksand!";"[ColoringStart][InsertMark][ColoringEnd] s'est fait engloutir par les sables !";
+"[ColoringStart][InsertMark][ColoringEnd]がダウンした";"[ColoringStart][InsertMark][ColoringEnd] fainted!";"[ColoringStart][InsertMark][ColoringEnd] est K.-O. !";
+"[ColoringStart][InsertMark][ColoringEnd]が敵につかまった";"[ColoringStart][InsertMark][ColoringEnd] got caught by an enemy!";"Un ennemi a capturé [ColoringStart][InsertMark][ColoringEnd] !";
+"[ColoringStart][InsertMark][ColoringEnd]が火山弾にあたった";"[ColoringStart][InsertMark][ColoringEnd] got hit by a volcanic rock!";"[ColoringStart][InsertMark][ColoringEnd] a été touché par une boule de lave !";
+"[ColoringStart][InsertMark][ColoringEnd]が氷雪弾にあたった";"[ColoringStart][InsertMark][ColoringEnd] got hit by a snowball!";"[ColoringStart][InsertMark][ColoringEnd] a été touché par une boule de neige !";
+"風船がわれてしまった…";"A balloon got popped...";"Un ballon a éclaté...";
+"妖精が1匹増えた!!";"You got an extra fairy!";"Vous avez une fée en plus !";
+"極まったな!!";"Well done. You did it!";"Jeune héros, le corps expéditionnaire est fier de toi !";
+"おったまげましたぞ!";"I didn't expect this at all!";"Oufti ! Vous ne faites pas les choses à moitié !";
+"連続なんて…お若いのねぇ";"How sturdy! ";"Ah, la belle vigueur de la jeunesse ! ";
+"Oh!";"Oh!";"Acceptez nos royales félicitations !";
+"感動でありマス";"I was moved!";"Que d'émotions... !";
+"まさか! だわサ";"Unbelievable!";"Juste ciel... Quel style, mon enfant !";
+"スゴイっちょ!";"Awesome stuff!";"Trop fort, mon pote !";
+"スゴイの? れんぞくってスゴイの?";"That's great!";"Eh ! Comment t'as fait, dit ? Allez, dis-le quoi !";
+"このチームだと[PlayableCourseAbyssAll]から進めます";"With this team, you can play from [PlayableCourseAbyssAll].";"Cette équipe peut partir de la [PlayableCourseAbyssAll].";
+"魔窟が選ばれました";"Den of Trials selected";"Vous avez choisi la crypte !";
 "この物語の「はじまり」を
 お聞かせしましょう";"Let me tell you how all this started.";"Laissez-moi vous raconter comment
 tout cela a commencé.";
@@ -1337,7 +1385,7 @@ sont accrochées au mur. Elles sont
 signées « Binocles au bol ».";
 "何か書いてある…
 
-
+
 
 この文字を読める者
 友多き者のみ";"There's something written here...
@@ -1350,9 +1398,11 @@ shall be able to decipher this code.";"Il y a une inscription...
 De nombreux amis il faut avoir pour
 pouvoir déchiffrer ces signes...";
 "なぜかこの木だけ
-セミの抜け殻がいっぱいついている";"For some reason, only this tree is
-covered in cast-off cicada shells...";"Cet arbre est couvert d'exuvies
-de cigales. Les autres non...";
+セミの抜け殻が[KindPointNum]匹ついている";"For some reason, only this tree has
+cast-off cicada shells hanging off it...
+[KindPointNum] of them, to be exact.";"Il y a des mues de cigales sur cet
+arbre, mais pas sur les autres...
+Il y en a [KindPointNum], pour être exact.";
 "ニャッ!
 ニャニャニャニャニャ!!";"Meow!
 Meow meowmeow!";"Miaou ! Miaaamiamiamiaaaou !";
@@ -1917,6 +1967,12 @@ vivre pour sortir d'ici ! »
 Je presse  d'un doigt mouillé de
 sueur. Le claquement de l'obturateur
 est, lui, sec comme un vieil os...";
+"この木から すさまじく濃い
+樹液の香りが漂ってくる";"The smell of sap wafting from this
+old tree is overpowering...
+You can't stop sniffing it.";"Les puissantes exhalaisons de
+sève émanant de ce vieil arbre
+sont presque enivrantes.";
 "自分は今 大事なお役目中で ありマス!
 扉を守ることが自分のお役目で ありマス!
 戦いについてのお作法は 教育係殿に
@@ -2666,6 +2722,20 @@ mission, hein ?";
 Place your order at Madame's!";"Nous avons reçu de nouvelles tenues !
 Pour commander, passe chez
 Madame !";
+"アレ…?その服…
+アレはアレなんだけど…
+なんだかいつもより輝いてない?
+気のせいかオシャレにみえてきたよ…";"Erm...? Hold on, that outfit...
+It's still kinda...erm...but now...?
+
+Is it...shining? It wasn't doing it
+before, was it? I don't know what it is,
+but it looks...pretty cool now...";"Mmh ? Cette tenue...
+Elle est toujours un peu... enfin...
+Elle est ce qu'elle est, mais...
+Elle... brille ? Elle ne faisait pas ça
+avant, si ? En tout cas, je la trouve
+vachement plus classe maintenant...";
 "おはようございます。
 こんにちは。
 こんばんは。
@@ -3018,6 +3088,23 @@ avec moi ?";
 "着替えたい!";"I wanna change!";"Je dois me changer !";
 "呪いの事教えて!";"About the curse!";"Alors, ce sortilège ?";
 "用はない";"Not really";"Non, merci...";
+"あらん 
+オニがとっても おニアイね
+…ふふふ";"Looking so fierce, my little praline!
+Uhm... Maybe a little too fierce.
+Could you...tone it down a bit...?";"Mon petit faon ! Vous êtes beau
+comme un dieu avec ça ! ";
+"あらん そんなにジッと見つめて
+お姉さんのドレスの下はお宝じゃないわよ～";"Oh my, auntie's little sailor-man! 
+Your eyes look right through me...
+Such a piercing gaze! ";"Hihihi, mon coffre n'a plus de secrets
+pour vous maintenant... ";
+"あらん
+アレがアレになっちゃった";"Erm...? Oh, I see!
+More like Bear MAXIMUM, right,
+sweetie pie? ";"Tenue basique, tenue basique...
+Absolument basifique, oui ! Vous êtes
+rayonnant mon petit choupignolet ! ";
 "毎日1回運試し!
 今日も明日も運試し!!
 毎日たからばこ屋へようこそ!
@@ -3572,6 +3659,89 @@ of them. Do you like it?";"Et voilà !
 On dirait que vous en
 avez déjà [Number].
 Vous êtes satisfait ?";
+"あれっ?
+
+その服は…";"Uhm?
+
+
+What's that outfit you got there,
+sonny? Could it be...";"Hmm ?
+
+
+C'est quoi cette tenue, petit gars ?
+Mais dites-moi, on dirait...";
+"　　　　　ラインバックの服!";"
+          Linebeck's Uniform!";"
+       La tenue de Linebeck !";
+"そんな服を着られてたんじゃ…
+商売あがったりじゃないか…";"If you come here wearing that...
+You'll take me for all I've got...";"Si vous venez ici attifé comme ça... j'ai
+plus qu'à mettre la clé sous la porte...";
+"…なんてな
+
+そこは俺もプロの宝箱屋
+ちゃんと対策はとってるよ！
+ウチの宝箱は特注品なんだ!
+どうだい中身が見えないだろ?
+じゃあ そういうことで…";"... You didn't actually think I'd
+let that happen, did you, sonny?
+
+Believe it or not, this isn't my first
+treasure chest rodeo. I've taken all
+the necessary precautions!
+So my treasure chests all have special
+Linebeck-vision-resistant lining. Ha!
+Bet you didn't expect that, did you?
+Anyhoo...";"... Sauf que, non, haha ! Vous pensiez
+m'avoir mais c'est moi qui vous ai eu,
+champion !
+Je suis pas un débutant mon vieux, le
+business des coffres, ça me connaît.
+J'ai pris mes précautions.
+Tous mes coffres sont doublés d'un
+tissu spécial anti-lorgnage. Jetez
+donc un œil. Vous n'y verrez rien !
+Ça va ? Pas trop déçu ? Ça va passer.
+Alors, qu'est-ce que je peux faire pour
+vous ?";
+"ふっふっふっーだ!
+ウチの宝箱は特注品！
+そんな服着てても中身は見えないよ!";"Nyuck-nyuck-nyuck!
+All my treasure chests are lined with
+a special material that I invented.
+You're not gonna be peeking inside,
+not even with those clothes on!";"Gnahaha ! Tous mes coffres sont
+doublés d'un tissu spécial anti-
+lorgnage de ma conception !
+Vous espériez pouvoir lorgner dans
+mes coffres avec cette tenue ? Bien
+essayé, mais c'est raté !";
+"宝箱の中身が見える服があるって
+噂はきいてたけど 本当にあるとはね～
+ちょっと値は張ったけど
+宝箱を特注品にしといてよかったよ～
+…おっとごめんよ
+そうそう 俺に用があったんだよな
+えっと…";"I've heard there's this outfit out there,
+one that lets you see inside treasure
+chests before opening them...
+If such a thing did exist, boy, would
+I be in trouble! Lucky I installed this
+special lining in all of my chests...
+Oh, hey there, sonny!
+You caught me daydreaming,
+You wanted something, I guess?
+Let's see now...";"Les rumeurs parlent d'une tenue qui
+permettrait de voir à l'intérieur des
+coffres sans les ouvrir...
+Ce ne sont que des rumeurs, mais j'ai
+pris mes précautions, au cas où. On
+n'est jamais trop prudent...
+Oh, mais vous êtes là, super héros !
+Désolé, je pensais à haute voix...
+
+Dites-moi tout, je peux faire quelque
+chose pour vous ?";
 "おや?
 おやおやおやおや??
 天をあおぐ とんがり耳に
@@ -4281,7 +4451,9 @@ Y aura bientôt un vendeur de rue
 en ville ! Il va s'installer juste ici !
 Trop la classe, non ?
 Hihihi, pour les dernières infos,
-tu peux compter sur Mimi !";
+tu peux compter sur Mimi !Eh ! Eh ! Dis, c'est quoi un
+« vendeur de rue » ? C'est quoi ?
+Dis-moi ! Steuplé ! Allez, dis-le, quoi !";
 "ねぇ ねぇ 『ろてんしょう』ってなに?
 ねぇ なに? ねぇ なになに?";"Hey, what's a "stweet mewchant"?
 Hey, tell me? Tell me, tell me!";"Eh ! Eh ! Dis, c'est quoi un
@@ -4679,7 +4851,7 @@ que toi ! Hahaha !";
 [Number of Sheet]だぞ!";"I've given you [Number of Sheet]
 so far...";"Jusqu'à présent, je t'ai donné
 [Number of Sheet].";
-"勇者ならこのぐらいのトモダチの数は
+"ゆ…勇者ならこのぐらいのトモダチの数は
 あたりまえだっちょ!";"Hmph. That's the bare minimum I'd
 expect from a hero, to be honest!";"Pour un soi-disant « héros », c'est
 quand même le minimum !";
@@ -4694,11 +4866,6 @@ derrière moi !";
 "お前にやったトモダチの証は
 [Number of Sheet]だっちょ!";"I've given you [Number of Sheet].";"Je t'ai donné
 [Number of Sheet].";
-"ま…まあまあ集めたっちょね…
-でも所詮 お前は まあまあ止まりだっちょ!";"That's...so-so.
-And you'll always be "so-so" at best!";"C'est... plutôt pas mal. Mais, héhé...
-ça m'étonnerait que tu puisses faire
-mieux que ça !";
 "ううっ オイラのトモダチの証が
 1つ残らずなくなったっちょ…";"Urgh...
 I have no more Friendly Tokens left...";"Arghhh... Il ne me reste plus aucune
@@ -4787,10 +4954,11 @@ le côté, comme toujours !";
 "お前にやったトモダチの証は
 [Number of Sheet]…";"I've given you [Number of Sheet]...";"Je t'ai donné
 [Number of Sheet].";
-"オ オイラが必死で集めたトモダチの証が
-こんなにも簡単に 半分もなくなるなんて…";"I can't believe I've already lost half
-my Friendly Tokens to you...";"J'arrive pas à croire que tu as déjà
-la moitié de mes preuves d'amitié...";
+"オ…オイラが必死で集めたトモダチの証が
+こんなにも…";"I can't believe I've already given you 
+this many Friendly Tokens... And after
+I worked so hard for them, too...";"J'arrive pas à croire que je t'ai déjà
+donné tout ça de preuves d'amitié...";
 "お前にやったトモダチの証は
 [Number of Sheet]…";"I've given you...[Number of Sheet]?";"Je t'ai donné
 [Number of Sheet].";
@@ -4906,6 +5074,74 @@ héros !";
 pas moi ?!";
 "トモダチの証";"Friendly Tokens";"Preuves d'amitié";
 "なんでもない";"Never mind";"Lâche-moi...";
+"　　　　　　　　　…グスッ";"*Sniffle*...";"Snif...";
+"　　　　　　　　ああっ!!!";"
+               Whoa there!!!";"
+                   Eh, toi !!!";
+"それはラインバックの服!!
+
+カタログで見て カッコいいなって
+思ってたっちょ!
+夢あふれる 男のロマンだなって
+思ってたっちょ!
+そして絶対…絶対
+オイラの方が先に見つけてたっちょ!
+お前!
+何から何までオイラの邪魔ばかりするっちょ!
+お前なんか…
+お前なんか…";"Could that be Linebeck's Uniform?!
+I saw it in the catalogue...
+It was love at first sight...
+Man, is it cool. I thought for sure I'd
+be the first one to get it...
+
+You...
+You're always getting in my way!!!";"C'est la tenue de Linebeck, ou je
+rêve ?!
+
+Je suis tombé raide dingue amoureux
+d'elle quand je l'ai vue dans le
+catalogue ! Elle est trop cool...
+Je pensais que je serais le premier à
+l'enfiler... Grrr... Tu me grilles toujours
+la politesse. La barbe, à la fin !";
+"アニキ! そ…それはラインバックの服!
+ほ…ほんものだっちょ…?
+カタログで見て
+カッコいいなって 思ってたっちょ!
+夢があるなって 思ってたっちょ!!
+
+男のロマンだなって 思ってたっちょ～!!!
+
+わざわざオイラに見せに来てくれるなんて…";"Hey, mate! Could that be...
+Linebeck's Uniform?!
+
+I saw it in the catalogue...
+It was love at first sight.
+Man, is it cool...
+Did you come all this way just to show
+it to me?";"Eh, mon pote ! Je rêve ou c'est
+la tenue de Linebeck ?! 
+Ah, cette tenue...
+Je suis tombé raide dingue amoureux
+d'elle quand je l'ai vue dans le
+catalogue ! Elle est trop cool...
+Tu as fait tout ce chemin juste pour
+me la montrer ?";
+"　　　　　　感激ですっちょ～!";"
+　　　　　　Impressive!";"
+　　　 　Impressionnant !";
+"伝説を感じるですっちょー!";"I can feel the legend!";"Tu portes la légende sur tes épaules !";
+"アニキこそ
+伝説ですっちょー!";"Hey you...
+You're a legend!";"T'es une vraie légende vivante,
+mon pote !";
+"オイラもいつかアニキと
+おそろいしたいっちょ!";"It'd be cool if... If we matched outfits 
+at some point...
+I'd like to wear one of those, too...";"Ce serait cool qu'on porte la même
+tenue une fois, mon pote... J'adorerais
+essayer celle que t'as sur le dos, là.";
 "飛び交う弓矢をかいくぐり
 荒ぶるトゲゴマ達を倒し
 森の神殿の守護者 メダマーゴを
@@ -5951,11 +6187,12 @@ vous aurez soif de bataille.";
 "　　　 インターネットに接続中です…";"
        Connecting to the internet...";"
           Connexion à Internet...";
-"インターネットに接続したぞい
-対戦相手が合流するまで しばし待つのじゃ";"There you go, all connected.
-Now wait for your opponents to join.";"Vous voilà connecté et fin prêt !
-Il ne vous reste plus qu'à attendre
-que vos adversaires vous rejoignent.";
+"時には望まぬ相手が来ることもあろうが
+じいさんのすることじゃ 大目にみてほしいぞい";"At times, opponents may arrive that
+are not entirely to your liking. Please
+understand that I'm trying my best.";"Il peut arriver que certains adversaires
+ne soient pas tout à fait de votre goût.
+Soyez sûr que je fais de mon mieux.";
 "インターネットに接続したぞい
 フレンドが合流するまで しばし待つのじゃ";"There you go, all connected.
 Now wait for your friends to join.";"Vous voilà connecté et fin prêt !
@@ -6154,6 +6391,111 @@ est déjà au complet.
 Rejoignez une autre équipe
 ou créez-en une nouvelle...
 À vous de voir !";
+"…オヌシ
+
+もしや インターネット通信でポーズを使い
+冒険を中断してはおらぬであろうな…
+最近では偽勇者とみなされブラックリストに
+登録されてしまう勇者が後を絶たないというぞ
+ブラックリストに載ってしまうと
+さすがのワシでもマッチングが難しくなるぞい
+まぁ 仕方のない時もあろうが
+ポーズで抜ける時は気をつけるのだぞい
+さてさて…";"Say, young master...
+
+
+You wouldn't happen to have paused
+the game and then chosen to leave it
+while playing online...would you?
+Other heroes tend not to like that...
+And lately, more and more fake heroes
+have been put on blacklists...
+If someone places you on their
+blacklist, even I might have a hard
+time matching you with other heroes.
+That said, I understand. Sometimes it's
+the only way. But do think twice when
+you use pause to retreat, hero.
+Well, then...";"Dites-moi, jeune héros...
+
+
+Vous n'êtes pas de ceux qui mettent
+le jeu en pause, puis quittent les
+parties en ligne sans prévenir, mmh ?
+De plus en plus de héros de pacotille
+sont ajoutés à la liste des utilisateurs
+bloqués d'autres héros excédés...
+Si cela devait vous arriver, il pourrait
+devenir difficile de vous trouver des
+compagnons ou adversaires. Alors...
+Même si c'est parfois la seule solution,
+réfléchissez bien avant de mettre le
+jeu en pause pour battre en retraite.
+Mais venons-en à nos moutons...";
+"…して
+オヌシの実力はいかほどかのう?";"... Tell me. How strong a hero
+would you say you are?";"... Dites-moi, jeune héros, quel est
+votre niveau ?";
+"新米勇者";"A newbie hero...";"Plutôt débutant !";
+"ベテラン勇者";"A veteran hero!";"Plutôt vétéran !";
+"　　　　　　　笑止!";"
+        Surely you're joking!";"
+             Petit plaisantin !";
+"剣聖のよろいを持つオヌシが
+新米なわけがなかろう!
+新米勇者に胸を貸す姿勢は良いが
+ここは闘技場…己の力を磨く場所じゃ
+実力の近い者達と戦うことこそ
+意味があるんじゃぞい!
+ではでは オヌシにピッタリなベテラン勇者を
+見つくろってこようかのう";"There is no way you could be a
+newbie, young master! No owner of
+the Sword Master Suit could!
+It's admirable that you want to help
+inexperienced heroes practice, but
+this is the coliseum!
+Think first about honing your own skill!
+And you can only do that if matched
+with heroes of comparable strength.
+I shall consider you a veteran hero,
+then. Relish the title, for you have
+earned it!";"Vous possédez la tenue haute-coupure
+et vous voulez me faire croire que
+vous êtes débutant ? HOHOHO !
+Aider les héros inexpérimentés à
+progresser est certes une ambition
+louable. Mais il s'agit ici de l'arène !
+Si vous souhaitez vous améliorer, il
+vous faut affronter des adversaires à
+votre mesure !
+Comptez sur moi, je vais de ce pas
+trouver un vétéran susceptible de vous
+aider à progresser.";
+"　　　　　　　　たわけ!";"
+                 Tomfoolery!";"
+                 Palsambleu !";
+"オヌシの友はどう見ても玄人
+剣聖のよろいを持つベテランではないか
+ここは闘技場…己の力を磨く場所
+力の近い者達と戦うことこそ意味があるんじゃ!
+ではでは オヌシらにピッタリな
+ベテラン勇者を見つくろってこようかのう";"It's plain as day! Your friend is clearly
+a hardened veteran hero! He even has
+the Sword Master Suit and all...
+This is the coliseum! A place to hone
+your skill... It makes no sense unless
+you fight enemies of a similar level.
+I shall consider you two veteran
+heroes, then, and strive to find you
+an opponent worthy of your time.";"On ne me la fait pas à moi. Votre ami
+n'a rien d'un débutant, il a réussi à
+obtenir la tenue haute-coupure !
+Dans l'arène, si vous souhaitez vous
+améliorer, il vous faut affronter des
+adversaires à votre mesure.
+Comptez sur moi, je vais de ce pas
+trouver un vétéran susceptible de vous
+aider à progresser.";
 "ローカル通信で対戦するんじゃな…よかろう
 それでオヌシはどうするぞい?";"So, you want to fight in
 Local Play... Very well.
@@ -6253,6 +6595,12 @@ est déjà au complet.
 Rejoignez une autre équipe
 ou créez-en une nouvelle...
 À vous de voir !";
+"同じバージョンの相手としか通信できません
+バージョンはタイトル画面で確認できます";"You can only play with heroes using
+the same software version as you.
+Check the version on the title screen.";"Vous ne pouvez jouer qu'avec des
+héros utilisant la même version du jeu.
+Vérifiez votre version sur l'écran titre !";
 "ダウンロードプレイじゃな
 それでオヌシはどうするぞい?";"Download Play, is it?
 Well, what will you do?";"En mode téléchargement, c'est ça ?
@@ -6390,6 +6738,12 @@ sans fil est désactivée...
 
 Activez la communication sans fil,
 puis réessayez.";
+"同じバージョンの相手としか通信できません
+バージョンはタイトル画面で確認できます";"You can only play with heroes using
+the same software version as you.
+Check the version on the title screen.";"Vous ne pouvez jouer qu'avec des
+héros utilisant la même version du jeu.
+Vérifiez votre version sur l'écran titre !";
 "インターネット通信で仲間を募るぞい
 どんな仲間がお好みかのう?";"Let us search for allies online.
 What manner of allies shall we seek?";"Recrutons en ligne des compagnons à
@@ -6424,11 +6778,16 @@ rendre dans les contrées maudites.";
 Please wait for your friends to join.";"Vous voilà connecté et fin prêt !
 Vous n'avez plus qu'à attendre que
 vos amis vous rejoignent.";
-"インターネットに接続したぞい
-他の仲間が合流するまで しばし待つのじゃ";"You have connected successfully.
-Please wait for other allies to join.";"Vous voilà connecté et fin prêt !
-Vous n'avez plus qu'à attendre que
-vos compagnons vous rejoignent.";
+"これで手続きは完了じゃ
+オヌシの要望は伝えておいたが約束はできんぞ";"There we go. I have sent out your
+request, but I can make no promises.";"Bien. J'ai transmis votre demande,
+mais je ne peux rien vous promettre.";
+"後は望みの勇者が
+来てくれることを願うばかりじゃの";"You will have to wait and hope that
+heroes matching your criteria turn up
+sooner or later.";"Il ne vous reste plus qu'à espérer que
+des héros correspondant à votre
+demande fassent leur apparition ! ";
 "ほほう…
 フレンドとチームを作るんじゃな
 だが もし・・・
@@ -6557,7 +6916,7 @@ inconnus prêts à partir à l'aventure
 avec vous. Attendez un moment. ";
 "なんじゃ?";"What is it?";"De quoi s'agit-il ?";
 "出発をやめたい";"Give up on going";"Je veux plus y aller...";
-"条件を変更して募集";"Change conditions";"Changer les critères.";
+"条件をかえて募集";"Change conditions";"Changer les critères.";
 "用はない";"Nothing really";"Non, rien...";
 "ではインターネットに接続するぞい";"Then let us connect to the internet.";"Bien, connectons-nous à Internet.";
 "それではインターネットに接続するぞい
@@ -6588,28 +6947,23 @@ décidé de ne pas recruter
 de compagnons en ligne.
 Revenez quand vous voudrez vous
 rendre dans les contrées maudites.";
-"では 新しいエリアで
+"では 今の条件で
 募集を始めるぞい
 見知らぬ勇者が来るまで
 しばし 待つのじゃ";"Well then, let us begin searching
-in the area you selected.
+with these conditions.
 
 Please wait until unknown heroes
 arrive...";"Ainsi soit-il ! Cherchons donc des
-candidats pour cette destination.
+candidats répondant à ces critères.
 
 Veuillez attendre jusqu'à ce que
 les héros inconnus se manifestent.";
-"なんじゃ変更せぬのか?
-では 先ほどと同じエリアで募集するぞい
-見知らぬ勇者が来るまで
-しばし 待つのじゃ";"Oh, so you do not want to change it?
-Then let us proceed with the area you
-selected previously.
-Please wait until unknown heroes
-arrive...";"On garde ces critères de recherche ?
-Bien. Cherchons des candidats pour
-la destination que vous avez choisie.";
+"なんじゃ もういいのか?
+では 仲間が来るまで しばし待つのじゃ";"Oh, so it's fine as is? Then please just
+wait until your allies arrive...";"Hmm ? C'est bon comme ça ? Dans ce
+cas, il ne vous reste plus qu'à attendre
+que vos compagnons arrivent...";
 "オヌシの好きにするがよい";"Do as you wish, hero.";"Comme vous voudrez.
 C'est vous, le héros.";
 "　　　 フレンドのチームに接続中です…";"
@@ -6654,6 +7008,87 @@ est déjà au complet.
 Rejoignez une autre équipe
 ou créez-en une nouvelle...
 À vous de voir !";
+"…オヌシ
+
+もしや インターネット通信でポーズを使い
+冒険を中断してはおらぬであろうな…
+最近では偽勇者とみなされブラックリストに
+登録されてしまう勇者が後を絶たないというぞ
+ブラックリストに載ってしまうと
+さすがのワシでもマッチングが難しくなるぞい
+まぁ 仕方のない時もあろうが
+ポーズで抜ける時は気をつけるのだぞい
+さてさて…";"Say, young master...
+
+
+You wouldn't happen to have paused
+the game and then chosen to leave it
+while playing online...would you?
+Other heroes tend not to like that...
+And lately, more and more fake heroes
+have been put on blacklists...
+If someone places you on their
+blacklist, even I might have a hard
+time matching you with other heroes.
+That said, I understand. Sometimes it's
+the only way. But do think twice when
+you use pause to retreat, hero.
+Well, then...";"Dites-moi, jeune héros...
+
+
+Vous n'êtes pas de ceux qui mettent
+le jeu en pause, puis quittent les
+parties en ligne sans prévenir, mmh ?
+De plus en plus de héros de pacotille
+sont ajoutés à la liste des utilisateurs
+bloqués d'autres héros excédés...
+Si cela devait vous arriver, il pourrait
+devenir difficile de vous trouver des
+compagnons ou adversaires. Alors...
+Même si c'est parfois la seule solution,
+réfléchissez bien avant de mettre le
+jeu en pause pour battre en retraite.
+Mais venons-en à nos moutons...";
+"オヌシがどんなスタイルで
+魔境での時間を過ごしたいかということじゃ
+まだ不慣れで じっくり考えながら進みたい
+そんな気分なら「のんびり」
+魔境を熟知し 効率重視でサクサク進みたい
+そんな気分なら「テキパキ」
+という感じかのう…
+
+さてさて…";"What I am asking is, in what manner
+do you like to spend your time in the
+Drablands, young master?
+Maybe you're not quite used to the
+adventuring life yet, and like to
+take it slow?
+Or do you prefer to forge ahead
+relentlessly and efficiently, and just
+generally keep it brisk?
+In my experience, those are the two
+kinds of hero...
+
+Now then...";"Ma foi, j'aimerais juste savoir comment
+vous aimez passer votre temps dans
+les contrées maudites...
+Peut-être que l'aventure est encore
+neuve pour vous et que vous
+souhaitez y aller plutôt tranquillou ?
+Ou bien peut-être êtes-vous en quête
+de résultats rapides et souhaitez-vous
+foncer droit au but ?
+Voilà, en gros, les deux types de
+héros qu'il m'arrive de croiser...
+
+Bien, et maintenant...";
+"オヌシの心意気を聞かせてくれんかの?";"Would you mind telling me your
+adventuring style, young master?";"Pourriez-vous, jeune héros, me dire
+dans quel état d'esprit vous partez
+à l'aventure ?";
+"のんびり";"Take it slow.";"Tranquillou.";
+"テキパキ";"Keep it brisk.";"Droit au but.";
+"心意気?";"Adventuring style?";"Quel état d'esprit... ?";
 "ローカル通信じゃな…よかろう
 それでオヌシはどうするぞい?";"Local Play, eh...? Very good.
 What will you do?";"Donc, vous voulez jouer en mode
@@ -6745,6 +7180,12 @@ est déjà au complet.
 Rejoignez une autre équipe
 ou créez-en une nouvelle...
 À vous de voir !";
+"同じバージョンの相手としか通信できません
+バージョンはタイトル画面で確認できます";"You can only play with heroes using
+the same software version as you.
+Check the version on the title screen.";"Vous ne pouvez jouer qu'avec des
+héros utilisant la même version du jeu.
+Vérifiez votre version sur l'écran titre !";
 "魔境へは 3人一組で向かわねばならぬぞい
 どんな方法で 仲間を募るのだ?";"You can only set off for the Drablands
 in teams of three heroes.
@@ -6806,6 +7247,66 @@ fil permet de trouver des compagnons.
 Lorsque vous vous sentirez prêt à
 partir pour les contrées maudites,
 venez me parler. Je vous guiderai.";
+"そうじゃ オヌシに
+勇者ポイントの話をしておかねばのう
+インターネット通信では
+オヌシが希望していない所に行くこともあろう
+しかし己の欲を捨て 他の勇者を助け
+そのコースを共にクリアした時
+オヌシには勇者ポイントが授けられるだろう
+
+ローカル通信やダウンロードプレイでも
+最後まで共に戦えばポイントがもらえよう
+この勇者ポイントが高い勇者は
+それ相応の褒美がもらえるであろう
+詳しくは左上にいる教育係か
+街の露天商に聞くがいいぞい";"A moment of your time, please.
+Young master, I must talk to you
+about hero points.
+In Online Play, you may sometimes
+find yourself taken to places you
+didn't necessarily wish to go...
+In those circumstances, a true hero
+will forget their own wants and instead
+focus on helping their allies!
+Complete the level together, and you
+will be rewarded with hero points.
+
+The same goes for Local Play and
+Download Play. See things through till
+the end and your reward will come.
+Collect many hero points and you
+will see your selflessness repaid
+accordingly!
+If you want to know more, speak with
+Mr Tudor in the corner there, or with
+the street merchant in town.";"Ma foi, puisque vous êtes là, jeune
+maître, laissez-moi vous toucher un
+mot des point d'héroïsme.
+Lorsque vous jouez en ligne, il se peut
+que vous vous retrouviez dans des
+lieux où vous ne souhaitiez pas aller...
+Dans de pareilles circonstances, un
+véritable héros oublie ses envies et
+tâche d'aider ses compagnons !
+Agissez ainsi, terminez le niveau, et
+vous recevrez en reconnaissance de
+votre effort des points d'héroïsme.
+Cela vaut aussi en multijoueur local et
+en mode téléchargement. Battez-vous
+jusqu'au bout, vous serez récompensé.
+Soyez sûr que plus vous accumulerez
+de points d'héroïsme, plus votre
+grandeur d'âme portera de fruits !
+Pour en savoir plus, adressez-vous au
+tuteur, dans le coin en haut à gauche,
+ou allez-voir le vendeur de rue.";
+"すまんすまん 年よりは話が長くてのう
+魔境に行きたくてウズウズしておろう";"Oh, I beg your pardon. Us old-timers
+do tend to ramble a bit... You must be 
+itching to head for the Drablands!";"Pardonnez-moi, l'âge m'a rendu
+bavard... Vous devez avoir hâte de
+partir dans les contrées maudites !";
 "まねビトを連れて出発するか?";"Do you want to set off in the
 doppels' company?";"Voulez-vous partir à l'aventure
 avec des pantins ?";
@@ -7454,6 +7955,153 @@ Prends garde, car en ce lieu aussi tu
 pourrais rencontrer de faux héros.";
 "偽勇者?";"Fake heroes?";"De faux héros ?";
 "用はない";"Never mind";"J'm'en fiche !";
+"私が勇者の心得を
+お話しして差し上げましょう";"Let me tutor you on the basics
+of being a hero.";"Laisse-moi te prodiguer les
+enseignements qui feront de
+toi un véritable héros.";
+"勇者ポイント";"Hero points";"Points d'héroïsme";
+"ポイントのごほうび";"Rewards for points";"Récompenses";
+"他の説明をきく";"Something else";"Autre chose";
+"用はない";"Never mind";"Pas besoin, merci !";
+"インターネットで自分が望んでいないコースを
+最後までプレイした勇者や
+ローカル通信やダウンロードプレイで
+魔境のコースをクリアした者は
+勇者としての正しき行いの証として
+勇者ポイントが与えられ
+そのポイント数に応じて
+ご褒美がもらえるシステムとなっています
+勇者たる者 我が道を突き進むだけでなく
+他の者と道を築くことも大切なことなのです";"Heroes who complete a level they
+did not themselves vote for in
+Online Play...
+...as well as those who complete
+Drablands levels in Local Play or
+Download Play...
+...will be awarded hero points for
+their proper heroic behaviour.
+
+There is a reward system in place for
+heroes who collect those points. It's
+quite snazzy, if I do say so myself.
+A hero must know to put the needs
+of others ahead of their own desires
+sometimes!";"Les héros qui terminent un niveau
+pour lequel ils n'ont pas voté pendant
+une partie en ligne...
+... et ceux qui terminent un niveau
+des contrées maudites en multijoueur
+local ou en mode téléchargement...
+... se verront attribuer des points
+d'héroïsme en reconnaissance de leur
+comportement héroïque.
+Accumule des points et tu recevras en
+retour des récompenses à la hauteur
+de tes efforts.
+Un véritable héros a l'élégance de faire
+passer ses compagnons avant ses
+propres désirs. Alors... sois élégant !";
+"勇者ポイントをためることで
+ご褒美が与えられます
+露天商に直接話しかけると
+ポイント数に応じ材料がもらえるでしょう
+また 勇者ポイントが30になると
+アレな服が特別な力を発するようになるとか…
+ただし これは心正しき勇者にのみ
+与えられる特別な力
+偽勇者が悪用せぬよう 悪しきことを行うと
+この力はなくなってしまいます
+しかし 過ちは誰にでもあるもの…
+
+力を失ってしまっても
+また勇者ポイントを集め皆を助けていれば
+その力は復活することでしょう";"Collecting hero points comes with
+its own set of rewards, young one.
+
+Talk to the street merchant to receive
+gifts befitting your point total.
+
+Furthermore, when you have at least
+30 hero points, the Bear Minimum Digs
+will gain some extraordinary powers!
+But only those who follow the straight
+and narrow path of heroism can make
+use of them...
+To prevent their abuse by false
+heroes, the powers will be taken away
+if you should wander astray...
+Oh, well, but to err is human, is it not?
+Even if the outfit has lost its powers...
+
+...you can restore them easily enough
+by helping out your fellow heroes and
+saving up more hero points.";"Accumuler des points d'héroïsme
+permet de recevoir des récompenses.
+
+Adresse-toi au vendeur de rue pour
+obtenir des matériaux à hauteur des
+points que tu auras accumulés.
+En outre, quand ton total de points
+atteint 30, la Tenue basique acquiert
+paraît-il des pouvoirs fabuleux...
+Bien sûr, le héros qui souhaite user
+de tels pouvoirs doit faire preuve
+de la plus grande droiture...
+Celui qui essaierait de les mettre au
+service d'intentions mauvaises s'en
+verrait immédiatement privé.
+Toutefois, l'erreur est humaine, et si
+ta tenue devait perdre ses pouvoirs
+suite à un égarement de ton âme...
+... tu pourrais les restaurer aisément
+en aidant tes compagnons et en
+accumulant des points d'héroïsme.";
+"あと私がお話しできる勇者の心得は
+こちらになります";"These are basics of being a hero.
+Of which one should I speak?";"Voici encore quelques enseignements
+qui feront de toi un véritable héros.";
+"がんばりゲージ";"Energy gauge";"Jauge d'endurance";
+"勇者パネル";"Hero panels";"Panneaux de héros";
+"ブラックリスト";"Blacklist";"Bloquer quelqu'un";
+"用はない";"Never mind";"Pas besoin, merci !";
+"今の勇者ポイントは [KindPointNum]のようですね
+正しき心の勇者には聖なる力が宿る事でしょう";"Your current hero point total is [KindPointNum],
+it seems. Good things will surely come
+to heroes who stay righteous, no?";"Ton total de points d'héroïsme est
+de [KindPointNum]... Le droit chemin mène
+ceux qui l'empruntent à la félicité.";
+"勇者ポイントが [KindPointNum]だそうですね
+アナタの評判は聞いていますよ
+私も教育係として
+大変鼻が高いです";"It looks like you have [KindPointNum] hero points.
+I've heard people say good things
+about you, you know.
+As your tutor, I am immensely proud.";"Ton total de points d'héroïsme
+est de [KindPointNum]. J'ai entendu dire
+beaucoup de bien de toi...
+Crois-moi, je ne suis pas peu fier
+d'être ton tuteur.";
+"アナタの評判は他国にも広まっているとか
+勇者ポイントが [KindPointNum]なだけはありますね";"Your fame has been spreading even
+outside this fair kingdom. You do have
+[KindPointNum] hero points, after all!";"Ta renommée s'étend bien au-delà
+des frontières du royaume. Il faut dire,
+[KindPointNum] points d'héroïsme, quel chic !";
+"アナタと出会えてよかったと
+他の勇者達が話していましたよ
+勇者ポイントが [KindPointNum]とは…
+私もアナタと出会えたことを誇りに思います";"I've been hearing other heroes sing
+your praises, young one. "I'm so glad
+we've met!", they'd say.
+A hero with [KindPointNum] hero points...
+I myself am greatly honoured to have
+made your acquaintance.";"J'ai entendu d'autres héros dire qu'ils
+étaient émus de t'avoir rencontré.
+Leur voix tremblait d'admiration.
+[KindPointNum] points d'héroïsme... Cela
+force le respect. Je suis moi-même
+très honoré de te connaître.";
 "オシャレしてたら
 魔女に呪われるんですってよぉ～";"Oh yes! They say, if you're too
 fashionable, the witch'll curse you!";"Oui, il paraît que la sorcière maudirait
@@ -10503,6 +11151,737 @@ d'abord zauvegarder.
 Bon, z'ai pas toute la zournée,
 alors dis-moi quand tu zeras prêt,
 d'accord ?";
+"こんにちは～
+私～ トリップさんと～ 申します～
+通りすがりの～
+ちょっとした～ トリップマニアなんですぅ～
+魔境で新しいエリアを調査中と聞いて～
+いてもたってもいられなくて～";"Oh, hey there, uh, little hero dude!
+Me? I'm the Great Tripini. Peeps
+call me, Trip, though.
+I, uh, was just passing through, and
+thought I'd drop in. Like a day trip.
+Ol' Trip likes visiting new, ah, places.
+So when I heard that, um, someone's
+been investigatin' a new, ah, part of
+the Drablands, I just had to see.";"Hé, pzzzt, le héros. Ohé !
+Qui ze zuis ? Ben, ze zuis Tripini le
+Grand, mais les zens m'appellent Trip.
+Ze pazzais pas loin et z'ai zaizi
+l'occazion pour faire, euh, un petit
+voyaze impromptu. Tu vois le zenre ?
+Z'ai entendu qu'y z'eczploraient une
+nouvelle rézion dans les contrées
+maudites et depuis, z'ai la bouzeotte !";
+"　　　　　　　　トリップ!";"          So I took me a trip!";"      Du coup, ze pérégrine !";
+"しにきちゃいました～
+
+恐ろしい場所なんですかね～
+楽しい場所なんですかね～
+はやく調査終わらないですかね～
+
+何かわかったらお伝えしますね～";"... That's how it went, yeah?
+
+
+I wonder if it's, like, a scary place...
+Or is it, like, fun times all around...
+I, uh, really hope to visit soon...
+I'll be, ah, keeping an eye on the
+investigation, so... umm... Yeah.
+Well, basically, I'll keep you posted.";"... Et z'est pour za que ze zuis là !
+
+
+Ze me demande ze que z'est comme
+endroit...
+
+Plutôt grozze frouzze ou
+grozze marrade ? Ou les deux ?
+
+Dès que z'arrive à entrer, ze te
+préviens, OK ?";
+"あ～ 勇者さま～
+魔境のこと～ ききました～? 
+新しいエリアに～
+トリップできるようになったみたいですよ～
+なんでも「魔窟」と名付けられたとか～";"Hey, uh, hero dude! Have you heard?
+About that investigation into, uh,
+a possible new Drablands area...
+They've, ah, finished that now, and
+you can actually go there! They call it
+the, uh, "Den of Trials"...";"Eh, pzzzt, le héros ! T'as entendu za ?
+Les rumeurs à propos de la nouvelle
+rézion dans les contrées maudites...
+Z'est bon, maintenant, elle est ouverte
+aux voyazeurs ! Même que za z'appelle
+la crypte là-bas. Z'est zuper non ?";
+"まくつ?";"The Den of Trials?";"La crypte ?";
+"まくら?";"The glen of files?";"La croûte ?";
+"マクレガーさん?";"Hens in the aisles?";"La crête ?";
+"へぇ～";"Wow.";"Super...";
+"あ～勇者さま～
+ききました～?";"Oh, uh, hi there, little hero dude!
+Hey, have you heard?";"Ah ! Z'est toi, héros ! Zalut.
+Dis, tu as entendu za ?";
+"じつは～
+色々トリップしてたら～
+こんなウワサを～きいちゃったんですが～
+興味あります～?";"On one of my various, uh, trips,
+ol' Trip heard some new rumours!
+
+That Den of Trials is, uh, old news
+now... So, ah, you wanna hear one?";"En me baladant de-zi, de-là, z'ai eu
+vent de zertaines, euh, rumeurs !
+
+Za t'intérezze d'en zavoir pluz ?";
+"すごそうな服のウワサ～";"Awesome new outfit?";"Une tenue de folie ?";
+"夢のある服のウワサ～";"A dreamy outfit?";"Une tenue de rêve ?";
+"ハンコのウワサ～";"Staaamps.";"Des tampons ?";
+"興味ない";"Not bothered...";"Ça m'intéresse pas...";
+"なんでも～ 魔窟の最下層には～
+特別なお洋服があるらしいですよ～
+なんか～
+
+すごそうじゃないですか～?";"Way Trip hears it... There's a
+one-of-a-kind outfit at the, um...
+bottom of the Den of Trials...
+That's kinda... Uh...
+
+
+That's kinda awesome, right?";"Z'ai entendu dire qu'il y avait une
+tenue très zpéziale au fond de la
+crypte...
+Moi, perzo...
+
+
+... za me fait quelque soze de zavoir
+za. Il va falloir tousser le fond pour
+être au zommet quoi, tu vois ?";
+"伝説の船乗りの伝説を～
+ごぞんじですか～
+え～ ごぞんじない～
+勇者さまなのに～?";"Have you, uh, heard the legends?
+Legends of the, ah, legendary sailor?
+
+Oh, you haven't? Really?
+Even though you're a hero?";"Est-ze que tu connais la lézendaire
+lézende du marin lézendaire ?
+
+Non ? Tu connais pas ? Alors que tu
+es toi-même un lézendaire héros de
+lézende ?";
+"まぁ私も～
+知らないんですけど～";"To be, ah, fair, um...neither have I.";"Bah... pas grave, tu zais.
+Ze la connais pas non plus.";
+"マダムが～
+そんな話を～ していましたよ～
+もしかしたら～ 新しいお洋服のアイデアを～
+思いつかれたのかも～
+それにしても～ 伝説とか～ 船乗りとかって～
+それだけで～ なんだか夢がありますよね～";"Madame's been, ah, talking about it
+recently. Could she be brainstorming
+new...ah, new outfits?
+All this talk of legends, sailors
+and outfits... It's putting ol' Trip in
+a bit of a dreamy, uh, mood...";"Madame m'a parlé de zette hiztoire...
+Et ze me demande zi za a pas quelque
+soze à voir avec une nouvelle tenue.
+... Ah, les lézendes, les marins, les
+tenues... Moi, za me fait rêver...";
+"あら～ もっとお話したかったのに～
+残念です～";"Aw, and here I was, with all those
+rumours to share... Well, maybe next
+time then, uh, buddy.";"Ah ! Dommaze ! Z'aurais bien voulu
+papoter encore un peu ! Bah, la
+prossaine fois peut-être.";
+"ハンコって使ってます～?
+ミーバースで使えるあのハンコですよ～
+最近新しいのが増えたって～
+もっぱらの評判ですよ～";"You know about stamps? Maybe
+you've already been, uh, using them
+on Miiverse?
+Anyway, some new ones have, ah,
+come in. Peeps've been, um, talkin'
+about them a lot...";"Tu zais ze que z'est les tampons ?
+Zeux qu'on peut utilizer zur Miiverse,
+là, tu vois de quoi ze parle ?
+Eh ben, il paraît qu'y en a des
+nouveaux, tout le monde ne parle
+que de za...";
+"もっとお話しましょうか～?";"You, uh, wanna hear another?";"Tu veux que ze te raconte encore
+autre soze ?";
+"すごそうな服のウワサ～";"Awesome new outfit?";"Une tenue de folie ?";
+"夢のある服のウワサ～";"A dreamy outfit?";"Une tenue de rêve ?";
+"ハンコのウワサ～";"Staaamps.";"Des tampons ?";
+"興味ない";"I've heard enough...";"J'ai pas le temps...";
+"魔境の奥で～ 発見されたんですが～
+やっと調査が終わって～
+トリップできるようになったらしいですよ～
+
+なんだか～
+ひどくおそろしそうな名前ですけど～
+きっと～
+ひどくおそろしい場所なんでしょうね～
+ワクワクですね～
+ドキドキですね～
+早く私も～
+トリップしなくちゃ～";"That's right! They've, uh, found it in
+the deepest Drablands, and now the,
+ah, investigation is done, so...
+It's, like, day trip central, yeah?
+
+
+Though the name is, um, kind of...
+off-putting, I guess? Yeah... Not
+welcoming at all...
+That might mean the place, ah, itself
+might be off-putting and, um...
+unwelcoming...?
+Honestly hope not, though...
+I'm kinda excited...
+It's pretty, um...thrilling.
+I hope I get to, uh, take a trip there,
+ah, soon...";"Et, euh, y l'ont découverte tout au
+bout des contrées maudites, zette
+rézion. Tout au bout de l'ecztrêmité.
+Et maintenant elle est ouverte aux
+voyazeurs ! Z'est trop zénial !
+
+Bon, le nom est lézèrement flippant,
+z'est vrai. Za fait pas très vacanzes
+quoi...
+Mais bon, les trucs flippant, moi ze
+trouve za zuper exzitant !
+
+Z'ai zuper envie d'aller voir... Ze zuis
+ronzé par l'impazienze ! Zusqu'à l'oz !";
+"季節の変わり目になると～
+枕に大量の抜け毛がついてるんです～
+自分が～生き物なんだな～って
+思う瞬間なんですよ～
+… … …
+… … …
+この話～
+魔窟に関係なくないですか～";"On one of my, uh, trips, I found this
+deep, winding valley... 
+
+It was the, uh, strangest thing though.
+There was a river there, but it wasn't
+water that it, ah, ran with...
+Just lots and lots of, ah, papers.
+
+
+...
+...
+...
+That's got nothing to do with the
+Den of Trials, does it...";"Zertains manzent la croûte, et zertains
+l'enlèvent, moi ze zuis plutôt de zeux
+qui la manzent. Z'est comme za...
+Z'est une queztion de goût. Et tu zais
+ze qu'on en dit : le goût, za ne ze
+dizcute pas.
+Donc n'en parlons plus.
+
+
+...
+...
+...
+Mais... za n'a rien à voir avec la
+crypte ?";
+"ん～
+誰でしょうね～
+… … …
+… … …
+私～魔窟の話を
+してませんでしたっけ～?";"I went to a shop the other day...
+And the aisles were filled with, uh...
+like, chickens...angry chickens...
+...
+...
+...
+Weren't we, uhh... Weren't we talking
+about the Den of Trials just now...?";"Ze n'ai pas de crête, non. Ze ne zuis
+pas un coq, z'est pour za. Zi z'étais un
+coq, z'en aurais probablement une.
+...
+...
+...
+Mais... z'étais en train de parler de la
+crypte, non ?";
+"もしかして～
+ご興味ない～?
+え～そんな～
+ノ～トリップ ノ～ライフですよ～";"Oh, you're not, uh, interested?
+
+
+Well that's a, uh, shame...
+Taking little trips is the, uh, the
+spice of life, little buddy...";"Ah bon ? Za ne t'intérezze pas ?
+
+
+Z'est dommaze, rien de tel qu'un petit
+voyaze pour épizer un peu zon
+quotidien. Enfin, z'est toi qui vois.";
+"魔境へトリップしたら～
+魔窟に入れるようになってるはずですよ～
+恐ろしげな～ 場所みたいなんで～
+トリップされるなら～ お気をつけて～";"If you take a, uh, trip to the
+Drablands, you should be able to
+visit the, ah, Den of Trials too...
+Sounds like a pretty scary place,
+though, so, uh... Do be careful if you
+go, okay, hero dude?";"Zi tu pars en voyaze dans les contrées
+maudites, tu devrais pouvoir viziter
+la crypte maintenant...
+Il paraît que z'est un peu flippant
+comme coin, donc zi t'y vas, eh ben,
+zois prudent, OK ?";
+"　　　　　　　　　ふぅ～";"
+　　　　　　　　　Phew...";"
+　　　　　　　　　Fiou...";
+"魔窟のことが～ お話できて～
+スッキリしました～
+誰かに～ 話したくて～
+ずっと～ 待ってたんです～
+あと～ 他にもお話したいことがあるんです～
+ウワサ話なんですけど～ ききたいですか～?";"Ahh, I feel so relieved now...
+Been keeping those rumours to myself
+for entirely, uh, too long...
+Thanks for letting me tell you about
+the Den of Trials, bud. It's nice to,
+ah, get it off my chest...";"Ah, quel zoulazement ! Za faizait
+zi longtemps que ze voulais parler de
+zette crypte avec quelqu'un...
+Za fait vraiment du bien. Ze me zens
+tout lézer ! Mais, tu zais quoi ? Z'ai
+encore plein de trucs à raconter !";
+"すごそうな服のウワサ～";"Awesome new outfit?";"Une tenue de folie ?";
+"夢のある服のウワサ～";"A dreamy outfit?";"Une tenue de rêve ?";
+"ハンコのウワサ～";"Staaamps.";"Des tampons ?";
+"興味ない";"I've heard enough...";"J'ai pas le temps...";
+"魔境での調査が終わって～ 新しいエリアに～
+入れるようになったようですね～
+なんでも「魔窟」と名付けられたとか～";"They're done surveying a new, uh,
+Drablands area, and you can go there
+on a, ah, trip, too.
+I hear they're calling it the, uh,
+"Den of Trials"...";"Y paraît qu'y z'ont terminé d'eczplorer
+la nouvelle rézion des contrées
+maudites et qu'on peut y voyazer !
+On m'a dit qu'y z'avaient appelé za
+la « crypte »...";
+"まくつ?";"The Den of Trials?";"La crypte ?";
+"まくら?";"The glen of files?";"La croûte ?";
+"マクレガーさん?";"Hens in the aisles?";"La crête ?";
+"へぇ～";"Wow.";"Super...";
+"も～ お願いですから
+魔窟のお話させてくださいよ～";"Heyyy... Stop teasin' ol' Trip...
+I NEEEEED to tell you about the
+Den of Trials...";"Allez, zte plaît, laizze-moi te parler
+zuste un peu de la crypte ! Zois
+zympa quoi !";
+"まくつ?";"The Den of Trials?";"La crypte ?";
+"まくら?";"The glen of files?";"La croûte ?";
+"マクレガーさん?";"Hens in the aisles?";"La crête ?";
+"へぇ～";"Really?";"Super...";
+"未知なる世界へのトリップ
+ドキドキでしたね～
+トリップしてると～ 色んなウワサを～
+耳にするんですが～ 興味あります～?";"Taking little trips to unknown worlds...
+That's kinda, uh, thrilling, isn't it?
+It's sorta, ah, exciting... No?
+And the best thing about these, ah,
+trips is... You hear all these rumours...
+Piqued your, uh, interest, buddy?";"Partir en voyaze dans des territoires
+inconnus... ze trouve za tellement
+eczitant ! Pas toi ? Zi ? Toi auzzi ?
+Ah, toutes zes rumeurs, zes ragots,
+zes potins qui vous carezzent
+l'oreille... Za t'intérezze toi auzzi ?";
+"すごそうな服のウワサ～";"Awesome new outfit?";"Une tenue de folie ?";
+"夢のある服のウワサ～";"A dreamy outfit?";"Une tenue de rêve ?";
+"ハンコのウワサ～";"Staaamps.";"Des tampons ?";
+"興味ない";"I'm okay, thanks.";"Ça va, merci...";
+"あ～ 勇者さまもトリップですかぁ～
+ここがウワサの魔窟みたいですよ～
+何でもここは～他のエリアと違って～
+特別なルールがあるみたいなんです～
+ご存じですぅ～?";"Hey, it's the little hero! Hiya, hero.
+Looks like this is the Den of Trials
+we've been, ah, hearing about...
+And, uh, it looks like there's some
+special rules in this place that, um...
+That set it apart from other areas...
+Want me to tell you?";"Hé, zalut le héros ! Za flotte ?
+Alors, zette fameuze crypte, on dirait
+bien qu'on y est, hein ?
+Et ze peut même te dire que dans ze
+trou il y a des règles zpéziales, qui en
+font un endroit... eh ben... zpézial.
+Z'ai dézà tout compris, tu veux que ze
+t'eczplique ?";
+"クリアの方法は?";"How do I get ahead?";"J'avance comment ?";
+"ここって安全？";"Is it safe here?";"On est en sécurité ici ?";
+"トリップできる場所は?";"Where can I go?";"Je peux aller où ?";
+"用はない";"I'm good, thanks.";"Non, merci...";
+"魔窟は～
+地下40階層まで続いてるみたいで～
+洞のお宝をとると クリア～
+下の洞に～ 進めるようになるみたいですね～
+最下層の極の洞まで～
+道のりは長そうですけど～
+クリアさえすれば～ 途中で力尽きても～
+続きから始められるみたいですよ～";"They say the Den of Trials has, ah,
+forty subterranean floors...
+
+You grab the treasure in each of the
+zones, and that, um, that completes it.
+And you get to go deeper down.
+From the topmost Forest Zone...
+to the Baneful Zone at the bottom...
+Sounds like a long way to, ah, go.
+Oh, but, ah! If you can complete a
+zone, you'll then be able to restart
+from there, so don't stress, okay?";"Il paraît que la crypte est conztituée
+de quarante zous-zols. Ils zont
+dezzendus bien bas, moi ze dit...
+Enfin. Une fois que tu as réuzzis à
+mettre la main zur le trézor d'une
+zone, tu peux pazzer à la zuivante.
+Tu pars de la zone foreztière, tout en
+haut et du t'enfonzes dans les
+profondeurs, zuzqu'à la zone ultime...
+Z'est un peu long, mais quand tu
+termines une zone, tu peux reprendre
+à partir de zette zone. Z'est pratique !";
+"え～ もちろん～";"Of course it...";"Mais bien zûr... !";
+"     　　危険極まりないでしょ～";"
+             isn't safe!";"
+       BIEN ZÛR QUE NON !";
+"なんでも～ お供の妖精さんも逃げ出して～
+最初は～ 一匹しかいないらしいですよ～
+安全な部屋の～ 宝箱の中に～
+隠れてるってウワサもありますけどね～";"In fact, it's so dangerous that, uh...
+Most of the fairies ran away,
+and now you've only got one, yeah?
+So choose wisely.
+There's, uh, a rumour that more are
+hiding in Treasure Chests, though...";"Même tes fées ze zont carapatées...
+Quand tu commenzes izi, tu n'en as
+qu'une zeule, alors pas de zottize !
+Zela dit, y paraît qu'on en trouve
+parfois dans des coffres. Ah bah oui,
+là elles zont en zécurité, za z'est zûr !";
+"勇者さま～ [ClearCourseAbyssSelf]まで
+クリアされたんですね～ すごいすご～い
+でも～ トリップできる場所は～
+ご一緒のお仲間さんによって 変わるみたいで～
+全員がクリアしている洞の次までしか～
+トリップできないそうですよ～
+トライフォースの光を～
+目印にすると～ 良さげですね～";"Let's see... You've made it as far as...
+[ClearCourseAbyssSelf], it looks like.
+Hey, ah, not bad, buddy! Kudos!
+But, you know, the places you can go
+will also depend on, uh, the allies
+you're travelling with...
+It seems you can only go as far as
+the zone just after the one that all 
+heroes have completed already...
+Just, uh, follow the light of the
+Triforce, and you'll be, ah, fine, yeah?";"Dis donc, le héros, tu as dézà terminé
+la [ClearCourseAbyssSelf] ! Z'est pas mal
+du tout !
+Mais... ze zais pas zi tu vas pouvoir
+continuer à partir de là. Parze que tu
+vois, tout dépend de tes compagnons.
+Pour vous rendre danz une zone avec
+ton équipe, vous devez touz avoir dézà
+terminé les zones prézédentes...
+Z'est très fazile, il suffit de zuivre la
+lumière de la Triforze !";
+"トリップできる場所は～
+ご一緒のお仲間さんによって 変わるみたいで～
+全員がクリアしている洞の次までしか～
+トリップできないそうですよ～
+勇者さまは～ まだどこも～
+クリアしていないみたいなんで～
+まずは森の洞の階層からですね～";"Where you can go depends on, ah,
+the allies you've brought with you,
+it seems...
+You can only go as far as the zone 
+just after the one that all heroes have
+completed already...
+Oh, hey, it doesn't seem like you've
+completed any yet... That's all right,
+everybody has to start somewhere.
+You'll just have to start at the start!
+That'll be, uh, the Forest Zone, which
+is the first area just over here.";"Euh, zi z'ai bien compris, tout dépend
+des compagnons qui zont avec toi.
+
+Pour vous rendre danz une zone avec
+ton équipe, vous devez touz avoir dézà
+terminé les zones prézédentes.
+Et zi ze peux me permettre, on dirait
+que t'en as terminé aucune. Zela dit,
+il faut bien commenzer quelque part...
+Donc tu vas commenzer par le
+commencement, dans la zone
+foreztière, zuzte là. Couraze !";
+"魔窟の最下層には～
+すっごいお洋服が～ 眠ってるらしいですよ～
+どんなんでしょうね～
+何がすっごいんでしょうね～";"I've heard there's a truly awesome
+outfit waiting at the bottom of the, ah,
+Den of Trials...
+I wonder what it is, though...
+I wonder how it feels... Mmm...";"Il paraît qu'il y a une tenue zuper
+zéniale qui attend qu'un héros vienne
+la serser tout au fond de la crypte...
+Ze zerais curieux de zavoir à quoi elle
+rezzemble. Qu'est-ze qu'elle peut bien
+avoir de zi zénial... ?";
+"魔窟ってややこしいですよね～
+他にも知りたいこと～ ありますか～?";"It's a pretty confusing place, this
+Den of Trials, eh? Wanna know
+about anything else, buddy?";"Drôle d'endroit hein, zette crypte...
+Tu veux zavoir quelque soze d'autre ?";
+"クリアの方法は?";"How do I get ahead?";"J'avance comment ?";
+"ここって安全？";"Is it safe here?";"On est en sécurité ici ?";
+"トリップできる場所は?";"Where can I go?";"Je peux aller où ?";
+"用はない";"I'm good, thanks.";"Non, merci...";
+"こんな恐ろしげなところに～ 来るなんて～
+勇者さまも～ お好きですね～
+魔窟って～ 他のエリアと違って～
+色々ややこしいですけど～ もう大丈夫です～?";"Oh, hey, it's the little hero again!
+The Den of Trials must've really,
+ah, tickled your fancy, yeah?
+Even though it's so confusing, ah...
+Or maybe you've got a handle on it
+already, huh?";"Hé, mais z'est encore le zoli héros !
+On dirait que zette crypte t'a satouillé
+au bon endroit, hein ?
+Pourtant z'est un peu déroutant
+comme coin... À propos, tu t'en zors ?";
+"クリアの方法は?";"How do I get ahead?";"J'avance comment ?";
+"ここって安全？";"Is it safe here?";"On est en sécurité ici ?";
+"トリップできる場所は?";"Where can I go?";"Je peux aller où ?";
+"用はない";"I'm good, thanks.";"Tout va bien, merci.";
+"勇者さま～
+その服～
+お気に入りのようですね～
+
+ちょい悪が～
+お好みですか～";"Hey, hero dude...
+Those clothes...
+
+You seem to really like them, yeah?
+
+
+Even though they're a bit evil...
+But so long as you like them...";"Zalut le héros.
+Dis donc, zette tenue...
+
+Z'est pas pour dire mais on dirait
+qu'elle te plaît bien !
+
+Elle a pourtant un petit quelque soze
+de démoniaque... Mais z'est peut-être
+za qui te plaît ?";
+"　　　　　　　　　あら～";"
+                    Oh, hey!";"
+                    Oh, hé !";
+"　　　　　　　あら あら～";"
+             Hey, oh, wow!";"
+                  Za alors !";
+"そのお召し物～
+まるで鬼神さんのようですね～
+へぇ～
+
+なるほど～
+
+こんな細かいところまで～ 
+
+ありがとうございます～
+堪能させていただきました～
+でも～ そのお姿～
+どちらかっていうと～ 正義ってよりは～";"Hey, that outfit...looks a lot like
+the one that Fierce Deity wore.
+
+Whoa...
+
+
+I see, I see...
+
+
+Such fine details...
+
+
+Phew. Thanks, hero buddy!
+It was so cool to see it. Consider my,
+uh, curiosity, ah, satiated.
+You know, though... When I look at
+you standing there in that... You look
+less like, ah, "justice", and more like...";"Zette tenue... Elle rezzemble comme
+deux gouttes d'eau à zelle que portait
+le Dieu démon.
+Mazette...
+
+
+Zuper clazze.
+
+
+Et puis zette finezze des détails...
+Ze dis sapeau.
+
+Merzi, z'est zympa de me la montrer
+comme za... de razzazzier ma
+curiozité, quoi. Vraiment zympa.
+Mais zi ze peux me permettre... Tu
+rezzembles pas trop à un zustizier
+comme za. Tu as plutôt l'air d'un..";
+"　　　　　　ザ・悪者!";"
+               The bad guy!";"
+    danzereux pzychopathe !";
+"って感じですね～
+
+あ～ すいません
+無駄話しちゃって～
+何か私に～
+ご用でしたか?～";"... That's the vibe I get, at least...
+
+
+Oh! Really sorry, little hero dude.
+Didn't mean to startle you. Let's
+pretend I didn't, ah, say that, yeah?
+Aaanyway... Did you want something?";"... Enfin tu vois le zenre...
+
+
+Oh, mais ze dis ça, ze dis rien, hein.
+Enfin, faizons comme zi z'avais rien
+dit, OK ? Voilà. Ze n'ai rien dit. Rien.
+Bon, et zinon, tu veux zavoir quelque
+soze ?";
+"クリアの方法は?";"How do I get ahead?";"J'avance comment ?";
+"ここって安全？";"Is it safe here?";"On est en sécurité ici ?";
+"トリップできる場所は?";"Where can I go?";"Je peux aller où ?";
+"用はない";"I'm good, thanks.";"Non, merci...";
+"それにしても～またココに来るなんて～
+勇者さまも～ お好きですね～
+魔窟って～ 他のエリアと違って～
+色々ややこしいですけど～ もう大丈夫です～?";"Either way, though... You're here
+again... The Den of Trials must've
+really, ah, tickled your fancy, yeah?
+It's confusing, but, ah...maybe you've
+got a handle on it already, huh?";"On dirait que zette crypte t'a satouillé
+au bon endroit pour que tu reviennes
+en ronronnant comme za...
+Pourtant z'est un peu déroutant
+comme coin... À propos, tu t'en zors ?";
+"クリアの方法は?";"How do I get ahead?";"J'avance comment ?";
+"ここって安全？";"Is it safe here?";"On est en sécurité ici ?";
+"トリップできる場所は?";"Where can I go?";"Je peux aller où ?";
+"用はない";"I'm good, thanks.";"Tout va bien, merci.";
+"魔窟の最後には～
+すごい服が～眠ってるらしいですよ～
+何なんでしょうね～
+どんなんでしょうね～
+もしかしたら～ そんな感じで～
+鬼のように強い服なのかもしれませんね～";"I've heard there's a truly awesome
+outfit waiting at the bottom of the, ah,
+Den of Trials...
+I wonder what it is, though...
+I wonder how it feels... Mmm...
+
+Wouldn't it be cool if it was, ah,
+as fierce as that one you've got on
+right now, hmm?";"Il paraît qu'il y a une tenue zuper
+zéniale qui attend qu'un héros vienne
+la serser tout au fond de la crypte...
+Ze zerais curieux de zavoir à quoi elle
+rezzemble. Qu'est-ze qu'elle peut bien
+avoir de zi zénial... ?
+Zi za ze trouve, elle zent un peu le
+zouffre, comme zette armure que tu
+portes en ze moment...";
+"って感じですね～
+
+あ～ すいません
+無駄話しちゃって～
+何か私に～
+ご用でしたか～?
+私にできることなんか～
+ウワサ話ぐらいですけどね～";"... That's the vibe I get, at least...
+
+
+Oh! Really sorry, little hero dude.
+Didn't mean to startle you. Let's
+pretend I didn't, ah, say that, yeah?
+Aaanyway... Did you want to, uh,
+hear some of those rumours?";"... Enfin, tu vois le zenre...
+
+
+Oh, mais ze dis ça, ze dis rien, hein.
+Enfin, faizons comme zi z'avais rien
+dit, OK ? Voilà. Ze n'ai rien dit. Rien.
+Bon, et zinon, une petite rumeur à te
+mettre zous la dent, za t'intérezze ?";
+"すごそうな服のウワサ～";"Awesome new outfit?";"Une tenue de folie ?";
+"夢のある服のウワサ～";"A dreamy outfit?";"Un tenue de rêve ?";
+"ハンコのウワサ～";"Staaamps.";"Des tampons ?";
+"興味ない";"I'm good, thanks.";"Non, merci...";
+"あ～ すいません
+無駄話しちゃって～
+何か私に～
+ご用でしたか～?
+私にできることなんか～
+ウワサ話ぐらいですけどね～";"Oh! Really sorry, little hero dude.
+Didn't mean to startle you. Let's
+pretend I didn't, ah, say that, yeah?
+Aaanyway... Did you want to, uh,
+hear some of those rumours?";"Oh, mais ze dis ça, ze dis rien, hein.
+Enfin, faizons comme zi z'avais rien
+dit, OK ? Voilà. Ze n'ai rien dit. Rien.
+Bon, et zinon, une petite rumeur à te
+mettre zous la dent, za t'intérezze ?";
+"すごそうな服のウワサ～";"Awesome new outfit?";"Une tenue de folie ?";
+"夢のある服のウワサ～";"A dreamy outfit?";"Un tenue de rêve ?";
+"ハンコのウワサ～";"Staaamps.";"Des tampons ?";
+"興味ない";"I'm good, thanks.";"Non, merci...";
+"それにしても～ 伝説とか～ 船乗りとかって～
+それだけで～ なんだか夢がありますよね～
+今日の勇者さまも～
+なんだか夢が漂ってますけどね～";"Hm, yeah...
+A legend... A sailor...
+Heroes, uh, dream about it, you know.
+All those dreams, floating around...
+I can feel them in the, uh, air...";"Ah, euh, ouais... Une lézende...
+Un marin... Les héros en rêvent,
+tu zais. Et moi auzzi...
+D'ailleurs, auzourd'hui, bah, ze zais
+pas pourquoi, mais tu me fais rêver
+pluz que d'habitude...";
+"洞の中はイイみたいですけど～
+この辺りは～ 撮影禁止らしいですよ～
+でも禁止といわれると～
+ついつい撮りたくなるんですよね～
+撮れませんけどね～";"It seems like it's fine out in the zones,
+but around here, well... You're not
+allowed to take photos.
+When someone tells you you're not
+allowed to do something, you want 
+to do it even more, right?
+I'd really like to take a photo now,
+but I can't...";"À l'intérieur de saque zone, y paraît
+que za poze pas de problème, mais
+izi et ben... les photos zont interdites.
+Quand z'est interdit, za donne encore
+pluz envie d'ezzayer, hein ? Bah oui,
+ze zais...
+Mais z'est comme za, il faut ze faire
+une raizon. Z'est tout zimplement pas
+pozzible.";
 "ニイチャン…
 いいブツ持ってるって顔だな";"I know that cheeky look.
 You've got something good, ain't ya?";"Aah, je connais ce regard. Laisse-moi
@@ -10937,6 +12316,170 @@ C'est un peu excessif, non ?";
 I'm definitely not gonna buy it.";"Comment veux-tu que je revende
 un truc si je ne sais même pas ce
 que c'est ?";
+"          おおっ! ニイチャン!!";"
+          Woah! You did it!!!";"
+          Oh ! Tu as réussi !";
+"サクっと姫さんの呪い
+解いちゃったみたいだねぇ
+街中大盛り上がりで
+ウチも稼がせてもらったよ～
+ニイチャンには世話んなったし
+今日から例のブツ出すことにしたんだ";"So you finally broke the Princess's 
+curse, did ya? 
+
+The town's lively again, and I'm
+turning a fine profit. 
+
+It's all thanks to you, friend. I'm gonna
+be a proper shopkeeper from now on,
+and I'm gonna sell something special.";"Tu as enfin brisé la malédiction qui
+pesait sur la princesse, hein ? 
+
+Grâce à toi, la ville renaît. Et ça, c'est
+bon pour les affaires, hé hé !
+
+Pour te remercier j'ai décidé de
+mettre quelque chose de nouveau
+sur le marché.";
+"         　　　　 その名も!";"
+             They're called...";"
+         　On appelle ça...";
+"   　　　       トモダチの証!!";"
+           Friendly Tokens!!!";"
+   　 Des preuves d'amitié !";
+"魔境では手に入らない
+超が超つくお宝だぜ～
+ただし 城の前にいる
+小うるさいガキには内緒な";"They're super special treasures, ya 
+know. Ya can't get your hands on them
+in the Drablands.
+Just don't tell that little noisy kid in 
+front of the castle, OK?";"Ce sont de véritables trésors, et je sais
+de quoi je parle ! Impossible d'en
+trouver dans les contrées maudites.
+Mais s'il te plaît, n'en parle pas au
+gamin qui passe ses journées à
+brailler devant les portes du château.";
+"よう! ニイチャン
+何か用かい?";"Hey there.
+Ya need anything?";"Bien le bonjour !
+Qu'est-ce que je peux faire pour toi ?";
+"買い取って";"Buy something?";"Achète-moi un truc !";
+"勇者ポイント";"Hero points";"Les points d'héroïsme.";
+"なんでもない";"Nothing really";"Rien de spécial.";
+"ニイチャンの勇者ポイントは [KindPointNum]のようだな
+あと [Number]集まったら また来るんだな";"Hero points? Looks like you have [KindPointNum].
+Come see me when ya get another
+[Number], then we'll talk.";"Les points d'héroïsme ? Eh bien, tu
+en as [KindPointNum]. Reviens donc me voir
+quand tu en auras gagné [Number] de plus.";
+"ニイチャン…もう十分満足って顔だな
+
+勇者ポイントでニイチャンを応援するのが
+おいちゃんの役目だったんだが…
+もう何をあげても
+ニイチャンを喜ばすことはできなさそうだな…
+オイちゃんの役目はここまで…
+ってか
+なんだかちょっとさみしいけどよ
+心の中でずっとニイチャンの応援してるからな";"Well, well. Ain't ya pleased as punch?
+
+
+I want to keep encouraging and
+supporting you through these hero
+points, but...
+It doesn't look like there's anything
+more I can give you that'd make you
+happy...
+It looks like my work here is done...
+
+
+Sigh. It's a lonely feeling, you know.
+But I'll keep cheering you on in my
+heart, so no worries there!";"Tu as la tête d'un homme comblé.
+
+
+Mon rôle était de t'encourager par le
+biais des points d'héroïsme, mais...
+
+Quoi que je puisse te donner, je
+n'arriverai pas à te rendre plus
+heureux...
+On dirait bien que j'ai fait tout ce que
+j'avais à faire...
+
+C'est un peu triste, c'est sûr, mais...
+je continuerai à t'encourager au fond
+de mon cœur !";
+"おっと これで終わりじゃないぞ";"And that's not all!";"Attends, ce n'est pas tout !";
+"ニイチャンが稼いだ
+勇者ポイントは [KindPointNum]か…
+いい稼ぎっぷりだな コレがご褒美のブツだ
+ニイチャンのために選んだ一級品だぜ!";"How many hero points have ya got
+there, huh? [KindPointNum]...?
+
+That's a goodly amount! Here,
+have a reward. From me to you!
+Guaranteed to make you smile!";"Voyons combien de points d'héroïsme
+tu as gagné... Oh ! [KindPointNum] ?
+
+Joli ! Ça mérite une récompense !
+Tiens, voilà un article de premier choix
+que j'ai sélectionné exprès pour toi !";
+"おう ニイチャン!
+じいさんから話は聞いたぜ～
+頑張ってる勇者様達を
+応援してやってくれって頼まれてよ
+おいちゃんも
+一肌脱ごうってわけよ
+勇者ポイントってやつを稼げば
+なんとおいちゃんから材料をプレゼントだ!
+おいちゃん 誰かにプレゼントするなんて
+人生で3回目さ…へへっ色々思いだすな…
+…
+…
+まあ そういうことで勇者ポイントを稼いだら
+おいちゃんに声かけてくれや";"Right, right. I've heard from the
+old man in the castle.
+
+He's asked me to do something to
+encourage all you heroes to do
+your heroic best.
+He wants me to put some skin in the
+game as well, in other words. Oh well.
+
+Tell you what, you get lots of those
+hero point things, and I'll give you
+something for your trouble.
+I've only given someone something
+twice in my life... Ahh, the bittersweet
+memories...
+...
+
+
+Well, anyway. You get to work earning
+your hero points and give me a shout
+once you've got a bunch!";"Hé, l'ami ! L'ancien m'a tout raconté.
+
+
+Et il m'a demandé d'encourager les
+héros qui s'efforcent de faire vraiment
+preuve de... ben, d'héroïsme.
+En gros, il veut que je donne aussi de
+ma personne.
+
+Enfin, tout ça pour dire que si tu
+récoltes des points d'héroïsme, je
+t'offrirai des matériaux en cadeau !
+C'est la troisième fois de ma vie
+que je fais un cadeau à quelqu'un...
+Héhé... Ça ravive des souvenirs...
+...
+...
+...
+Oui, bon, euh... Donc, quand tu auras
+gagné des points d'héroïsme, viens
+me voir.";
 "って その姿…
 魔女討伐隊の制服でしょ?";"I know that outfit. You're one of them
 witch-hunting guys, aren't ya?";"Je connais cette tenue. T'es un
@@ -11662,6 +13205,837 @@ qui n'entendent rien à l'élégance...";
 Just leave me alone and go live
 unfashionably ever after, will you?!";"Hors de ma vue ! Vous me rendez
 malade !";
+"どの本を読みますか?";"Which book do you want to read?";"Que voulez-vous lire ?";
+"ハートは共有!";"Sharing Hearts";"Cœurs partagés";
+"音のなる玉";"The Lucky Lobby Ball";"Balle musicale du hall";
+"1人でも遊べる?";"The Lone Hero";"Héros solitaire";
+"やめる";"Nothing";"Rien";
+"魔境では他の勇者候補達と
+ハートが共有されます
+自分のダメージは 仲間のダメージに
+仲間のダメージは 自分のダメージになります
+腕に自信がない人は ハートフルドレス等の
+サポートタイプの服がおススメです";"All potential heroes must share hearts,
+just as they share triumph. So it shall
+be in the dreaded Drablands!
+Your pain is your team's pain, and vice
+versa. Protect your teammates as you
+would protect yourself.
+If you need an extra boost to help you
+survive, try wearing helpful outfits
+such as the Legendary Dress!";"Dans les contrées maudites, vous
+partagez vos cœurs avec vos
+héroïques compagnons.
+Vos souffrances sont les leurs, et leurs
+souffrances les vôtres. Protégez-vous
+les uns les autres !
+Si vous avez peur de ne pas faire le
+poids, enfiler une tenue comme la
+robe de légende peut s'avérer utile !";
+"魔境へ通じる扉 トライフォースは
+3人の力が集まらないと開きません
+試勇版では1人で
+魔境に行くことはできませんが
+なんと製品版では1人でも
+魔境に行くことができます
+1人でどうやってトライフォースを開くのか…
+それは製品版でのお楽しみです";"The way to the Drablands will only
+open when three heroes stand atop
+the Triforce symbol.
+In the demo version of this game, it is
+not possible for heroes to venture into
+the Drablands alone.
+However, rumour has it that one may
+travel alone in the full version of
+the game.
+How is it possible to break the rules of
+the Triforce symbol? The full version
+of the game has the answer...";"Pour que s'ouvre la voie vers les
+contrées maudites, trois héros doivent
+se réunir sur le symbole de la Triforce.
+Dans cette version démo, nul héros ne
+peut partir seul à l'aventure. La chose
+est tout bonnement impensable.
+Le bruit court cependant que dans la
+version complète, de tels voyages
+solitaires seraient possibles... 
+Comment un héros seul peut-il
+invoquer la Triforce ? La réponse se
+trouve dans la version complète...";
+"仲間を待っている間
+暇を持て余しているアナタ!
+壁に/ダッシュしてぶつかると
+上からボールが落ちてきます
+落とさないように剣ではじき続けると
+ステキなメロディーを奏でます
+試勇版では5曲しかありませんが
+製品版では23曲楽しめます
+アナタは最後までメロディーを
+奏でることができるでしょうか？";"Have you ever suffered from feelings
+of boredom while waiting for friends
+to join your team?
+Well, those days are now behind you!
+Simply press / to dash into a wall,
+causing the Lucky Lobby Ball to drop.
+Repeatedly hit this magical ball with
+your sword without dropping it to play
+a beautiful melody.
+There are five songs available in the
+demo version of the game and 23 in
+the full version.
+Do you have the timing and skill to
+play through all of the songs?";"Vous arrive-t-il parfois de ressentir
+de l'ennui, voire de la lassitude, quand
+vous attendez vos compagnons ?
+Et bien, cela n'arrivera plus ! Appuyez
+sur  ou  pour foncer dans un mur
+et faire chuter la balle musicale !
+Frappez-la en continu avec votre
+épée pour l'empêcher de tomber
+et jouer une délicieuse mélodie !
+La version démo ne compte que
+5 morceaux, mais il y en a 23 à
+écouter dans la version complète !
+Avez-vous l'adresse et l'endurance
+nécessaires pour jouer chaque
+morceau jusqu'au bout ?";
+"タイトル画面に戻るで ありマスか?";"Do you wish to return to the
+title screen?";"Tu veux retourner à l'écran titre ?";
+"はい";"Yes";"Oui";
+"いいえ";"No";"Non";
+"戦いについてのお作法は
+左上にいる 教育係殿に!
+プレイヤー名の変更や
+服や材料のことなら右上にいる青年殿に!
+通信をやめたい場合は
+中央にいる案内人殿の許可をとるで ありマス!";"For adventuring tips, you need to see
+Mr Tudor. He's the man with the
+glasses in the upper left corner.
+To change your name or ask about
+outfits and materials, speak to the
+boy in the upper right.
+If you want to disconnect, simply talk
+to the guide in the middle!";"Besoin de conseils ? Pour tout ce qui
+est aventure, adresse-toi au tuteur,
+en haut à gauche.
+Pour en savoir plus sur les tenues et
+les matériaux ou pour changer de nom,
+adresse-toi au jeune garçon à droite.
+Et si tu veux interrompre la
+communication sans fil, adresse-toi
+au guide au milieu du hall !";
+"ちょっと待つで ありマス!";"Stop right there!";"Hep ! Attends !";
+"ここから出たいで ありマスか?";"Do you wish to leave this place?";"Tu veux sortir d'ici ?";
+"はい";"Yes";"Oui";
+"いいえ";"No";"Non";
+"この試勇版は期間中であれば
+何度でも遊べるで ありマス!
+ゲームをやめたい時は
+気がねなく自分に声をかけるで ありマス!";"You can play the demo version of this
+game as many times as you like during
+the trial period.
+If you ever want to quit the demo,
+just let me know!";"Tu peux utiliser cette démo autant de
+fois que tu veux pendant la période
+d'essai !
+Si tu veux quitter le jeu, adresse-moi
+la parole ! Je suis là pour ça !";
+"試勇版をやめることになるで ありマスが
+本当に良いで ありマスか?";"If you leave, you will be quitting the
+demo version of this game. Are you
+sure that's what you wish to do?";"Si tu sors, tu quitteras la version démo
+de ce jeu. Tu es sûr de toi ?";
+"いいえ";"Not sure...";"Non";
+"はい";"Yes, I'll leave!";"Oui";
+"お名前変えちゃうんですか?
+
+お試しと言っても 勇者サマ候補なんですから
+変なのつけちゃダメですよ!";"Oh! Did you want to change
+your name?
+
+Even though this is a demo, remember
+you're still a hero! We look up to you!
+So don't choose anything weird, ok?";"Tu veux changer de nom ?
+
+
+Démo ou pas, n'oublie pas que tu es
+un héros et que le monde te regarde.
+Ne choisis pas un nom saugrenu !";
+"わかってる";"You got it!";"Fais-moi confiance !";
+"じゃあやめる";"Never mind then...";"Je ne change plus...";
+"あっ…すいません
+ボクに何かご用なんですよね？";"Oh, sorry!
+Can I help you with something?";"Oups, pardon !
+Est-ce que je peux t'aider ?";
+"名前の変更";"Change my name!";"Changer de nom";
+"服について";"Tell me about outfits!";"Parler des tenues";
+"材料について";"What about materials?";"Parler des matériaux";
+"用はない";"Nothing";"Besoin de rien";
+"うん ボクも
+今のままでイイと思いますよ!
+[PlayerName]って
+けっこうオシャレだし! ボクはスキですよ!";"I agree, I think your name is perfectly
+heroic just the way it is. No need to
+change anything!
+[PlayerName]... So stylish,
+yet humble. Love it!";"Tu as bien raison, ton nom est
+suffisamment héroïque en l'état.
+Pas besoin d'en changer !
+[PlayerName]...
+C'est très classe, pas trop extravagant,
+j'adore !";
+"他にご用はありますか?";"Do you need anything else?";"Tu as besoin d'autre chose ?";
+"名前の変更";"Change my name!";"Changer de nom";
+"服について";"Tell me about outfits!";"Parler des tenues";
+"材料について";"What about materials?";"Parler des matériaux";
+"用はない";"Nothing";"Besoin de rien";
+"[PlayerName]かぁ…
+なかなかなオシャレネームですね!
+ボク すっごい好きな感じです!!";"[PlayerName]...
+Such a stylish name!
+I'm really liking it!";"[PlayerName] ? Quel nom !
+Toute l'élégance en quelques lettres.
+Et tu le portes à merveille !";
+"お試し勇者体験ができるなんて
+便利な世の中になったものですね～";"These days anyone who fits the
+criteria can try out to be a hero.
+Ah, modern convenience!";"Dire que de nos jours, l'héroïsme est
+disponible en version démo... C'est
+quand même rudement pratique !";
+"そんな服を 恥ずかしげもなく
+堂々と着れるなんて…
+さすが勇者サマ候補!!
+オシャレは度胸からってことですね!!
+それにしても…
+何でこんな服を…
+じゃなくて…
+タダでこんな服まで用意してくれるなんて
+試勇版ってのは太っ腹ですね～";"It takes real courage to wear an outfit
+like that without feeling embarrassed!
+I applaud you!
+It's true what they say - confidence is
+the best accessory! But even so, this
+demo has stuck you with such an...
+Erm. I mean... How nice of this demo
+to provide you with such a...special
+outfit from the start! So very nice!";"Porter une telle tenue sans rougir...
+Quelle force de caractère ! Quelle
+bravoure !
+La mode est portée par des gens sans
+peur, comme on dit ! Mais cette tenue
+est quand même vraiment... spéciale.
+Euh... ne le prends pas mal, hein ! Tu
+as de la chance de pouvoir porter une
+tenue si... unique dans cette démo !";
+"そのとんがった耳…
+とってもオシャレですね!
+すいません…はしゃいじゃって…
+ボク オシャレなものに目がなくて…
+ボクに何かご用ですか?";"Look at those ears! They're so
+perfectly pointy! So wonderfully
+stylish! SUCH EXCELLENCE!
+...Oh, erm...sorry about that. I can get
+quite excitable when I see stylish
+things! Hehe.
+Anyway, can I help you with
+something?";"Mazette, quelles superbes oreilles !
+Quelle courbe délicate, aérienne,
+gracile, déliée ! QUELLE PERFECTION !
+Oh... Pardon... Je me suis un peu
+emporté... Les jolies choses me font
+parfois tourner la tête. Héhé.
+Mais trêve de bavardage. Est-ce
+que je peux t'aider ?";
+"名前の変更";"Change my name!";"Changer de nom";
+"服について";"Tell me about outfits!";"Parler des tenues";
+"材料について";"What about materials?";"Parler des matériaux";
+"用はない";"Nothing";"Besoin de rien";
+"その服…何だかアナタの為に
+デザインされたかのような服ですね!";"That outfit... It fits...perfectly!
+It's like it was made just for you!";"Mais dis-moi, cette tenue te va comme
+un gant ! On dirait qu'elle a été taillée
+pour toi !";
+"あっ 今のお気に入りは弓ですか?
+コキリ族は弓の名手だそうですね!
+今回 試着できるアイテム強化型の服は
+コキリ族の衣装だけみたいですが
+製品版では自分のお気に入りのアイテムを
+強化できる服を作れるようになりますよ～";"An arrow fan, are we? Nice! The Kokiri
+tribe is known for their unparalleled
+bow skills. Their clothes are cute too!
+Kokiri Clothes take your bow game to
+the next level. There are other outfits
+to enhance other items too.
+It will be possible to try those other
+ones out in the full version of the
+game. Exciting times!";"Amateur d'archerie ? Les Kokiris sont
+des archers hors pair, et en plus leurs
+tenues sont d'un chic forestier inouï !
+Avec la tenue kokiri, ton arc passe au
+niveau supérieur !
+
+Dans la version complète, d'autres
+tenues permettent de renforcer
+d'autres éléments de ton équipement.
+... Quoi ? Tu t'en doutais ? Haha !
+Quel flair ! Quelle finesse !";
+"なんだかアナタと話していると
+心が温まるというか…癒されるというか…
+アナタのような方と魔境に行けたら
+みんなきっと心強いでしょうね";"That outfit... Wow... I feel so warm
+and at peace just being with you...
+Like everything's going to be okay...
+With that outfit on, I'm sure people
+would feel comfortable venturing out
+to the Drablands with you!";"Je ne sais pas pourquoi, mais ça me
+réchauffe le cœur de te voir dans cette
+robe. Je me sens... apaisé, en sécurité.
+Rien de tel pour mettre en confiance
+tes compagnons d'aventure dans les
+contrées maudites, tu peux me croire !";
+"なんだかイイことあったって
+顔してますね!
+イイな～ ラッキーパジャマ!
+運がイイってある意味最強じゃないですか!!
+こんな服を試着できるなんて
+さすが勇者サマ候補の方はラッキーですね!
+…でもなんでパジャマにしちゃったんだろ";"Feeling lucky today? You should!
+That Lucky Loungewear is pretty
+special. I'm a big fan of that one!
+Good luck is a powerful ally! You're so
+lucky to have...well, such good luck!
+It looks really comfortable, too.";"Tu te sens veinard aujourd'hui ? Tu
+fais bien ! Quelle chance tu as de
+pouvoir porter le pyjama chanceux !
+Tu sais, un coup de chance au bon
+moment, ça peut sauver la vie ! Et
+puis, il a du chien ce pyjama, non ?
+Hm ? Pourquoi un pyjama pour partir
+à l'aventure ? Alors ça...";
+"これはこれは、勇者候補どの!
+オツトメご苦労でござる!!
+なんてね!";"What are you standing around for?
+Shouldn't you be spin attacking?
+Haha, just joking!";"Alors, héros, prêt à tourbillonner dans
+l'aventure ? Moi, cette armure me fait
+tourner la tête ! Haha !";
+"すいません…もう今のお名前で
+募集登録しちゃったので今は無理なんですよ… 
+お名前の変更は 一度募集をやめてから
+またボクに話しかけてください
+募集をやめたい場合は
+真中にいる案内人に言えばいいですよ";"Whoops! I'm afraid you can't change
+your name at the moment. I mean,
+you're showing it off to everyone!
+If you really want to change it,
+talk to the guide in the middle
+and give up on setting out for now.
+Once that's taken care of, just talk
+to me again!";"Tu ne peux pas changer maintenant,
+tu es déjà enregistré pour partir à
+l'aventure sous ton nom actuel...
+Si tu veux vraiment changer, parle au
+guide au milieu du hall, dis-lui que tu
+abandonnes, et reviens me voir après !";
+"服は単なる見た目のオシャレだけじゃなく
+それぞれ色んな効果があるんです
+仲間をサポートするタイプや
+アイテムを強化するタイプなんかもありますよ!
+色んなオシャレを楽しんでくださいね!";"Outfits aren't just for looking stylish.
+Each has a special power! Use them to
+enhance your items or help your team.
+It's quite magical! Try out all kinds of
+different fashion statements and see
+which ones you like best!";"Les tenues ne sont pas là que pour le
+plaisir des yeux. Chacune est porteuse
+d'un pouvoir spécial !
+Certaines renforcent l'équipement
+de leur porteur, d'autres renforcent
+toute l'équipe... Essaie-les toutes !";
+"今回はお試しってことで
+服が色々用意されているみたいですが
+製品版では
+服は自分で作らないといけないんです
+でも服を作るためには材料が必要で
+その材料は魔境でしか手に入らないんですよね
+ボクも魔境にさえいければ
+色んな服を作ってオシャレするんですけどねー";"Since this is what they call a "demo"
+version, a few outfits have been
+provided for you to try out.
+In the full game, it will be possible to
+collect materials from the Drablands
+to craft new outfits with.
+If only I could go to the Drablands...
+My closet would be overflowing with
+all kinds of outfits!";"Dans cette démo, les tenues ont été
+préparées pour que tu puisses les
+essayer. C'est du prêt-à-porter, quoi.
+Dans la version complète, les tenues
+sont créées à partir de matériaux que
+tu rapportes des contrées maudites...
+C'est du sur-mesure !
+Ah, si je pouvais y aller, je me ferais
+tailler tout un tas de tenues...";
+"今回はお試しってことで
+服が色々用意されているみたいですが
+製品版では
+服は自分で作らないといけないんです
+でも服を作るためには材料が必要で…
+
+あっ もうお持ちなんですね!
+材料は魔境でしか手に入らないんですよね
+ボクも魔境にさえいければ
+色んな服を作ってオシャレするんですけどねー";"Since this is what they call a "demo"
+version, a few outfits have been
+provided for you to try out.
+In the full game, it will be possible to
+collect materials from the Drablands
+to craft new outfits with...
+Oh! Silly me, you already have some!
+Well that's fantastic then!
+
+If only I could go to the Drablands...
+My closet would be overflowing with
+all kinds of outfits!";"Dans cette démo, les tenues ont été
+préparées pour que tu puisses les
+essayer. C'est du prêt-à-porter, quoi.
+Dans la version complète, les tenues
+sont créées à partir de matériaux que
+tu rapportes des contrées maudites...
+Oh ! Mais je vois que tu as déjà
+trouvé certains matériaux !
+
+Ah, si seulement je pouvais aller dans
+les contrées maudites, je me ferais
+tailler tout un tas de tenues...";
+"　　 ユーザー名は通信相手に公開されます";"            Your name will be seen
+                by other players.";"　　　Votre nom sera visible par
+　　　　　les autres joueurs.";
+"インターネット通信で仲間を募るぞい
+どんな仲間がお好みかのう?";"Let us search for allies online.
+What manner of allies shall we seek?";"Recrutons en ligne des compagnons à
+votre mesure ! Dans quelle catégorie
+voulez-vous chercher ?";
+"見知らぬ勇者";"Unknown heroes!";"Héros inconnus";
+"フレンド";"Friends!";"Amis";
+"やめる";"Never mind";"Aucune, finalement...";
+"なんじゃ?
+魔境へ行くのをあきらめるのかのぅ?";"Beg your pardon?
+You want to give up on going into
+the Drablands?";"Parbleu !
+Vous ne voulez plus vous rendre
+dans les contrées maudites ?";
+"いえ 出発します";"No, let's go!";"Bien sûr que si !";
+"出発をやめる";"I give up";"Non, j'abandonne...";
+"通信エラーが起こったようじゃぞい
+すまんが もう一度やり直してくれんかのぅ?";"It seems a connection error has
+occurred. I beg your pardon, but
+could you try again?";"On dirait qu'une erreur de
+communication est survenue.
+Voulez-vous bien réessayer ?";
+"魔境に行きたくなったら
+また 来るがよい";"Come back if you want to visit the
+Drablands.";"Revenez quand vous voudrez vous
+rendre dans les contrées maudites.";
+"　　　 インターネットに接続中です…";"
+        Connecting to the internet...";"
+	Connexion à Internet...";
+"インターネットに接続したぞい
+フレンドが合流するまで しばし待つのじゃ";"You have connected successfully.
+Please wait for your friends to join.";"Vous voilà connecté et fin prêt !
+Vous n'avez plus qu'à attendre que
+vos amis vous rejoignent.";
+"インターネットに接続したぞい
+他の仲間が合流するまで しばし待つのじゃ";"You have connected successfully.
+Please wait for other allies to join.";"Vous voilà connecté et fin prêt !
+Vous n'avez plus qu'à attendre que
+vos compagnons vous rejoignent.";
+"魔境に行きたくなったら
+また 来るがよい";"Come back if you want to visit the
+Drablands.";"Revenez quand vous voudrez vous
+rendre dans les contrées maudites.";
+"通信エラーが起こったようじゃぞい
+すまんが 再びチームを作り直してくれんかの?";"It seems a connection error has
+occurred. I beg your pardon, but
+could you try again?";"On dirait qu'une erreur de
+communication est survenue.
+Voulez-vous bien réessayer ?";
+"なんじゃ?";"What is it?";"De quoi s'agit-il ?";
+"出発をやめたい";"Give up on going";"Je veux plus y aller...";
+"用はない";"Never mind";"Non, rien...";
+"ではインターネットに接続するぞい";"Then let us connect to the internet.";"Bien, connectons-nous à Internet.";
+"　　　　　通信を切断しています…";"
+       You are being disconnected...";"
+   Interruption de la communication...";
+"インターネット通信で
+仲間を募るのをとりやめたぞい
+魔境に行きたくなったら
+また 来るがよい";"You have given up on searching for
+allies online.
+
+Come back if you want to visit the
+Drablands.";"Qu'il en soit ainsi. Vous avez
+décidé de ne pas recruter
+de compagnons en ligne.
+Revenez quand vous voudrez vous
+rendre dans les contrées maudites.";
+"オヌシの好きにするがよい";"Do as you wish, hero.";"Comme vous voudrez.
+C'est vous, le héros.";
+"         今すぐニンテンドーeショップで
+    このソフトの更新データを受信しますか?";"Do you want to download the
+latest update data for this software
+from Nintendo eShop now?";"Accéder maintenant au Nintendo
+eShop pour télécharger les données
+de mise à jour de ce logiciel ?";
+"はい";"Download";"Oui";
+"いいえ";"Never mind";"Non";
+"                 ゲームを終了します
+                  セーブしますか?";"           The game will be closed.
+             Do you want to save?";"           Vous allez quitter le jeu.
+                 Sauvegarder ?";
+"はい";"Save";"Oui";
+"いいえ";"Don't save";"Non";
+"                   セーブ中です…
+             電源を切らないでください";"                      Saving...
+         Do not turn the power off.";"	     Sauvegarde...
+        N'éteignez pas la console.";
+"　　　　　　セーブが終了しました";"
+              Saved successfully.";"
+	 Partie sauvegardée.";
+"インターネット通信で遊ぶ場合は
+バージョンの更新を行う必要があります";"To play online, you will need to
+download the latest update for this
+software.";"Pour jouer en ligne, vous devez
+mettre à jour le logiciel.";
+"残念じゃが このチームは
+すでに3人集まっとるようじゃぞい
+チームを作るか別のチームに参加するか…
+オヌシの好きにするがよい";"I am sorry, but that three-person team
+is already full.
+
+You will have to create a new team or
+join another one. The choice is yours.";"Désolé, mais cette équipe
+est déjà au complet.
+
+Rejoignez une autre équipe
+ou créez-en une nouvelle...
+À vous de voir !";
+"おおっと すまん すまん
+試勇版では フレンドとは遊べないんじゃ
+じゃが 製品版では
+フレンドとチームを作ったり
+自分とフレンドと見知らぬ勇者の3人でも
+チームを作ることができるぞい";"I am sorry, but you can't play
+with friends in the demo version.
+
+In the full version, it will be possible
+to create a team with your friends.
+
+It will also be possible to search for an
+unknown hero to join you and a friend,
+if that is what you wish.";"Désolé, mais la version démo ne
+permet pas de jouer avec ses amis...
+
+Dans la version complète, en
+revanche, il est possible de créer
+une équipe entre amis.
+Il est même possible de créer une
+équipe composée de vous, d'un ami et
+d'un héros inconnu. Pas mal, hein ?";
+"ローカル通信じゃな…よかろう
+それでオヌシはどうするぞい?";"Local Play, eh...? Very good.
+What will you do?";"Donc, vous voulez jouer en mode
+multijoueur local, hein ? C'est vous
+le patron ! Et que voulez-vous faire ?";
+"チームを作る";"Create a team";"Créer une équipe";
+"チームに入る";"Join a team";"Rejoindre une équipe";
+"説明を聞く";"Can you explain?";"Expliquez-moi...";
+"やめる";"Never mind";"Rien !";
+"ローカル通信で
+仲間を募るのをやめたいと?";"Do you want to give up on setting out
+with allies in Local Play?";"Vous ne voulez plus recruter
+de compagnons en mode
+multijoueur local ?";
+"やめる";"I give up";"Non, j'abandonne...";
+"やめない";"Never give up!";"Si, si, je veux !";
+"ふうむ…まだ誰も
+チームを作っていないようじゃぞい";"Hrm... It seems nobody has
+created a team yet.";"Hmm... On dirait que personne
+n'a encore créé d'équipe.";
+"　　　　　　　　接続中です…";"
+                   Connecting...";"
+                  Connexion...";
+"チームを作ったぞい
+仲間が合流するまで しばし待つのじゃ";"The team has been created.
+Please wait for your allies to join.";"Votre équipe a été créée.
+Vous n'avez plus qu'à attendre que
+vos compagnons vous rejoignent.";
+"通信エラーが起こったようじゃぞい
+すまんが 再びチームを作り直してくれんかの?";"It seems a connection error has
+occurred. I beg your pardon, but
+could you try again?";"On dirait qu'une erreur de
+communication est survenue.
+Voulez-vous bien réessayer ?";
+"ローカル通信では まず「チームを作る」か
+「チームに入る」かを選ばねばならぬぞい
+誰か1人がリーダーとなりチームを作り
+他の仲間はそのチームに入る…という具合じゃ
+3人そろえば 魔境に旅立てるぞい";"To adventure in Local Play, you must
+first choose to either create a team
+or join one.
+One of you must become the leader
+and create a team. The others can
+then join that team. That's the system.
+Once three heroes have gathered,
+you can set off for the Drablands.";"Pour vous battre en mode multijoueur
+local, il faut soit « créer une équipe »,
+soit « rejoindre une équipe ».
+Celui qui crée une équipe est le
+meneur. Les autres n'ont plus qu'à
+rejoindre son équipe. Voilà le principe.
+Une fois qu'une équipe compte trois
+héros, elle peut partir à l'aventure
+dans les contrées maudites.";
+"オヌシの好きにするがよい";"The choice is yours.";"C'est à vous de voir.";
+"魔境に行きたくなったら
+また 来るがよい";"Come back if you want to visit the
+Drablands.";"Revenez quand vous voudrez vous
+rendre dans les contrées maudites.";
+"魔境に行きたくなったら
+また 来るがよい";"Come back if you want to visit the
+Drablands.";"Revenez quand vous voudrez vous
+rendre dans les contrées maudites.";
+"　　　　　通信を切断しています…";"
+       You are being disconnected...";"
+   Interruption de la communication...";
+"無線通信がオフになっとるようじゃぞい
+
+無線通信をオンにして
+もう一度やり直すんじゃな";"You appear to have wireless
+communication disabled.
+
+Please enable wireless communication
+and try again.";"On dirait bien que la communication
+sans fil est désactivée...
+
+Activez la communication sans fil,
+puis réessayez.";
+"残念じゃが このチームは
+すでに3人集まっとるようじゃぞい
+チームを作るか別のチームに参加するか…
+オヌシの好きにするがよい";"I am sorry, but that three-person team
+is already full.
+
+You will have to create a new team or
+join another one. The choice is yours.";"Désolé, mais cette équipe
+est déjà au complet.
+
+Rejoignez une autre équipe
+ou créez-en une nouvelle...
+À vous de voir !";
+"魔境へは 3人一組で向かわねばならぬぞい
+どんな方法で 仲間を募るのだ?";"You can only set off for the Drablands
+in teams of three heroes.
+How will you look for allies?";"Pour aller dans les contrées maudites,
+il faut une équipe de trois héros.
+Comment recruter vos compagnons ?";
+"ローカル通信";"Local Play";"Multijoueur local";
+"インターネット通信";"Online Play";"En ligne";
+"ダウンロードプレイ";"Download Play";"Mode téléch.";
+"やめる";"Never mind";"Oubliez ça !";
+"そうか 魔境へ旅立ちたくなったら
+また 来るがよい";"Is that so? Come back if you want to
+visit the Drablands.";"Vous êtes sûr ? Soit.
+Revenez quand vous voudrez vous
+rendre dans les contrées maudites.";
+"　　　　　 　　　　ほぅ…
+　　　　　仮入隊の勇者候補殿かのぅ";"Hrm... You must be our new
+temporary hero recruit.";"Oh... Vous devez être la nouvelle
+recrue pour la démonstration...";
+"ここは 仲間を募り
+魔境へ旅立つ通信の間
+ワシはオヌシら勇者候補達を
+魔境へ送り出す案内人じゃぞい";"This room is for those who would meet
+allies via wireless communication
+and set out into the Drablands.
+I act as the guide here, sending
+hero recruits on their way.";"Ce lieu de communication sans fil vous
+permet de recruter des compagnons
+pour partir dans les contrées maudites.
+Je suis le guide chargé d'envoyer
+les héros à l'aventure.";
+"これはトライフォース
+魔境に通ずる唯一の入口じゃぞい
+3人の力が集いし時 トライフォースが解放され
+オヌシらを 魔境へと導くのじゃぞい";"That is the Triforce symbol.
+The only path into the Drablands.
+
+When three heroes gather, the
+power of the Triforce is triggered,
+sending you on your journey.";"Ce que vous voyez ici est le symbole
+de la Triforce, la seule et unique
+voie vers les contrées maudites.
+Que trois héros se réunissent ici et la
+puissance de la Triforce les conduira
+jusqu'à leur périlleuse destination.";
+"1人の力では道は開かん
+まずは通信で仲間を集めることじゃ
+ちなみにオヌシの名前は 通信相手に
+公開されるからのぅ
+魔境に旅立つ心が決まったなら
+ワシに声をかけるがよいぞ";"The way will not open for a solitary
+hero. You must first gather allies via
+wireless communication.
+Incidentally... Your name will be
+shown to other players, so I hope
+you'll behave, hm?
+When you think you're ready to
+set out for the Drablands, just
+talk to me and we can begin.";"La force d'un seul héros ne suffit pas à
+ouvrir la voie. La communication sans
+fil permet de trouver des compagnons.
+Votre nom sera visible aux autres
+utilisateurs, donc... je compte sur
+vous pour faire preuve d'élégance.
+Lorsque vous vous sentirez prêt à
+partir pour les contrées maudites,
+venez me parler. Je vous guiderai.";
+"すまんが 試勇版では
+ダウンロードプレイはできんのじゃ";"I am sorry, but Download Play is
+not available in the demo version
+of this game.";"Je suis désolé, mais il n'est pas
+possible de jouer à cette version
+démo en mode téléchargement.";
+"　　　　　　　しかしじゃ!";"
+　　　　　　　HOWEVER!";"
+　　　　　 NÉANMOINS !";
+"製品版のソフトが一本でもあれば
+3人で全てのコースを遊ぶことができるぞい";"One FULL version of the game will
+allow up to three heroes to play
+through all of the levels together.";"Un seul exemplaire de la version
+complète permet à trois héros de
+profiter ensemble de tous les niveaux.";
+"なかなか悪くないであろう";"Not too shabby, eh?";"Plutôt pas mal, non ?";
+"知識は最大の防御
+知識なきもの 勇者ならざる";"Knowledge is the greatest defence.
+One cannot become a hero without
+knowledge.";"Le savoir est la meilleure des
+protections. Un ignare ne peut
+devenir un véritable héros.";
+"私が勇者の心得を
+お話ししてさしあげましょう";"Let me tutor you on the basics
+of being a hero.";"Laisse-moi te prodiguer les
+enseignements qui feront de
+toi un véritable héros.";
+"がんばりゲージ";"Energy gauge";"Jauge d'endurance";
+"勇者パネル";"Hero panels";"Panneaux de héros";
+"ブラックリスト";"Blacklist";"Bloquer quelqu'un";
+"用はない";"Never mind";"Pas besoin, merci !";
+"魔境に行くと上画面に
+紫のゲージが表示されることでしょう
+それはがんばりゲージといい
+アナタの心のパワーを表しています
+魔境で手に入れたアイテムは
+扱う者の心のパワーを必要とします
+がんばりゲージが減り パワーが無くなると
+アイテムは使えなくなるでしょう
+勇者たる者 力も心も
+常にマネジメントが必要なのです";"When you are in the Drablands, a
+purple meter will be displayed on
+the top screen.
+This is the energy gauge, and it
+represents the power of your soul.
+
+This power is needed to use items
+that you might find in the Drablands.
+
+When your energy gauge decreases
+and you run out of power, you will no
+longer be able to use items.
+A hero must be able to manage their
+energy wisely.";"Quand tu te trouves dans les contrées
+maudites, une jauge violette apparaît
+sur l'écran supérieur.
+C'est ce qu'on appelle la jauge
+d'endurance. Elle représente la
+force de ton âme.
+Tu en auras besoin pour te servir
+des objets que tu trouveras dans
+les contrées maudites.
+Évidemment, quand la jauge est vide,
+tu ne peux pas utiliser ces objets.
+
+Un véritable héros doit savoir se servir
+adroitement de sa force et de son
+esprit pour s'emparer de la victoire.";
+"下にある顔や名前が書かれたパネルは
+勇者パネルと呼ばれています
+勇者パネルをタッチすると
+その勇者の様子を見ることができるのです
+勇者たる者 常に仲間のことを
+気にかけておかねばなりませんよ";"The panels with faces and names on
+the lower screen are hero panels.
+
+By touching a hero panel, you will be
+able to see how that hero is doing.
+
+A hero must always look out for their
+comrades.";"Il s'agit des panneaux sur l'écran
+tactile qui affichent le nom et le
+visage d'un héros.
+Si tu en touches un, tu peux voir
+le statut du héros sélectionné.
+
+Un véritable héros se doit de se
+soucier de ses compagnons.";
+"勇者たる者 いつも他人を思いやる心を
+忘れてはなりませんよ";"Always have compassion for others,
+young one. A true hero must have
+a tender heart.";"N'oublie pas, un véritable héros
+combat pour les autres, jamais
+pour lui-même.";
+"インターネット通信では 時折
+勇者のふりをした偽勇者が出没します
+偽勇者は勇者の心得を持たず
+魔境で勇者らしからぬ行いを繰り返します
+そんな偽勇者に出会ったら
+ブラックリストへの登録をおススメします
+インターネット通信中に 偽勇者の
+勇者パネルを押し かを押すのです
+そうすればその偽勇者は
+ブラックリストに登録されるでしょう
+ブラックリストに登録すると
+登録した者とは もう会えなくなります
+勇者たる者
+見極めを間違えてはなりませんよ";"In the online world, sometimes you
+may encounter fake heroes.
+
+These pretenders, not having the
+heart of a true hero, will behave
+heinously in the Drablands.
+I recommend you register such fake
+heroes on the blacklist.
+
+To do so, touch and hold their hero
+panel, then press  or  while online.
+You will never see them again.
+A hero must be able to assess a
+situation carefully and make the
+correct decision.";"Quand tu combats en ligne, il se peut
+que certaines âmes mal intentionnées
+se fassent passer pour des héros.
+Ces faux héros s'évertuent à faire le
+mal, ignorant la mission qui incombe
+aux véritables héros.
+Si par malheur tu en rencontrais un
+dans les contrées maudites, n'hésite
+pas à le bloquer.
+Appuie sur  ou  tout en touchant
+son panneau quand vous êtes en ligne.
+Tu ne le reverras plus.
+Mais n'oublie pas, un véritable héros
+doit bien réfléchir à la situation avant
+de prendre une telle décision.";
 "                  毎日たからばこ屋
                 一生懸命準備中";"                   Daily Riches
          Still setting things up!";"                   Magotidien
@@ -11686,6 +14060,36 @@ malade !";
 　　　　　　まねビトじいさんまで";"              To use the doppels,
             see the Doppel Master.";" Pour utiliser ce pantin, adressez-vous
 　　　　au maître des pantins.";
+"       　以前は朽ちかけた人形であったが";"
+    The doll was once old and broken.";"          Ce n'était autrefois qu'un
+            vieux pantin tout usé.";
+"           今は街の人たちの誇りとして";"
+      Now it is the townsfolks' pride.";"              Mais aujourd'hui,
+         il est la fierté de la ville.";
+"　 埃1つなくピカピカに磨き上げられている";"
+      It lies polished to a high sheen.";"
+ Il a été lustré avec le plus grand soin.";
+"      以前より少し立派に見える気がする…";"
+    It looks a little nicer than before.";"          Il vous paraît un peu plus
+             beau qu'auparavant...";
+"             心正しき勇者に栄光あれ!";"
+       Glory be to righteous heroes!";"
+      Gloire aux héros au cœur pur !";
+"              今は凛々しくすら感じる";"
+    Now it has a dignified air about it.";"       Aujourd'hui, il émane de lui
+          une certaine noblesse.";
+"          　  　払う埃もないようだ";"
+    There's no need to wipe it, either.";"     Plus un seul grain de poussière
+                  ne le souille.";
+"    毎日手を合わせ拝む街人までいるという";"
+    Some of them stop by every day.";" On dit que chaque jour, des habitants
+ de la ville viennent prier à ses pieds.";
+"         　今では勇者の化身と讃えられ";"
+    Now it's like a symbol of heroism.";"    Aujourd'hui, on le vénère comme
+         l'incarnation du Héros.";
+"　 世界中の勇者達の聖地となっているようだ";"
+  Heroes come from far away to see it.";"   Cet endroit est un lieu sacré pour
+       les héros du monde entier.";
 "裏からでは読めない……";"You can't read it from this side.";"Vous ne pouvez pas lire d'ici...";
 "求ム!! トーテム勇者!!
 
@@ -11735,24 +14139,57 @@ Au nom de Sa Majesté le roi Frisette";
           Madame Couture's";"           Il n'y a pas de chance,
          seulement de l'élégance !
           Madame la couturière ";
+"地下1階層 入口
+森の洞";"Entrance to Level -1
+Forest Zone";"Entrée du niveau -1
+Zone forestière";
+"地下6階層 入口
+水の洞";"Entrance to Level -6
+Flooded Zone";"Entrée du niveau -6
+Zone inondée";
+"地下11階層 入口
+炎の洞";"Entrance to Level -11
+Scorching Zone";"Entrée du niveau -11
+Zone ardente";
+"地下16階層 入口
+氷の洞";"Entrance to Level -16
+Frozen Zone";"Entrée du niveau -16
+Zone gelée";
+"地下21階層 入口
+砦の洞";"Entrance to Level -21
+Fortified Zone";"Entrée du niveau -21
+Zone fortifiée";
+"地下26階層 入口
+砂の洞";"Entrance to Level -26
+Desert Zone";"Entrée du niveau -26
+Zone aride";
+"地下31階層 入口
+闇の洞";"Entrance to Level -31
+Shadow Zone";"Entrée du niveau -31
+Zone obscure";
+"地下36階層 入口
+極の洞";"Entrance to Level -36
+Baneful Zone";"Entrée du niveau -36
+Zone ultime";
 "　　　　　　
   最初に着ていた私服
 　　　　　　
 受けるダメージが2倍!
 更にハートの器－1
-私服がこれだけ弱いと
-なんだか悲しい…";"Your first outfit!
+心正しき勇者には
+聖なる力が宿るという";"Your first outfit!
                 
 It makes you take
 double damage and
-reduces maximum
-hearts by one.
-Impressively bad.";"La tenue de base !
+reduces max. hearts
+by one. Said to give
+aid to the righteous.";"La tenue de base !
 Double les dégâts
 reçus et réduit d'un
 cœur votre nombre
 total de cœurs.
-Pas terrible...";
+Renferme le pouvoir
+d'une âme noble.";
 "　　　　　　
  剣の力が2倍になる服
 　　　　　　
@@ -12398,6 +14835,44 @@ se fait sentir ! Vos
 compagnons ne
 risquent rien. Dans
 l'arène, par contre...";
+"　　　　　　
+      時もお宝なり
+　　　　　　
+君は知ってるかい?
+伝説の船乗りの話を…
+ヤツにかかれば お宝が
+まる見えだって話だぜ!";"Treasure your time!
+                
+You've heard of the
+legendary sailor
+who always got the
+treasure he wanted.
+Now you can, too!";"Cette tenue a
+appartenu à un
+chasseur de trésors
+qui avait l'œil pour
+trouver les coffres
+les mieux garnis.
+L'œil et le temps...";
+"　　　　　　
+　　　至高の剣
+　　　　　　
+こんな剣みたことない!
+回転斬りでも
+ビームが炸裂!! 
+その姿 鬼神のごとし!!";"Fiercer than fierce!
+                
+Swordplay that's
+out of this world!
+Attacks send four
+beams flying. Also?
+Coolest blade ever.";"Vous rêvez de
+puissance ? Enfilez
+cette tenue pour
+que vos attaques
+lancent quatre
+rayons ! Allez-y !
+Rayonnez !";
 "剣士の服を着ると
 剣の性能がUPするんだって";"The power of your sword will go up
 if you wear the Sword Suit!";"Si tu veux renforcer tes attaques à
@@ -12558,6 +15033,12 @@ you touch while wearing the
 Cacto Clothes.";"Si tu veux infliger des dégâts aux
 ennemis qui osent te toucher, c'est
 le complet piquant qu'il te faut !";
+"宝箱の中がわかるラインバックの服は特注で
+マダムに直接オーダーしないと作れないんだ…";"Linebeck's Uniform lets you see
+inside treasure chests! (Only available
+directly from Madam Couture's.)";"Si tu veux voir le contenu d'un coffre
+fermé, c'est la tenue de Linebeck qu'il
+te faut ! À commander chez Madame.";
 "剣士の服を着ると
 剣が強化され ビームも出せるようになるだわサ";"Wearing that Sword Suit
 makes your sword shoot beams.
@@ -12746,11 +15227,20 @@ by the thorns! Touching enemies
 will damage them, so it works out well.";"Revêts le complet piquant pour laisser
 aux ennemis qui t'approchent un petit
 souvenir piquant.";
+"ラインバックの服を着ると
+宝箱がスケスケなんだわサ";"If you're wearing Linebeck's Uniform,
+Treasure Chests become transparent
+and you can see what lies within. ";"Quand tu portes la tenue de Linebeck,
+tu peux voir le contenu des coffres
+sans les ouvrir.";
 "体力がマイナス1からのスタート
-しかも受けるダメージも2倍";"Start with one heart fewer,
-take double damage to boot.";"Double les dégâts reçus et
+しかも受けるダメージも2倍
+※心正しき勇者が着ると…";"Start with one heart fewer,
+take double damage to boot.
+But if worn by a real hero...";"Double les dégâts reçus et
 retire un cœur du nombre
-total de cœurs.";
+total de cœurs. Toutefois,
+revêtue par un vrai héros...";
 "剣の攻撃力が2倍になり
 ビームも出るようになる
 ※ビームは体力満タン時のみ発動";"Deal double damage with
@@ -12959,6 +15449,19 @@ you use it in the coliseum...";"Blesse les ennemis qui
 s'approchent trop.
 Portez-le dans l'arène,
 pour voir...";
+"宝箱の中身が見えると同時に
+時間制限時にタイマーが＋10秒";"Lets you see into treasure
+chests, gives +10 seconds
+in timed challenges!";"Permet de voir à l'intérieur
+des coffres et ajoute 10
+secondes au chronomètre
+quand le temps est limité.";
+"回転斬りでもビームが炸裂!
+しかもまさかの4方向!!";"Makes spin attacks
+launch beams! In
+FOUR directions!!!";"Vos attaques circulaires
+lancent des rayons !
+Dans QUATRE directions !!!";
 "アレな服";"Bear Minimum Digs";"Tenue basique";
 "剣士の服";"Sword Suit";"Tenue cape et épée";
 "コキリ族の衣装";"Kokiri Clothes";"Tenue kokiri";
@@ -12995,6 +15498,8 @@ pour voir...";
 "怪傑ロールナイト";"Dapper Spinner Kit";"Mousquetourne";
 "チアリーダーな服";"Cheer Outfit";"Tenue pom-pom";
 "トゲトゲスーツ";"Cacto Clothes";"Complet piquant";
+"ラインバックの服";"Linebeck's Uniform";"Tenue de Linebeck";
+"鬼神のよろい";"Fierce Deity Mail";"Armure Dieu démon";
 "アレな服";"Minimum";"Basique";
 "剣士の服";"Sword";"Cape et épée";
 "コキリ族の衣装";"Kokiri";"Kokiri";
@@ -13031,6 +15536,8 @@ pour voir...";
 "怪傑ロールナイト";"Spinner";"Mousquet.";
 "チアリーダーな服";"Cheer";"Pom-pom";
 "トゲトゲスーツ";"Cacto";"Piquant";
+"ラインバックの服";"Linebeck's";"Linebeck";
+"鬼神のよろい";"Fierce";"Dieu démon";
 "森林エリア";"Woodlands";"Forêt";
 "水源エリア";"Riverside";"Rivière";
 "火山エリア";"Volcano";"Volcan";
@@ -13039,6 +15546,7 @@ pour voir...";
 "砂漠エリア";"The Dunes";"Désert";
 "廃墟エリア";"The Ruins";"Ruines";
 "天空エリア";"Sky Realm";"Ciel";
+"魔窟エリア";"Den of Trials";"Crypte";
 "ルピー";" Rupee";" rubis";
 "ルピー";" Rupees";" rubis";
 "秒";" second";" seconde";
@@ -13153,6 +15661,15 @@ le sol !";
 "神殿";"The Temple";"Le temple";
 "火山";"The Volcano";"Le volcan";
 "要塞";"The Fortress";"La forteresse";
+"森の洞";"Forest Zone";"Zone forestière";
+"水の洞";"Flooded Zone";"Zone inondée";
+"炎の洞";"Scorching Zone";"Zone ardente";
+"氷の洞";"Frozen Zone";"Zone gelée";
+"砦の洞";"Fortified Zone";"Zone fortifiée";
+"砂の洞";"Desert Zone";"Zone aride";
+"闇の洞";"Shadow Zone";"Zone obscure";
+"極の洞";"Baneful Zone";"Zone ultime";
+"魔窟";"Den of Trials";"Crypte";
 "洗練された女性しか
 かけることが許されないメガネ
 場所：森林エリア";"Only the most refined ladies
