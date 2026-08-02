@@ -1010,8 +1010,8 @@ pub const TFH: GameConfig = GameConfig {
         &LANGUAGES
     },
     get_filenames : || {
-        const FILENAMES : [&str;68] = [
-            "Action.msbt",
+        const FILENAMES : [&str;76] = [
+"Action.msbt",
 "CourseResult.msbt",
 "CreateExtraSaveData.msbt",
 "E3Flow.msbt",
@@ -1023,6 +1023,17 @@ pub const TFH: GameConfig = GameConfig {
 "StaffCredit.msbt",
 "SystemFlow.msbt",
 "AreaSimpleTalk.msbt",
+// "KRAreaSimpleTalk.msbt",
+// "KRNpcBoy.msbt",
+// "KRNpcDressWoman.msbt",
+// "KRNpcGentleMan.msbt",
+// "KRNpcGirl.msbt",
+// "KRNpcMadam.msbt",
+// "KRNpcMiddleLady.msbt",
+// "KRNpcMiddleman.msbt",
+// "KRNpcShopmanDlc.msbt",
+// "KRNpcShopmanPhoto.msbt",
+// "KRNpcSoldier.msbt",
 "NpcBlockMan.msbt",
 "NpcBoy.msbt",
 "NpcClothesIntern.msbt",
@@ -1055,6 +1066,14 @@ pub const TFH: GameConfig = GameConfig {
 "NpcShopmanPhoto.msbt",
 "NpcSoldier.msbt",
 "NpcWitch.msbt",
+"TrialAreaSimpleTalk.msbt",
+"TrialNpcBlockMan.msbt",
+"TrialNpcClothesIntern.msbt",
+"TrialNpcMatchingDlp.msbt",
+"TrialNpcMatchingInet.msbt",
+"TrialNpcMatchingLocal.msbt",
+"TrialNpcMatchingMulti.msbt",
+"TrialNpcMaterial.msbt",
 "ObjDoorHouse.msbt",
 "ObjPuppet.msbt",
 "ObjSavePoint.msbt",
@@ -1155,6 +1174,9 @@ pub const TFH: GameConfig = GameConfig {
                         let costume_names = ["[First]","[Brave]","[Kokiri]","[Zelda]","[Fancy]","[Goron]","[Zora]","[GreatFairy]","[Bomb]","[Gauge]","[AgainstCold]","[RotationAttack]","[DashAttack]","[Rich]","[Boomerang]","[Alike]","[Lucky]","[WaterRod]","[Witch]","[Tights]","[EightBit]","[Kandelaar]","[WalkFast]","[Fairy]","[Normal]","[AirCannon]","[Hammer]","[WalkSand]","[ArmShot]","[FireGlove]","[Balloon]","[Calcify]","[Legend]","[SwordMaster]","[Idol]","[Thorn]","[DLC1]","[DLC2]","[DLC3]","[DLC4]","[DLC5]","[DLC6]"];
                         get_enum(&costume_names)
                     },
+                    6 => "[ClearCourseAbyssSelf]".to_string(),
+                    7 => "[PlayableCourseAbyssAll]".to_string(),
+                    8 => "[KindPointNum]".to_string(),
                     _ => String::new()
                 }
             },

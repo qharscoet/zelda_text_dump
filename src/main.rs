@@ -324,7 +324,7 @@ impl Exporter for HTMLExporter  {
         let font =  match &self.config {
             Some(conf) => match conf.id {
                 "tp" => "fot-rodin-prondb",
-                "tww" | "ph" | "st" | "fsa" => "rock",
+                "tww" | "ph" | "st" | "fsa" | "albw" | "tfh" => "rock",
                 _ => "fot-rodin-prondb"
             }
             None => "fot-rodin-prondb"
@@ -334,7 +334,7 @@ impl Exporter for HTMLExporter  {
         let ruby_font =  match &self.config {
             Some(conf) => match conf.id {
                 "tp" => "reishotai",
-                "tww" | "ph" | "st" | "fsa"  => "fot-rodin-prondb",
+                "tww" | "ph" | "st" | "fsa" | "albw" | "tfh"  => "fot-rodin-prondb",
                 _ => "fot-rodin-prondb"
             }
             None => "fot-rodin-prondb"
