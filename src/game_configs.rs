@@ -21,7 +21,8 @@ pub enum StyleTagType {
 
 pub enum TagType {
     Style(StyleTagType),
-    Replace
+    Replace,
+    Insert((String, usize)) //Bank name, idx
 }
 
 
@@ -34,7 +35,13 @@ fn get_tag_type_default_inner(tag_group : u8, tag_number : u16, payload : &[u8],
     let get_u16 = if big_endian { utils::get_u16_be } else {utils::get_u16_le};
     match tag_group {
         0xFF => match tag_number {
-            0x00 => TagType::Style(StyleTagType::Color(payload[0] as u16)),
+            0x00 => TagType::Style(StyleTagType::Color(
+                if payload[0] == 0 {
+                    0xFFFF
+                } else {
+                    payload[0] as u16
+                }
+            )),
             0x01 => TagType::Style(StyleTagType::Size(get_u16(payload, 0))),
             0x02 => {
                 let over_count = payload[0];
@@ -87,7 +94,7 @@ pub struct GameConfig {
     pub get_filenames : fn() -> &'static [&'static str]
 }
 
-pub const ALL_CONFIGS  : [&GameConfig;6]= [&TP, &TWW, &PH, &ST, &FSA, &ALBW];
+pub const ALL_CONFIGS  : [&GameConfig;7]= [&TP, &TWW, &PH, &ST, &FSA, &ALBW, &TFH];
 
 pub const TWW: GameConfig = GameConfig {
     name: "The Wind Waker",
@@ -114,6 +121,7 @@ pub const TWW: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB_TWW: [&str; 9] = [
             "#ffffff",
             "#ff6400",
@@ -126,7 +134,7 @@ pub const TWW: GameConfig = GameConfig {
             "#ff8000",
         ];
 
-        COLORS_RGB_TWW[id]
+        COLORS_RGB_TWW[idx]
     },
     get_tag_type : |tag| {
         get_tag_type_default_inner(tag.group, tag.number, &tag.payload, true, encoding_rs::SHIFT_JIS)
@@ -270,8 +278,9 @@ pub const TP: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB : [&str; 9] = [
-            "#FFFFFF",
+            "#ffffff",
             "#f07878",
             "#aadc8c",
             "#a0b4dc",
@@ -282,7 +291,7 @@ pub const TP: GameConfig = GameConfig {
             "#dcaa78",
         ];
 
-        COLORS_RGB[id]
+        COLORS_RGB[idx]
     },
     get_tag_type : |tag| {
         get_tag_type_default_inner(tag.group, tag.number, &tag.payload, true, encoding_rs::SHIFT_JIS)
@@ -495,6 +504,7 @@ pub const PH: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB_TWW: [&str; 9] = [
             "#ffffff",
             "#ff6400",
@@ -507,7 +517,7 @@ pub const PH: GameConfig = GameConfig {
             "#ff8000",
         ];
 
-        COLORS_RGB_TWW[id]
+        COLORS_RGB_TWW[idx]
     },
     get_tag_type : |tag| {
         get_tag_type_default_inner(tag.group, tag.number, &tag.payload, false, encoding_rs::UTF_16LE)
@@ -601,6 +611,7 @@ pub const ST: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB_TWW: [&str; 9] = [
             "#ffffff",
             "#ff6400",
@@ -613,7 +624,7 @@ pub const ST: GameConfig = GameConfig {
             "#ff8000",
         ];
 
-        COLORS_RGB_TWW[id]
+        COLORS_RGB_TWW[idx]
     },
     get_tag_type : |tag| {
         get_tag_type_default_inner(tag.group, tag.number, &tag.payload, false, encoding_rs::UTF_16LE)
@@ -678,6 +689,7 @@ pub const FSA: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB_TWW: [&str; 9] = [
             "#ffffff",
             "#ff6400",
@@ -690,7 +702,7 @@ pub const FSA: GameConfig = GameConfig {
             "#ff8000",
         ];
 
-        COLORS_RGB_TWW[id]
+        COLORS_RGB_TWW[idx]
     },
     get_tag_type : |tag| {
         match tag.group {
@@ -734,12 +746,12 @@ pub const ALBW: GameConfig = GameConfig {
     logo : "https://www.nintendo.com/jp/character/zelda/history/img/branch-b/04/pc/logo.png",
     big_endian : false,
     get_languages : || {
-        const LANGUAGES : [(&str, &str);3] = [
+        const LANGUAGES : [(&str, &str);4] = [
             ("jp", "Japanese"),
             ("en", "English"),
             ("fr", "French"),
             // ("sp", "Spanish"),
-            // ("de", "German"),
+            ("de", "German"),
             // ("it" "Italian")
         ];
 
@@ -893,21 +905,34 @@ pub const ALBW: GameConfig = GameConfig {
         }
     },
     get_tag_type : |tag| {
-        get_tag_type_default_msbt(tag, false, encoding_rs::UTF_16LE)
+        match tag.group {
+            0x2 => {
+                let idx = tag.payload[0] as usize;
+                let bank_name = match tag.number {
+                    0 => "NPCName",
+                    1 => if tag.payload[2] == 1 {"LocationNameUpper"} else {"LocationName"},
+                    2 => if tag.payload[2] == 1 {"ItemNameUpper"} else {"ItemName"},
+                    _ => ""
+                };
+
+                TagType::Insert((bank_name.to_string(), idx))
+            },
+            _ => get_tag_type_default_msbt(tag, false, encoding_rs::UTF_16LE)
+        }
     },
     get_tag_replacement : |tag| {
-        let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join("");
-        let default = format!("[Tag {} {} ]", match tag.group {
-            0x0 => String::from(match tag.number {
-                0 => "Ruby ",
-                1 => "Font ",
-                2 => "Size ",
-                3 => "Color ",
-                _ => ""
-            }),
+        // let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join("");
+        // let default = format!("[Tag {} {} ]", match tag.group {
+        //     0x0 => String::from(match tag.number {
+        //         0 => "Ruby ",
+        //         1 => "Font ",
+        //         2 => "Size ",
+        //         3 => "Color ",
+        //         _ => ""
+        //     }),
             
-            _ => format!("{}:{}", tag.group, tag.number)
-        }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
+        //     _ => format!("{}:{}", tag.group, tag.number)
+        // }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
         
         match tag.group {
             0x1 => match tag.number {
@@ -949,7 +974,225 @@ pub const ALBW: GameConfig = GameConfig {
                     _ => "",
                 }.to_string()
             },
-            _=> default
+            _=> "".to_string()
+        }
+    },
+
+    get_message_style : |_attribs: &MessageAttributes| {
+        let centered = false;
+        let color = String::new();
+        let bg_color = String::new();
+    
+        
+        
+        let style_id = String::new();
+
+        StyleInfo { centered, color, bg_color, alt_font : false, style_id }
+    }
+};
+
+
+pub const TFH: GameConfig = GameConfig {
+    name: "Tri Force Heroes",
+    id: "tfh",
+    logo : "https://www.nintendo.com/jp/character/zelda/history/img/branch-b/05/pc/logo.png",
+    big_endian : false,
+    get_languages : || {
+        const LANGUAGES : [(&str, &str);3] = [
+            ("jp", "Japanese"),
+            ("en", "English"),
+            ("fr", "French"),
+            // ("sp", "Spanish"),
+            // ("de", "German"),
+            // ("it" "Italian")
+        ];
+
+        &LANGUAGES
+    },
+    get_filenames : || {
+        const FILENAMES : [&str;76] = [
+"Action.msbt",
+"CourseResult.msbt",
+"CreateExtraSaveData.msbt",
+"E3Flow.msbt",
+"ErrorApplet.msbt",
+"GetItem.msbt",
+"LayoutShopName.msbt",
+"Live.msbt",
+"Opening.msbt",
+"StaffCredit.msbt",
+"SystemFlow.msbt",
+"AreaSimpleTalk.msbt",
+// "KRAreaSimpleTalk.msbt",
+// "KRNpcBoy.msbt",
+// "KRNpcDressWoman.msbt",
+// "KRNpcGentleMan.msbt",
+// "KRNpcGirl.msbt",
+// "KRNpcMadam.msbt",
+// "KRNpcMiddleLady.msbt",
+// "KRNpcMiddleman.msbt",
+// "KRNpcShopmanDlc.msbt",
+// "KRNpcShopmanPhoto.msbt",
+// "KRNpcSoldier.msbt",
+"NpcBlockMan.msbt",
+"NpcBoy.msbt",
+"NpcClothesIntern.msbt",
+"NpcCommon.msbt",
+"NpcDressWoman.msbt",
+"NpcGameTreasure.msbt",
+"NpcGentleMan.msbt",
+"NpcGirl.msbt",
+"NpcHeroMan.msbt",
+"NpcKing.msbt",
+"NpcMadam.msbt",
+"NpcMatchingBattle.msbt",
+"NpcMatchingBattleInet.msbt",
+"NpcMatchingBattleLocal.msbt",
+"NpcMatchingDlp.msbt",
+"NpcMatchingInet.msbt",
+"NpcMatchingLocal.msbt",
+"NpcMatchingMulti.msbt",
+"NpcMatchingPuppet.msbt",
+"NpcMaterial.msbt",
+"NpcMiddleLady.msbt",
+"NpcMiddleman.msbt",
+"NpcMobman.msbt",
+"NpcNamingMan.msbt",
+"NpcPrincessCursed.msbt",
+"NpcPrincessDress.msbt",
+"NpcShopmanClothes.msbt",
+"NpcShopmanDlc.msbt",
+"NpcShopmanGoods.msbt",
+"NpcShopmanPhoto.msbt",
+"NpcSoldier.msbt",
+"NpcWitch.msbt",
+"TrialAreaSimpleTalk.msbt",
+"TrialNpcBlockMan.msbt",
+"TrialNpcClothesIntern.msbt",
+"TrialNpcMatchingDlp.msbt",
+"TrialNpcMatchingInet.msbt",
+"TrialNpcMatchingLocal.msbt",
+"TrialNpcMatchingMulti.msbt",
+"TrialNpcMaterial.msbt",
+"ObjDoorHouse.msbt",
+"ObjPuppet.msbt",
+"ObjSavePoint.msbt",
+"ObjSignboard.msbt",
+"CostumeDetail.msbt",
+"CostumeExplainLobby.msbt",
+"CostumeExplainShop.msbt",
+"CostumeFunction.msbt",
+"CostumeName.msbt",
+"CostumeShortName.msbt",
+"FieldName.msbt",
+"IntNumberN.msbt",
+"ItemExplanation.msbt",
+"ItemName.msbt",
+"LocationName.msbt",
+"MaterialDetail.msbt",
+"MaterialName.msbt",
+"MaterialNameGet.msbt",
+"MaterialNameTalk.msbt",
+"Todo.msbt",
+"TestIkematsu.msbt",
+"TestMessage.msbt",
+"TestMouri.msbt",
+"TestYamaoka.msbt",
+        ];
+
+        &FILENAMES
+    },
+    get_color_hex: |id| {
+
+        if id == 0xFFFF { 
+            "#ffffff" 
+        }
+        else {
+            const COLORS_RGB: [&str; 2] = [
+                "#003F97",
+                "#F92300",
+            ];
+    
+            COLORS_RGB[id]
+        }
+    },
+    get_tag_type : |tag| {
+        match tag.group {
+            0x1 => {
+                match tag.number {
+                    1 => TagType::Insert(("FieldName".to_string(), tag.payload[0] as usize)),
+                    2 => TagType::Insert(("ItemName".to_string(), tag.payload[0] as usize)),
+                    5 => TagType::Insert(("CostumeName".to_string(), tag.payload[0] as usize)),
+                    _=> TagType::Replace,
+                }
+            },
+            _ => get_tag_type_default_msbt(tag, false, encoding_rs::UTF_16LE)
+        }
+    },
+    get_tag_replacement : |tag| {
+        let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join("");
+        let default = format!("[Tag {} {} ]", match tag.group {
+            0x0 => String::from(match tag.number {
+                0 => "Ruby ",
+                1 => "Font ",
+                2 => "Size ",
+                3 => "Color ",
+                4 => "PageBreak",
+                5 => "Reference",
+                _ => ""
+            }),
+            
+            _ => format!("{}:{}", tag.group, tag.number)
+        }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
+
+        match tag.group {
+            0x1 => {
+                let get_enum = |arr : &[&str]| {
+                    arr[tag.payload[0] as usize].to_string()
+                };
+                match tag.number {
+                    0 => "[PlayerName]".to_string(),
+                    1 => {
+                        let field_names = ["[Grass]","[Water]","[Fire]","[Ice]","[Fort]","[Sand]","[Dark]","[Sky]"];
+                        get_enum(&field_names)
+                    },
+                    2 => {
+                        let item_names = ["[sword]","[bomb]","[bow]","[fireglove]","[boomerang]","[waterrod]","[aircannon]","[armshot]","[hammer]"];
+                        get_enum(&item_names)
+                    },
+                    3 => {
+                        let unit_names = ["None","Rupee","Second","Minute","Person","Number","Sheet","Win","Costume"];
+                        let idx = tag.payload[4] as usize;
+                        if idx > 0 {
+                            format!("[Number of {}]", unit_names[idx])
+                        } else {
+                            String::from("[Number]")
+                        }
+                    }
+                    4 => "[InsertMark]".to_string(),
+                    5 => {
+                        let costume_names = ["[First]","[Brave]","[Kokiri]","[Zelda]","[Fancy]","[Goron]","[Zora]","[GreatFairy]","[Bomb]","[Gauge]","[AgainstCold]","[RotationAttack]","[DashAttack]","[Rich]","[Boomerang]","[Alike]","[Lucky]","[WaterRod]","[Witch]","[Tights]","[EightBit]","[Kandelaar]","[WalkFast]","[Fairy]","[Normal]","[AirCannon]","[Hammer]","[WalkSand]","[ArmShot]","[FireGlove]","[Balloon]","[Calcify]","[Legend]","[SwordMaster]","[Idol]","[Thorn]","[DLC1]","[DLC2]","[DLC3]","[DLC4]","[DLC5]","[DLC6]"];
+                        get_enum(&costume_names)
+                    },
+                    6 => "[ClearCourseAbyssSelf]".to_string(),
+                    7 => "[PlayableCourseAbyssAll]".to_string(),
+                    8 => "[KindPointNum]".to_string(),
+                    _ => String::new()
+                }
+            },
+            0x2 => match tag.number {
+                0 => "", //[Vibrate]",
+                1 => "", //[Flush]",
+                2 => "", //[Wait]", // TODO params
+                3 => "", //[AutoForward]", // TODO params
+                4 => "",//[ChoiceN]", // TODO params
+                5 => "",//[ChoicePositive]",
+                6 => "[ColoringStart]",
+                7 => "[ColoringEnd]",
+                8 => "",//[LimitForward]", // TODO params
+                _=> "",
+            }.to_string(),
+            _=> "".to_string()
         }
     },
 
