@@ -1,4 +1,7 @@
-use crate::bmg_message::{MessageAttributes, Tag};
+use encoding_rs::Encoding;
+use itertools::Itertools;
+
+use crate::{message::{MessageAttributes, Tag}, utils};
 
 #[derive(Default)]
 pub struct StyleInfo {
@@ -10,29 +13,66 @@ pub struct StyleInfo {
 }
 
 pub enum StyleTagType {
-    Color,
-    Size,
-    Ruby,
+    Color(u16),
+    Size(u16),
+    Ruby(u8, String),
     Unknown
 }
 
 pub enum TagType {
     Style(StyleTagType),
-    Replace
+    Replace,
+    Insert((String, usize)) //Bank name, idx
 }
 
 
 pub fn get_tag_type_default(tag:&Tag) -> TagType {
-    get_tag_type_default_inner(tag.group, tag.number)
+    get_tag_type_default_inner(tag.group, tag.number,&tag.payload, true, encoding_rs::WINDOWS_1252)
 }
 
-fn get_tag_type_default_inner(tag_group : u8, tag_number : u16) -> TagType {
+fn get_tag_type_default_inner(tag_group : u8, tag_number : u16, payload : &[u8], big_endian : bool, encoding : &'static Encoding) -> TagType {
+    let tag_number = if big_endian { tag_number } else {tag_number.swap_bytes()};
+    let get_u16 = if big_endian { utils::get_u16_be } else {utils::get_u16_le};
     match tag_group {
         0xFF => match tag_number {
-            0x00 => TagType::Style(StyleTagType::Color),
-            0x01 => TagType::Style(StyleTagType::Size),
-            0x02 => TagType::Style(StyleTagType::Ruby),
+            0x00 => TagType::Style(StyleTagType::Color(
+                if payload[0] == 0 {
+                    0xFFFF
+                } else {
+                    payload[0] as u16
+                }
+            )),
+            0x01 => TagType::Style(StyleTagType::Size(get_u16(payload, 0))),
+            0x02 => {
+                let over_count = payload[0];
+                let last_is_zero = payload[payload.len() -1] == 0x00;
+                let slice_end = payload.len() - (last_is_zero as usize);
+                let raw_bytes = &payload[1..slice_end];
+
+                let decoded_ruby = encoding.decode(&raw_bytes).0.to_string();
+                TagType::Style(StyleTagType::Ruby(over_count, decoded_ruby))
+            },
             _ => TagType::Style(StyleTagType::Unknown)
+        },
+        _ => TagType::Replace
+    }
+}
+
+fn get_tag_type_default_msbt(tag : &Tag, big_endian : bool, encoding : &'static Encoding) -> TagType {
+    let get_u16 = if big_endian { utils::get_u16_be } else {utils::get_u16_le};
+    match tag.group {
+        0x0 => match tag.number {
+            0x00 =>  {
+                let over_count = get_u16(&tag.payload, 0)/2;
+                let ruby_bytes_count = get_u16(&tag.payload, 2);
+                let raw_bytes = &tag.payload[4..];
+
+                let decoded_ruby = encoding.decode(&raw_bytes).0.to_string();
+                TagType::Style(StyleTagType::Ruby(over_count as u8, decoded_ruby))
+            },
+            0x02 => TagType::Style(StyleTagType::Size(get_u16(&tag.payload, 0))),
+            0x03 => TagType::Style(StyleTagType::Color(get_u16(&tag.payload, 0))),
+            _ => TagType::Replace,
         },
         _ => TagType::Replace
     }
@@ -46,7 +86,7 @@ pub struct GameConfig {
     pub big_endian : bool,
 
     pub get_color_hex: fn(usize) -> &'static str,
-    pub get_tag_replacement: fn(&Tag) -> &str,
+    pub get_tag_replacement: fn(&Tag) -> String,
     pub get_tag_type : fn(&Tag) -> TagType,
     pub get_message_style : fn(&MessageAttributes) -> StyleInfo,
 
@@ -54,7 +94,7 @@ pub struct GameConfig {
     pub get_filenames : fn() -> &'static [&'static str]
 }
 
-pub const ALL_CONFIGS  : [&GameConfig;5]= [&TP, &TWW, &PH, &ST, &FSA];
+pub const ALL_CONFIGS  : [&GameConfig;8]= [&TP, &TWW, &PH, &ST, &FSA, &ALBW, &TFH, &SS];
 
 pub const TWW: GameConfig = GameConfig {
     name: "The Wind Waker",
@@ -81,6 +121,7 @@ pub const TWW: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB_TWW: [&str; 9] = [
             "#ffffff",
             "#ff6400",
@@ -93,10 +134,10 @@ pub const TWW: GameConfig = GameConfig {
             "#ff8000",
         ];
 
-        COLORS_RGB_TWW[id]
+        COLORS_RGB_TWW[idx]
     },
     get_tag_type : |tag| {
-        get_tag_type_default_inner(tag.group, tag.number)
+        get_tag_type_default_inner(tag.group, tag.number, &tag.payload, true, encoding_rs::SHIFT_JIS)
     },
     get_tag_replacement : |tag| {
         match tag.group {
@@ -174,7 +215,7 @@ pub const TWW: GameConfig = GameConfig {
                 }
             }
             _=> ""
-        }
+        }.to_string()
     },
 
     get_message_style : |attribs: &MessageAttributes| {
@@ -237,8 +278,9 @@ pub const TP: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB : [&str; 9] = [
-            "#FFFFFF",
+            "#ffffff",
             "#f07878",
             "#aadc8c",
             "#a0b4dc",
@@ -249,10 +291,10 @@ pub const TP: GameConfig = GameConfig {
             "#dcaa78",
         ];
 
-        COLORS_RGB[id]
+        COLORS_RGB[idx]
     },
     get_tag_type : |tag| {
-        get_tag_type_default_inner(tag.group, tag.number)
+        get_tag_type_default_inner(tag.group, tag.number, &tag.payload, true, encoding_rs::SHIFT_JIS)
     },
     get_tag_replacement : |tag| {
         match tag.group {
@@ -378,7 +420,7 @@ pub const TP: GameConfig = GameConfig {
                 }
             },
             _=> "",
-        }
+        }.to_string()
     },
 
     get_message_style : |attribs: &MessageAttributes| {
@@ -397,7 +439,12 @@ pub const TP: GameConfig = GameConfig {
             _ => {}
         }
 
-        StyleInfo { centered, color, bg_color : String::new(), alt_font, style_id : String::new() }
+        let style_id = match attribs.payload[0x05] {
+            0x00 | 0x0D |0x0E => format!("display-{}", attribs.payload[0x05]),
+            _  => String::new()
+        };
+
+        StyleInfo { centered, color, bg_color : String::new(), alt_font, style_id }
     }
 };
 
@@ -457,6 +504,7 @@ pub const PH: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB_TWW: [&str; 9] = [
             "#ffffff",
             "#ff6400",
@@ -469,10 +517,10 @@ pub const PH: GameConfig = GameConfig {
             "#ff8000",
         ];
 
-        COLORS_RGB_TWW[id]
+        COLORS_RGB_TWW[idx]
     },
     get_tag_type : |tag| {
-        get_tag_type_default_inner(tag.group, tag.number.swap_bytes())
+        get_tag_type_default_inner(tag.group, tag.number, &tag.payload, false, encoding_rs::UTF_16LE)
     },
     get_tag_replacement : |tag| {
         let tag_number = tag.number.swap_bytes();
@@ -483,7 +531,7 @@ pub const PH: GameConfig = GameConfig {
                 _ => "[Unknown_Tag]"
             },
             _=> ""
-        }
+        }.to_string()
     },
 
     get_message_style : |_attribs: &MessageAttributes| {
@@ -563,6 +611,7 @@ pub const ST: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB_TWW: [&str; 9] = [
             "#ffffff",
             "#ff6400",
@@ -575,10 +624,10 @@ pub const ST: GameConfig = GameConfig {
             "#ff8000",
         ];
 
-        COLORS_RGB_TWW[id]
+        COLORS_RGB_TWW[idx]
     },
     get_tag_type : |tag| {
-        get_tag_type_default_inner(tag.group, tag.number.swap_bytes())
+        get_tag_type_default_inner(tag.group, tag.number, &tag.payload, false, encoding_rs::UTF_16LE)
     },
     get_tag_replacement : |tag| {
         let tag_number = tag.number.swap_bytes();
@@ -589,7 +638,7 @@ pub const ST: GameConfig = GameConfig {
                 _ => "[Unknown_Tag]"
             },
             _=> ""
-        }
+        }.to_string()
     },
 
     get_message_style : |_attribs: &MessageAttributes| {
@@ -640,6 +689,7 @@ pub const FSA: GameConfig = GameConfig {
         &FILENAMES
     },
     get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
         const COLORS_RGB_TWW: [&str; 9] = [
             "#ffffff",
             "#ff6400",
@@ -652,19 +702,19 @@ pub const FSA: GameConfig = GameConfig {
             "#ff8000",
         ];
 
-        COLORS_RGB_TWW[id]
+        COLORS_RGB_TWW[idx]
     },
     get_tag_type : |tag| {
         match tag.group {
             0x2 => match tag.number {
-                0x1E => TagType::Style(StyleTagType::Color),
+                0x1E => TagType::Style(StyleTagType::Color(tag.payload[0] as u16)),
                 _ => TagType::Replace
             },
             _ => TagType::Replace
         }
     },
     get_tag_replacement : |_tag| {
-        ""
+        "".to_string()
     },
 
     get_message_style : |_attribs: &MessageAttributes| {
@@ -682,6 +732,651 @@ pub const FSA: GameConfig = GameConfig {
         //     0x0E => { bg_color = String::from("#3F48CC"); }
         //     _ => {}
         // }
+        
+        
+        let style_id = String::new();
+
+        StyleInfo { centered, color, bg_color, alt_font : false, style_id }
+    }
+};
+
+pub const ALBW: GameConfig = GameConfig {
+    name: "A Link Between Worlds",
+    id: "albw",
+    logo : "https://www.nintendo.com/jp/character/zelda/history/img/branch-b/04/pc/logo.png",
+    big_endian : false,
+    get_languages : || {
+        const LANGUAGES : [(&str, &str);4] = [
+            ("jp", "Japanese"),
+            ("en", "English"),
+            ("fr", "French"),
+            // ("sp", "Spanish"),
+            ("de", "German"),
+            // ("it" "Italian")
+        ];
+
+        &LANGUAGES
+    },
+    get_filenames : || {
+        const FILENAMES : [&str;117] = [
+            "Action.msbt",
+"Collect.msbt",
+"Common.msbt",
+"EventItemGet.msbt",
+"ExtraName.msbt",
+"HintGhost.msbt",
+"ItemName.msbt",
+"ItemNameUpper.msbt",
+"ItemSelect.msbt",
+"ItemTutorial.msbt",
+"LocationName.msbt",
+"LocationNameUpper.msbt",
+"NPCName.msbt",
+"Opening.msbt",
+"StaffCredit.msbt",
+"System.msbt",
+"Demo010.msbt",
+"Demo020.msbt",
+"Demo030.msbt",
+"Demo040.msbt",
+"Demo050.msbt",
+"Demo060.msbt",
+"Demo070.msbt",
+"Demo080.msbt",
+"Demo090.msbt",
+"Demo100.msbt",
+"Demo110.msbt",
+"Castle.msbt",
+"Dark.msbt",
+"Dokuro.msbt",
+"East.msbt",
+"Ganon.msbt",
+"Hagure.msbt",
+"Hera.msbt",
+"Ice.msbt",
+"Kame.msbt",
+"Sand.msbt",
+"Water.msbt",
+"Wind.msbt",
+"cl_Church_UG.msbt",
+"E3_message.msbt",
+"Cave.msbt",
+"CrossBattle.msbt",
+"CrossBoard.msbt",
+"CrossForceTalk.msbt",
+"CrossOldMan.msbt",
+"CrossRecordList.msbt",
+"DefaultShadowLink.msbt",
+"Ending.msbt",
+"Field.msbt",
+"FieldDark.msbt",
+"FieldDark_00.msbt",
+"FieldDark_02.msbt",
+"FieldDark_05.msbt",
+"FieldDark_0F.msbt",
+"FieldDark_13.msbt",
+"FieldDark_14.msbt",
+"FieldDark_16.msbt",
+"FieldDark_17.msbt",
+"FieldDark_18.msbt",
+"FieldDark_1A.msbt",
+"FieldDark_1B.msbt",
+"FieldDark_1E.msbt",
+"FieldDark_22.msbt",
+"FieldDark_28.msbt",
+"FieldDark_29.msbt",
+"FieldDark_2A.msbt",
+"FieldDark_2C.msbt",
+"FieldDark_33.msbt",
+"FieldDark_35.msbt",
+"FieldDark_3A.msbt",
+"FieldLight.msbt",
+"FieldLight_00.msbt",
+"FieldLight_02.msbt",
+"FieldLight_03.msbt",
+"FieldLight_05.msbt",
+"FieldLight_0A.msbt",
+"FieldLight_0F.msbt",
+"FieldLight_11.msbt",
+"FieldLight_12.msbt",
+"FieldLight_13.msbt",
+"FieldLight_14.msbt",
+"FieldLight_16.msbt",
+"FieldLight_17.msbt",
+"FieldLight_18.msbt",
+"FieldLight_1A.msbt",
+"FieldLight_1B.msbt",
+"FieldLight_1E.msbt",
+"FieldLight_22.msbt",
+"FieldLight_28.msbt",
+"FieldLight_29.msbt",
+"FieldLight_2A.msbt",
+"FieldLight_2B.msbt",
+"FieldLight_2C.msbt",
+"FieldLight_2D.msbt",
+"FieldLight_2E.msbt",
+"FieldLight_33.msbt",
+"FieldLight_35.msbt",
+"FieldLight_37.msbt",
+"FortuneMessage.msbt",
+"HintGhostDark.msbt",
+"HintGhostLight.msbt",
+"ToRentalShopBoard.msbt",
+"MiniDungeon_FieldDark_2B.msbt",
+"MiniDungeon_FieldLight_07.msbt",
+"MiniDungeon_FieldLight_15.msbt",
+"MiniDungeon_FieldLight_1E.msbt",
+"MiniDungeon_FieldLight_32.msbt",
+"MiniDungeon_FieldLight_33.msbt",
+"GirigiriGameTest.msbt",
+"NpcClimberTest.msbt",
+"NpcHinox.msbt",
+"NpcTestIwata.msbt",
+"StaffCreditTest.msbt",
+"npcTest00.msbt",
+"test.msbt",
+"yamazaki.msbt",
+        ];
+
+        &FILENAMES
+    },
+    get_color_hex: |id| {
+
+        if id == 0xFFFF { 
+            "#ffffff" 
+        }
+        else {
+            const COLORS_RGB: [&str; 12] = [
+                "#262626",
+                "#808080",
+                "#FFFFFF",
+                "#855C2F",
+                "#591710",
+                "#006400",
+                "#375960",
+                "#BAA800",
+                "#3A1B4C",
+                "#003F97",
+                "#F92300",
+                "#4AF0D1",
+            ];
+    
+            COLORS_RGB[id]
+        }
+    },
+    get_tag_type : |tag| {
+        match tag.group {
+            0x2 => {
+                let idx = tag.payload[0] as usize;
+                let bank_name = match tag.number {
+                    0 => "NPCName",
+                    1 => if tag.payload[2] == 1 {"LocationNameUpper"} else {"LocationName"},
+                    2 => if tag.payload[2] == 1 {"ItemNameUpper"} else {"ItemName"},
+                    _ => ""
+                };
+
+                TagType::Insert((bank_name.to_string(), idx))
+            },
+            _ => get_tag_type_default_msbt(tag, false, encoding_rs::UTF_16LE)
+        }
+    },
+    get_tag_replacement : |tag| {
+        // let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join("");
+        // let default = format!("[Tag {} {} ]", match tag.group {
+        //     0x0 => String::from(match tag.number {
+        //         0 => "Ruby ",
+        //         1 => "Font ",
+        //         2 => "Size ",
+        //         3 => "Color ",
+        //         _ => ""
+        //     }),
+            
+        //     _ => format!("{}:{}", tag.group, tag.number)
+        // }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
+        
+        match tag.group {
+            0x1 => match tag.number {
+                0 => "[PlayerName]",
+                1 => "[UserName]",
+                2 => "[ShadowLinkPlayerName]",
+                3 => "[ShadowLinkUserName]",
+                4 => "[InsertMark]",
+                5 => "[IntNumberN]", //TODO : paramete]rs
+                6 => "[ChoiceN]", //TODO : paramete]rs
+                7 => "" , //AutoForward
+                8 => "", // Wa]it
+                9 => "[MyRecordNum]",
+                10 => "[ShadowLinkRecordNum]",
+                11 => "[ShadowLinkPrizeMoney]",
+                12 => "[ColoringStart]",
+                13 => "[ColoringEnd]",
+                14 => "[Flush]",
+                15 => "[Vibrate]",
+                16 => "[ChoicePositive]",
+                17 => "", // Cursor
+                _=> "",
+            }.to_string(),
+            0x2 => {
+                let idx = tag.payload[0] as usize;
+                match tag.number {
+                    0 => {
+                        let npc_names = ["[zelda]","[inpa]","[sahaspupil]","[zoraqueen]","[danpei]","[maple]","[priestgirl]","[miner]","[priest]","[sahas]","[ganon]","[darkzelda]","[darklink]","[darkganon]","[commander]","[hitghost]","[darklinkpet]","[blacksmithKid]","[shopmanmagic]","[kinstamother]"];
+                        npc_names[idx]
+                    },
+                    1 => {
+                        let location_names = ["[dgn_east]","[dgn_wind]","[dgn_hera]","[dgn_castle]","[dgn_dark]","[dgn_water]","[dgn_dokuro]","[dgn_hagure]","[dgn_ice]","[dgn_sand]","[dgn_kame]","[dgn_ganon]","[loc_name_church]","[loc_name_villagelight]","[loc_name_lake]","[loc_name_linkhouse]","[MtHebra]","[MagicShopLight]","[HoleofHyakkai]","[FortuneHouseDark]","[HakabaDark]","[MagicshopDark]","[BlackSmithDark]","[LinkHouseDark]","[milkbar]","[DevilsMarsh]","[ZorasVillage]","[DeathMountain]","[Boss]","[Cuccos]","[HyruleHotfoot]","[OctballDarby]","[RupeeRush]","[FortunesChoice]","[LostWoods]","[ThievesHideout]","[HyruleCastleCore]"];
+                        location_names[idx]
+                    },
+                    2 => {
+                        let item_names = ["[icerod]","[sandrod]","[tornaderod]","[bomb]","[firerod]","[hookshot]","[boomerang]","[hammer]","[bow]","[shield]","[bottle]","[potshop_red]","[potshop_blue]","[potshop_heart]","[item_name_bracelet]","[item_name_lantern]","[item_name_kinsta]","[item_name_gamecoin]","[item_name_stonebeauty]","[item_name_durian]","[item_name_doron]","[item_name_heartpiece]","[item_name_bee]","[item_name_beebadge]","[item_name_powergloves]","[item_name_powerfulglove]","[item_name_pegasus]","[item_name_bell]","[item_name_hintglass]","[item_name_goldenbee]","[item_name_potshop_yellow]","[item_name_potshop_purple]","[item_name_web]","[item_name_net]","[item_name_wisdom]","[item_name_courage]","[item_name_power]","[item_name_fairy]","[item_name_ore]","[postsword]","[charm]","[emptybracelet]","[bigbombflower]","[sword]","[mastersword]","[item_name_liver_blue]","[item_name_liver_purple]","[item_name_liver_yellow]","[item_name_clothes_blue]","[item_name_clothes_red]","[item_name_hyrule_shield]","[item_name_ganbari_power_up]","[item_name_pouch]","[keysmall]","[keyboss]","[heartcontioner]","[compass]","[apple_red]","[apple_blue]","[milk]","[mild_matured]","[message_bottle]","[special_move]","[clothes_blacksmith]","[clothes_green]","[lantern_lv2]","[net_lv2]","[bow_light]","[ganbaritubo]","[trifoce_wisdom]","[triforce_courage]","[triforce_power]","[icerod_LV2]","[sandrod_LV2]","[tornadrod_LV2]","[bomb_LV2]","[firerod_LV2]","[hookshot_LV2]","[boomerang_LV2]","[hammer_LV2]","[bow_LV2]","[icerod_rental]","[sandrod_rental]","[tornaderod_rental]","[bomb_rental]","[firerod_rental]","[hookshot_rental]","[boomerang_rental]","[hammer_rental]","[bow_rental]"];
+                        item_names[idx]
+                    },
+                    _ => "",
+                }.to_string()
+            },
+            _=> "".to_string()
+        }
+    },
+
+    get_message_style : |_attribs: &MessageAttributes| {
+        let centered = false;
+        let color = String::new();
+        let bg_color = String::new();
+    
+        
+        
+        let style_id = String::new();
+
+        StyleInfo { centered, color, bg_color, alt_font : false, style_id }
+    }
+};
+
+
+pub const TFH: GameConfig = GameConfig {
+    name: "Tri Force Heroes",
+    id: "tfh",
+    logo : "https://www.nintendo.com/jp/character/zelda/history/img/branch-b/05/pc/logo.png",
+    big_endian : false,
+    get_languages : || {
+        const LANGUAGES : [(&str, &str);3] = [
+            ("jp", "Japanese"),
+            ("en", "English"),
+            ("fr", "French"),
+            // ("sp", "Spanish"),
+            // ("de", "German"),
+            // ("it" "Italian")
+        ];
+
+        &LANGUAGES
+    },
+    get_filenames : || {
+        const FILENAMES : [&str;76] = [
+"Action.msbt",
+"CourseResult.msbt",
+"CreateExtraSaveData.msbt",
+"E3Flow.msbt",
+"ErrorApplet.msbt",
+"GetItem.msbt",
+"LayoutShopName.msbt",
+"Live.msbt",
+"Opening.msbt",
+"StaffCredit.msbt",
+"SystemFlow.msbt",
+"AreaSimpleTalk.msbt",
+// "KRAreaSimpleTalk.msbt",
+// "KRNpcBoy.msbt",
+// "KRNpcDressWoman.msbt",
+// "KRNpcGentleMan.msbt",
+// "KRNpcGirl.msbt",
+// "KRNpcMadam.msbt",
+// "KRNpcMiddleLady.msbt",
+// "KRNpcMiddleman.msbt",
+// "KRNpcShopmanDlc.msbt",
+// "KRNpcShopmanPhoto.msbt",
+// "KRNpcSoldier.msbt",
+"NpcBlockMan.msbt",
+"NpcBoy.msbt",
+"NpcClothesIntern.msbt",
+"NpcCommon.msbt",
+"NpcDressWoman.msbt",
+"NpcGameTreasure.msbt",
+"NpcGentleMan.msbt",
+"NpcGirl.msbt",
+"NpcHeroMan.msbt",
+"NpcKing.msbt",
+"NpcMadam.msbt",
+"NpcMatchingBattle.msbt",
+"NpcMatchingBattleInet.msbt",
+"NpcMatchingBattleLocal.msbt",
+"NpcMatchingDlp.msbt",
+"NpcMatchingInet.msbt",
+"NpcMatchingLocal.msbt",
+"NpcMatchingMulti.msbt",
+"NpcMatchingPuppet.msbt",
+"NpcMaterial.msbt",
+"NpcMiddleLady.msbt",
+"NpcMiddleman.msbt",
+"NpcMobman.msbt",
+"NpcNamingMan.msbt",
+"NpcPrincessCursed.msbt",
+"NpcPrincessDress.msbt",
+"NpcShopmanClothes.msbt",
+"NpcShopmanDlc.msbt",
+"NpcShopmanGoods.msbt",
+"NpcShopmanPhoto.msbt",
+"NpcSoldier.msbt",
+"NpcWitch.msbt",
+"TrialAreaSimpleTalk.msbt",
+"TrialNpcBlockMan.msbt",
+"TrialNpcClothesIntern.msbt",
+"TrialNpcMatchingDlp.msbt",
+"TrialNpcMatchingInet.msbt",
+"TrialNpcMatchingLocal.msbt",
+"TrialNpcMatchingMulti.msbt",
+"TrialNpcMaterial.msbt",
+"ObjDoorHouse.msbt",
+"ObjPuppet.msbt",
+"ObjSavePoint.msbt",
+"ObjSignboard.msbt",
+"CostumeDetail.msbt",
+"CostumeExplainLobby.msbt",
+"CostumeExplainShop.msbt",
+"CostumeFunction.msbt",
+"CostumeName.msbt",
+"CostumeShortName.msbt",
+"FieldName.msbt",
+"IntNumberN.msbt",
+"ItemExplanation.msbt",
+"ItemName.msbt",
+"LocationName.msbt",
+"MaterialDetail.msbt",
+"MaterialName.msbt",
+"MaterialNameGet.msbt",
+"MaterialNameTalk.msbt",
+"Todo.msbt",
+"TestIkematsu.msbt",
+"TestMessage.msbt",
+"TestMouri.msbt",
+"TestYamaoka.msbt",
+        ];
+
+        &FILENAMES
+    },
+    get_color_hex: |id| {
+
+        if id == 0xFFFF { 
+            "#ffffff" 
+        }
+        else {
+            const COLORS_RGB: [&str; 2] = [
+                "#003F97",
+                "#F92300",
+            ];
+    
+            COLORS_RGB[id]
+        }
+    },
+    get_tag_type : |tag| {
+        match tag.group {
+            0x1 => {
+                match tag.number {
+                    1 => TagType::Insert(("FieldName".to_string(), tag.payload[0] as usize)),
+                    2 => TagType::Insert(("ItemName".to_string(), tag.payload[0] as usize)),
+                    5 => TagType::Insert(("CostumeName".to_string(), tag.payload[0] as usize)),
+                    _=> TagType::Replace,
+                }
+            },
+            _ => get_tag_type_default_msbt(tag, false, encoding_rs::UTF_16LE)
+        }
+    },
+    get_tag_replacement : |tag| {
+        let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join("");
+        let default = format!("[Tag {} {} ]", match tag.group {
+            0x0 => String::from(match tag.number {
+                0 => "Ruby ",
+                1 => "Font ",
+                2 => "Size ",
+                3 => "Color ",
+                4 => "PageBreak",
+                5 => "Reference",
+                _ => ""
+            }),
+            
+            _ => format!("{}:{}", tag.group, tag.number)
+        }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
+
+        match tag.group {
+            0x1 => {
+                let get_enum = |arr : &[&str]| {
+                    arr[tag.payload[0] as usize].to_string()
+                };
+                match tag.number {
+                    0 => "[PlayerName]".to_string(),
+                    1 => {
+                        let field_names = ["[Grass]","[Water]","[Fire]","[Ice]","[Fort]","[Sand]","[Dark]","[Sky]"];
+                        get_enum(&field_names)
+                    },
+                    2 => {
+                        let item_names = ["[sword]","[bomb]","[bow]","[fireglove]","[boomerang]","[waterrod]","[aircannon]","[armshot]","[hammer]"];
+                        get_enum(&item_names)
+                    },
+                    3 => {
+                        let unit_names = ["None","Rupee","Second","Minute","Person","Number","Sheet","Win","Costume"];
+                        let idx = tag.payload[4] as usize;
+                        if idx > 0 {
+                            format!("[Number of {}]", unit_names[idx])
+                        } else {
+                            String::from("[Number]")
+                        }
+                    }
+                    4 => "[InsertMark]".to_string(),
+                    5 => {
+                        let costume_names = ["[First]","[Brave]","[Kokiri]","[Zelda]","[Fancy]","[Goron]","[Zora]","[GreatFairy]","[Bomb]","[Gauge]","[AgainstCold]","[RotationAttack]","[DashAttack]","[Rich]","[Boomerang]","[Alike]","[Lucky]","[WaterRod]","[Witch]","[Tights]","[EightBit]","[Kandelaar]","[WalkFast]","[Fairy]","[Normal]","[AirCannon]","[Hammer]","[WalkSand]","[ArmShot]","[FireGlove]","[Balloon]","[Calcify]","[Legend]","[SwordMaster]","[Idol]","[Thorn]","[DLC1]","[DLC2]","[DLC3]","[DLC4]","[DLC5]","[DLC6]"];
+                        get_enum(&costume_names)
+                    },
+                    6 => "[ClearCourseAbyssSelf]".to_string(),
+                    7 => "[PlayableCourseAbyssAll]".to_string(),
+                    8 => "[KindPointNum]".to_string(),
+                    _ => String::new()
+                }
+            },
+            0x2 => match tag.number {
+                0 => "", //[Vibrate]",
+                1 => "", //[Flush]",
+                2 => "", //[Wait]", // TODO params
+                3 => "", //[AutoForward]", // TODO params
+                4 => "",//[ChoiceN]", // TODO params
+                5 => "",//[ChoicePositive]",
+                6 => "[ColoringStart]",
+                7 => "[ColoringEnd]",
+                8 => "",//[LimitForward]", // TODO params
+                _=> "",
+            }.to_string(),
+            _=> "".to_string()
+        }
+    },
+
+    get_message_style : |_attribs: &MessageAttributes| {
+        let centered = false;
+        let color = String::new();
+        let bg_color = String::new();
+    
+        
+        
+        let style_id = String::new();
+
+        StyleInfo { centered, color, bg_color, alt_font : false, style_id }
+    }
+};
+
+
+pub const SS: GameConfig = GameConfig {
+    name: "Skyward Sword",
+    id: "ss",
+    logo : "https://www.nintendo.com/jp/character/zelda/history/img/branch-a/01/pc/logo.png",
+    big_endian : true,
+    get_languages : || {
+        const LANGUAGES : [(&str, &str);3] = [
+            ("jp", "Japanese"),
+            ("en", "English"),
+            ("fr", "French"),
+            // ("sp", "Spanish"),
+            // ("de", "German"),
+            // ("it" "Italian")
+        ];
+
+        &LANGUAGES
+    },
+    get_filenames : || {
+        const FILENAMES : [&str;79] = [
+"0-Common/001-Action.msbt",
+"0-Common/002-System.msbt",
+"0-Common/003-ItemGet.msbt",
+"0-Common/004-Object.msbt",
+"0-Common/005-Tutorial.msbt",
+"0-Common/006-1KenseiNormal.msbt",
+"0-Common/006-2KenseiNormal.msbt",
+"0-Common/006-3KenseiNormal.msbt",
+"0-Common/006-4KenseiNormal.msbt",
+"0-Common/006-5KenseiNormal.msbt",
+"0-Common/006-6KenseiNormal.msbt",
+"0-Common/006-7KenseiNormal.msbt",
+"0-Common/006-8KenseiNormal.msbt",
+"0-Common/006-9KenseiNormal.msbt",
+"0-Common/006-KenseiNormal.msbt",
+"0-Common/007-MapText.msbt",
+"0-Common/008-Hint.msbt",
+// "0-Common/word.msbt",
+"1-Town/100-Town.msbt",
+"1-Town/101-Shop.msbt",
+"1-Town/102-Zelda.msbt",
+"1-Town/103-DaiShinkan.msbt",
+"1-Town/104-Rival.msbt",
+"1-Town/105-Terry.msbt",
+"1-Town/106-DrugStore.msbt",
+"1-Town/107-Kanban.msbt",
+"1-Town/108-ShinkanA.msbt",
+"1-Town/109-TakeGoron.msbt",
+"1-Town/110-DivingGame.msbt",
+"1-Town/111-FortuneTeller.msbt",
+"1-Town/112-Trustee.msbt",
+"1-Town/113-RemodelStore.msbt",
+"1-Town/114-Friend.msbt",
+"1-Town/115-Town2.msbt",
+"1-Town/116-InsectGame.msbt",
+"1-Town/117-Pumpkin.msbt",
+"1-Town/118-Town3.msbt",
+"1-Town/119-Captain.msbt",
+"1-Town/120-Nushi.msbt",
+"1-Town/121-AkumaKun.msbt",
+"1-Town/122-Town4.msbt",
+"1-Town/123-Town5.msbt",
+"1-Town/124-Town6.msbt",
+"1-Town/125-D3.msbt",
+"1-Town/150-Siren.msbt",
+"1-Town/199-Demo.msbt",
+"2-Forest/200-Forest.msbt",
+"2-Forest/201-ForestD1.msbt",
+"2-Forest/202-ForestD2.msbt",
+"2-Forest/203-ForestF2.msbt",
+"2-Forest/204-ForestF3.msbt",
+"2-Forest/250-ForestSiren.msbt",
+"2-Forest/251-Salvage.msbt",
+"2-Forest/299-Demo.msbt",
+"3-Mountain/300-Mountain.msbt",
+"3-Mountain/301-MountainD1.msbt",
+"3-Mountain/302-Anahori.msbt",
+"3-Mountain/303-MountainF2.msbt",
+"3-Mountain/304-MountainD2.msbt",
+"3-Mountain/305-MountainF3.msbt",
+"3-Mountain/350-MountainSiren.msbt",
+"3-Mountain/351-Salvage.msbt",
+"3-Mountain/399-Demo.msbt",
+"4-Desert/400-Desert.msbt",
+"4-Desert/401-DesertD2.msbt",
+"4-Desert/402-DesertF2.msbt",
+"4-Desert/403-DesertD1.msbt",
+"4-Desert/404-DesertF3.msbt",
+"4-Desert/405-DesertD2Clear.msbt",
+"4-Desert/406-TrolleyRace.msbt",
+"4-Desert/450-DesertSiren.msbt",
+"4-Desert/451-Salvage.msbt",
+"4-Desert/460-RairyuMinigame.msbt",
+"4-Desert/499-Demo.msbt",
+"5-CenterField/500-CenterField.msbt",
+"5-CenterField/501-Inpa.msbt",
+"5-CenterField/502-CenterFieldBack.msbt",
+"5-CenterField/503-Goron.msbt",
+"5-CenterField/510-Salvage.msbt",
+"5-CenterField/599-Demo.msbt",
+        ];
+
+        &FILENAMES
+    },
+    get_color_hex: |id| {
+
+        if id == 0xFFFF { 
+            "#ffffff" 
+        }
+        else {
+            const COLORS_RGB: [&str; 15] = [
+                "#FF5050",
+                "#FF7878",
+                "#E6A000",
+                "#469BEB",
+                "#50DC41",
+                "#FF6400",
+                "#8C468C",
+                "#1EB91E",
+                "#009BA5",
+                "#F50A32",
+                "#919BA0",
+                "#EFEF00",
+                "#5F9669",
+                "#FFFFFF",
+                "#000000",
+            ];
+    
+            COLORS_RGB[id]
+        }
+    },
+    get_tag_type : |tag| {
+        match tag.group {
+            _ => get_tag_type_default_msbt(tag, true, encoding_rs::UTF_16BE)
+        }
+    },
+    get_tag_replacement : |tag| {
+        let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join("");
+        let default = format!("[Tag {} {} ]", match tag.group {
+            0x0 => String::from(match tag.number {
+                0 => "Ruby ",
+                1 => "Font ",
+                2 => "Size ",
+                3 => "Color ",
+                _ => ""
+            }),
+            
+            _ => format!("{}:{}", tag.group, tag.number)
+        }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
+
+        match tag.group {
+            0x1 => match tag.number {
+                0 | 1 | 2 | 3 => "   • ",
+                _ => "",
+            }.to_string(),
+            0x2 => match tag.number {
+                0 => "[Link]".to_string(),
+                _=> default,
+            },
+            _=> default,
+        }
+    },
+
+    get_message_style : |_attribs: &MessageAttributes| {
+        let centered = false;
+        let color = String::new();
+        let bg_color = String::new();
+    
         
         
         let style_id = String::new();

@@ -1,18 +1,22 @@
-use std::{fmt, fs::File, io::{self, Write}, path::Path};
+use std::{collections::HashMap, fmt, fs::File, io::{self, Write}, path::Path};
+use itertools::Itertools;
 use rust_xlsxwriter::{Color, Format, FormatAlign};
+
+mod message;
 
 mod bmg_raw_parser;
 mod bmg_text_parser;
-mod bmg_message;
+mod msbt_parser;
+
 mod utils;
 mod game_configs;
 
-use bmg_message::{Message, Tag, TextPart};
+use message::{Message, Tag, TextPart};
 
-use crate::{bmg_message::{MessageParser, MessageSingleLang}, game_configs::{GameConfig, StyleTagType, TagType}};
+use crate::{message::{MessageParser, MessageSingleLang}, game_configs::{GameConfig, StyleTagType, TagType}};
 
 
-const BANK_COUNT : usize = 32;
+const BANK_COUNT : usize = 256;
 
 const DEFAULT_COLORS : [&str; 9] = [
     "#FFFFFF",
@@ -29,10 +33,10 @@ const DEFAULT_COLORS : [&str; 9] = [
 
 impl Tag {
     
-    fn get_simple_replacement(&self, config: Option<&GameConfig>) -> &str {
+    fn get_simple_replacement(&self, config: Option<&GameConfig>) -> String {
         match config {
             Some(conf) => (conf.get_tag_replacement)(&self),
-            None => "[Tag]"
+            None => String::from("[Tag]")
         }
     }
 }
@@ -48,22 +52,22 @@ impl fmt::Display for Tag {
                     _ => "",
                 }
             },
-            _ => self.get_simple_replacement(None)
+            _ => "[Tag]"
         })
     }
 }
 
 impl Message {
-    fn get_html_formatted(&self, lang_id : usize, ignore_tags : bool, config : Option<&GameConfig>) -> String {
+    fn get_html_formatted(&self, lang_id : usize, ignore_tags : bool, config : Option<&GameConfig>, parent : Option<&BMGParser>) -> String {
         
         if ignore_tags {
-            self.get_raw(lang_id, config).replace("\n", "<br>")
+            self.get_raw(lang_id, config, parent).replace("\n", "<br>")
             //RE_TAG.replace_all(&s, |c : &Captures| c[0].parse::<Tag>().unwrap_or_default().get_simple_replacement().to_owned()).to_string()
         } else {
 
             let mut res_str = String::new();
 
-            let mut current_color = 0;
+            let mut current_color = 0xFFFFu16;
             let mut current_size = 100;
 
             let mut needs_ruby : Option<(u8, String)> = None;
@@ -89,25 +93,21 @@ impl Message {
                             let get_tag_type = config.map(|c| c.get_tag_type).unwrap_or(game_configs::get_tag_type_default);
                             match get_tag_type(&tag) {
                                 TagType::Style(style_type) => {
-                                    //let real_number = if config.map(|c| c.big_endian).unwrap_or(true) { tag.number} else {tag.number.swap_bytes()};
                                     match style_type {
-                                        StyleTagType::Color => { // change color
-                                            let new_color = tag.payload[0] as usize;
-                                            if current_color != 0 {
+                                        StyleTagType::Color(id) => { // change color
+                                            if current_color != 0xFFFF {
                                                 res_str += "</span>";
                                             }
-                                            if new_color != 0 {
-                                                let c = if let Some(conf) = config { (conf.get_color_hex)(new_color)} else { DEFAULT_COLORS[new_color]};
+
+                                            if id != 0xFFFF {
+                                                let new_color = id as usize;
+                                                let c = if let Some(conf) = config { (conf.get_color_hex)(new_color)} else { "#ffffff"};
                                                 res_str += &format!("<span style='color:{};'>", c);
                                             }
-                                            current_color = new_color;
+                                            current_color = id;
                                         },
-                                        StyleTagType::Size => {
-    
-                                            let big_endian = config.map(|c| c.big_endian).unwrap_or(true);
-                                            let get_u16 = if big_endian { utils::get_u16_be } else {utils::get_u16_le};
-
-                                            let new_size = get_u16(&tag.payload, 0);
+                                        StyleTagType::Size(percent) => {
+                                            let new_size = percent;// get_u16(&tag.payload, 0);
                                             if current_size != 100 {
                                                 res_str += "</span>"
                                             }
@@ -117,27 +117,37 @@ impl Message {
                     
                                             current_size = new_size;
                                         },
-                                        StyleTagType::Ruby => {
-                                            let over_count = tag.payload[0];
-                                            let last_is_zero = tag.payload[tag.payload.len() -1] == 0x00;
-                                            let slice_end = tag.payload.len() - (last_is_zero as usize);
-                                            let raw_bytes = &tag.payload[1..slice_end];
+                                        StyleTagType::Ruby(over_count, decoded_ruby) => {
+                                            // let over_count = tag.payload[0];
+                                            // let last_is_zero = tag.payload[tag.payload.len() -1] == 0x00;
+                                            // let slice_end = tag.payload.len() - (last_is_zero as usize);
+                                            // let raw_bytes = &tag.payload[1..slice_end];
 
-                                            let encoding = config.map(|c| 
-                                                match c.id  {
-                                                   "ph" | "st" => encoding_rs::UTF_16LE,
-                                                   _ => encoding_rs::SHIFT_JIS, 
-                                                }).unwrap_or(encoding_rs::SHIFT_JIS);
+                                            // let encoding = config.map(|c| 
+                                            //     match c.id  {
+                                            //        "ph" | "st" => encoding_rs::UTF_16LE,
+                                            //        _ => encoding_rs::SHIFT_JIS, 
+                                            //     }).unwrap_or(encoding_rs::SHIFT_JIS);
 
 
 
-                                            let decoded_ruby = encoding.decode(&raw_bytes).0;
-                                            needs_ruby = Some((over_count, decoded_ruby.to_string()));
+                                            // let decoded_ruby = encoding.decode(&raw_bytes).0;
+                                            needs_ruby = Some((over_count, decoded_ruby));
                                         },
                                         _ => {}
                                     }
                                 }
-                                TagType::Replace => { res_str += tag.get_simple_replacement(config); }
+                                TagType::Replace => { res_str += &tag.get_simple_replacement(config); },
+                                TagType::Insert((bank_name, idx)) => {
+                                    let s = if let Some(parser) = parent {
+                                        let bank = &parser.msgs[parser.bank_idxs[&bank_name]];
+                                        bank[idx].get_html_formatted(lang_id, ignore_tags, config, parent)
+                                    } else {
+                                        tag.get_simple_replacement(config).to_string()
+                                    };
+
+                                    res_str += &s;
+                                }
                             }
                         }
                     }                
@@ -149,14 +159,14 @@ impl Message {
         
     }
 
-    fn get_xlsx_formatted(&self, lang_id : usize, ignore_tags : bool, default_color : Color, config : Option<&GameConfig> ) -> Vec<(Format, String)> {
+    fn get_xlsx_formatted(&self, lang_id : usize, ignore_tags : bool, default_color : Color, config : Option<&GameConfig>, parent : Option<&BMGParser> ) -> Vec<(Format, String)> {
         let mut segments : Vec<(Format, String)> = Vec::new();
 
         if ignore_tags {
-            segments.push((Format::new(), self.get_raw(lang_id, config)));
+            segments.push((Format::new(), self.get_raw(lang_id, config,parent)));
         } else {
             
-            let mut current_color = 0;
+            let mut current_color = 0xFFFFu16;
             let mut current_size = 100;
 
             const DEFAULT_SIZE : f32 = 11.0;
@@ -167,40 +177,56 @@ impl Message {
                     match part {
                         TextPart::Text(text) => {
                             if !text.is_empty() {
-                                let config_color = if let Some(conf) = config { (conf.get_color_hex)(current_color)} else { DEFAULT_COLORS[current_color]};
-                                let color = if current_color == 0 { default_color } else { Color::from(config_color)};
+                                let c = current_color as usize;
+                                let config_color = if let Some(conf) = config { (conf.get_color_hex)(c)} else { DEFAULT_COLORS[c]};
+                                let color = if current_color == 0xFFFF { default_color } else { Color::from(config_color)};
                                 let size = DEFAULT_SIZE * (current_size as f32/100.0);
                                 let format = Format::new().set_font_color(color).set_font_size(size);
                                 segments.push((format, text.to_string()));
                             }
                         },
                         TextPart::Tag(tag) => {
-                            match tag.group {
-                                0xFF => {
-                                    match tag.number {
-                                        0x00 => { // change color
-                                            //color
-    
-                                            current_color = tag.payload[0] as usize;
+                            let get_tag_type = config.map(|c| c.get_tag_type).unwrap_or(game_configs::get_tag_type_default);
+                            match get_tag_type(&tag) {
+                                TagType::Style(style_type) => {
+                                    match style_type {
+                                        StyleTagType::Color(id) => { // change color
+                                            current_color = id;
                                         },
-                                        0x01 => {
-    
-                                            let big_endian = config.map(|c| c.big_endian).unwrap_or(true);
-                                            let get_u16 = if big_endian { utils::get_u16_be } else {utils::get_u16_le};
+                                        StyleTagType::Size(percent) => {                          
+                                            current_size = percent;
+
+                                        },
+                                        StyleTagType::Ruby(_,_) => {
                                             
-                                            current_size = get_u16(&tag.payload, 0);
-                                            //Size
-                                        },
-                                        0x02 => {
-                                            //ruby
                                         },
                                         _ => {}
                                     }
                                 }
-                                _ => { 
+                                TagType::Replace => { 
                                     let s = tag.get_simple_replacement(config).to_string();
                                     if !s.is_empty() {
-                                        let color = if current_color == 0 { default_color } else { Color::from(DEFAULT_COLORS[current_color])};
+                                        let c = current_color as usize;
+                                        let config_color = if let Some(conf) = config { (conf.get_color_hex)(c)} else { DEFAULT_COLORS[c]};
+                                        let color = if current_color == 0xFFFF { default_color } else { Color::from(config_color)};
+                                        let size = DEFAULT_SIZE * (current_size as f32/100.0);
+                                        let format = Format::new().set_font_color(color).set_font_size(size);
+    
+                                        segments.push((format, s)); 
+                                    }
+                                }
+                                TagType::Insert((bank_name, idx)) => {
+                                    let s = if let Some(parser) = parent {
+                                        let bank: &Vec<Message> = &parser.msgs[parser.bank_idxs[&bank_name]];
+                                        bank[idx].get_raw(lang_id, config, parent)
+                                    } else {
+                                        tag.get_simple_replacement(config).to_string()
+                                    };
+
+                                    if !s.is_empty() {
+                                        let c = current_color as usize;
+                                        let config_color = if let Some(conf) = config { (conf.get_color_hex)(c)} else { DEFAULT_COLORS[c]};
+                                        let color = if current_color == 0xFFFF { default_color } else { Color::from(config_color)};
                                         let size = DEFAULT_SIZE * (current_size as f32/100.0);
                                         let format = Format::new().set_font_color(color).set_font_size(size);
     
@@ -217,9 +243,26 @@ impl Message {
         segments
     }
 
-    fn get_raw(&self, lang_id : usize, config : Option<&GameConfig>) -> String {
+    fn get_raw(&self, lang_id : usize, config : Option<&GameConfig>, parent: Option<&BMGParser>) -> String {
         if self.text.len() > lang_id {
-            bmg_message::get_raw_msg(&self.text[lang_id], config)
+            self.text[lang_id].iter().map(|text_part| match text_part {
+                TextPart::Text(s) => s.to_string(),
+                TextPart::Tag(t) => {
+                    let get_tag_type = config.map(|c| c.get_tag_type).unwrap_or(game_configs::get_tag_type_default);
+                    match get_tag_type(&t) {
+                        TagType::Insert((bank_name, idx)) => {
+                            if let Some(parser) = parent {
+                                let bank: &Vec<Message> = &parser.msgs[parser.bank_idxs[&bank_name]];
+                                bank[idx].get_raw(lang_id, config, parent)
+                            } else {
+                                t.get_simple_replacement(config).to_string()
+                            }
+                        }
+                        _ => t.get_simple_replacement(config).to_string()
+                    }
+                }
+            }).join("")
+            // message::get_raw_msg(&self.text[lang_id], config)
         } else {
             String::new()
         }
@@ -230,7 +273,8 @@ impl Message {
 
 #[derive(Default, Debug)]
 struct BMGParser {
-    msgs : [Vec<Message>; BANK_COUNT],
+    msgs : Vec<Vec<Message>>,
+    bank_idxs : HashMap<String, usize>,
     encoding : Option<&'static encoding_rs::Encoding>,
 }
 
@@ -251,7 +295,7 @@ trait Exporter {
     fn set_config(&mut self, config:&GameConfig);
     fn begin(&mut self);
     fn set_headers(&mut self);
-    fn add_row(&mut self , msg : &Message, ignore_tags : bool);
+    fn add_row(&mut self , msg : &Message, ignore_tags : bool, parent : Option<&BMGParser>);
     fn end(&mut self);
 }
 
@@ -280,7 +324,7 @@ impl Exporter for HTMLExporter  {
         let font =  match &self.config {
             Some(conf) => match conf.id {
                 "tp" => "fot-rodin-prondb",
-                "tww" | "ph" | "st" | "fsa" => "rock",
+                "tww" | "ph" | "st" | "fsa" | "albw" | "tfh" => "rock",
                 _ => "fot-rodin-prondb"
             }
             None => "fot-rodin-prondb"
@@ -290,7 +334,7 @@ impl Exporter for HTMLExporter  {
         let ruby_font =  match &self.config {
             Some(conf) => match conf.id {
                 "tp" => "reishotai",
-                "tww" | "ph" | "st" | "fsa"  => "fot-rodin-prondb",
+                "tww" | "ph" | "st" | "fsa" | "albw" | "tfh"  => "fot-rodin-prondb",
                 _ => "fot-rodin-prondb"
             }
             None => "fot-rodin-prondb"
@@ -421,7 +465,7 @@ nav a:hover, nav a:active {{
         }
     }
 
-    fn add_row(&mut self, msg : &Message, ignore_tags : bool) {
+    fn add_row(&mut self, msg : &Message, ignore_tags : bool, parent : Option<&BMGParser>) {
         if let Some(f) = &mut self.file {
             let style_info = self.config.as_ref().map(|c| (c.get_message_style)(&msg.attribs)).unwrap_or_default();
 
@@ -439,7 +483,7 @@ nav a:hover, nav a:active {{
     
             let lang_count =  if let Some(config) = &self.config { (config.get_languages)().len()} else {0};
             for i in 0..lang_count {
-                s += &format!("<td>{}</td>\n", msg.get_html_formatted(i, ignore_tags, self.config.as_ref()));
+                s += &format!("<td>{}</td>\n", msg.get_html_formatted(i, ignore_tags, self.config.as_ref(), parent));
             }
     
             s += "</tr>";
@@ -505,13 +549,13 @@ impl Exporter for CSVExporter {
 
     }
 
-    fn add_row(&mut self , msg : &Message, _ : bool) {
+    fn add_row(&mut self , msg : &Message, _ : bool, parent : Option<&BMGParser>) {
         if let Some(f) = &mut self.file {
             let mut s =  "".to_string();
     
             let lang_count =  if let Some(config) = &self.config { (config.get_languages)().len()} else {0};
             for i in 0..lang_count {
-                s += &format!("\"{}\";", msg.get_raw(i, self.config.as_ref()));
+                s += &format!("\"{}\";", msg.get_raw(i, self.config.as_ref(), parent));
             }
 
             s += "\n";
@@ -565,13 +609,13 @@ impl Exporter for XLSXExporter {
         }
     }
 
-    fn add_row(&mut self , msg : &Message, ignore_tags : bool) {
+    fn add_row(&mut self , msg : &Message, ignore_tags : bool, parent : Option<&BMGParser>) {
         if let Ok(worksheet) = self.workbook.worksheet_from_index(0) {
 
             let lang_count =  if let Some(config) = &self.config { (config.get_languages)().len()} else {0};
             for i in 0..lang_count {
                 if ignore_tags {
-                    let _ = worksheet.write(self.current_row as u32 , i as u16, msg.get_raw(i, self.config.as_ref()));
+                    let _ = worksheet.write(self.current_row as u32 , i as u16, msg.get_raw(i, self.config.as_ref(),parent));
                 } else {
                     let mut cell_color = Color::White;
                     let mut cell_align = FormatAlign::default();
@@ -589,7 +633,7 @@ impl Exporter for XLSXExporter {
                                                     .set_text_wrap();
                                                     
 
-                    let segments = msg.get_xlsx_formatted(i, ignore_tags, cell_color, self.config.as_ref());
+                    let segments = msg.get_xlsx_formatted(i, ignore_tags, cell_color, self.config.as_ref(), parent);
 
                     if !segments.is_empty() {
                         let segments_ref : Vec<_>= segments.iter().map(|(a,b)| (a,b.as_str())).collect();
@@ -629,6 +673,10 @@ impl BMGParser {
             return;
         }
 
+        if bank_id >= self.msgs.len() {
+            self.msgs.resize_with(bank_id + 1, || Vec::new());
+        }
+
         let idx = msg.id - 1;//if msg.id > 0 {} else {self.msgs[bank_id].len()};
 
         if idx + 1> self.msgs[bank_id].len() { self.msgs[bank_id].resize_with(idx + 1, || Message::default() );}
@@ -661,7 +709,7 @@ impl BMGParser {
 
         for bank in &self.msgs {
             for msg in bank.iter().filter(|msg| !msg.is_empty()) {
-                exporter.add_row(msg, ignore_tags);
+                exporter.add_row(msg, ignore_tags, Some(&self));
             }
         }
         exporter.end();
@@ -676,7 +724,7 @@ impl BMGParser {
 
         for bank in &self.msgs {
             for msg in bank.iter().filter(|msg| !msg.is_empty()) {
-                exporter.add_row(msg, true);
+                exporter.add_row(msg, true, Some(&self));
             }
         }
         exporter.end();
@@ -691,7 +739,7 @@ impl BMGParser {
 
         for bank in &self.msgs {
             for msg in bank.iter().filter(|msg| !msg.is_empty()) {
-                exporter.add_row(msg, ignore_tags);
+                exporter.add_row(msg, ignore_tags, Some(&self));
             }
         }
         exporter.end();
@@ -705,6 +753,7 @@ fn process_file(filename : &Path, lang_id : usize, bank_id : usize, parser : &mu
     let p : Box<dyn MessageParser> = match filename.extension().and_then(|s| s.to_str()) {
         Some("txt") => Box::new(bmg_text_parser::open_bmg(filename)?),
         Some("bmg") => Box::new(bmg_raw_parser::open_bmg(filename, big_endian)?),
+        Some("msbt") => Box::new(msbt_parser::open_msbt(filename)?),
         None => todo!(),
         _ => todo!()
     };
@@ -713,6 +762,7 @@ fn process_file(filename : &Path, lang_id : usize, bank_id : usize, parser : &mu
         parser.add_message(&m, lang_id, bank_id);
     }
 
+    parser.bank_idxs.insert(filename.file_prefix().unwrap().to_string_lossy().to_string(), bank_id);
     parser.encoding = Some(p.get_encoding());
 
     Ok(())
@@ -726,7 +776,12 @@ fn process_config(parser : &mut BMGParser, config : &GameConfig)
         let folder_path = Path::new(&str_path);
 
         for (bank_id,&basename) in (config.get_filenames)().iter().enumerate() {
-            let _ = process_file(&folder_path.join(&basename), lang_idx, bank_id, parser, config.big_endian);
+            let path = folder_path.join(&basename);
+            match process_file(&path, lang_idx, bank_id, parser, config.big_endian)
+            {
+                Ok(_) => {},
+                Err(e) => println!("Error opening  {} : {}", path.display(), e)
+            }
         }
     }
 }
@@ -757,6 +812,7 @@ fn main() {
 
     generate_index(Path::new("./www/index.html"));
 
+    // for config in &[game_configs::ALBW] {
     for config in game_configs::ALL_CONFIGS {
         
         let id = config.id;
@@ -766,4 +822,8 @@ fn main() {
         parser.export_csv(Path::new(&format!("./www/download/{id}.csv")), &config);
         parser.export_xlsx(Path::new(&format!("./www/download/{id}.xlsx")), false, &config);
     }
+
+
+    //msbt_parser::print_msbt(Path::new("./res/albw/Japanese/Common.msbt"));
+
 }
