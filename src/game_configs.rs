@@ -72,7 +72,7 @@ fn get_tag_type_default_msbt(tag : &Tag, big_endian : bool, encoding : &'static 
             },
             0x02 => TagType::Style(StyleTagType::Size(get_u16(&tag.payload, 0))),
             0x03 => TagType::Style(StyleTagType::Color(get_u16(&tag.payload, 0))),
-            _ => TagType::Style(StyleTagType::Unknown)
+            _ => TagType::Replace,
         },
         _ => TagType::Replace
     }
@@ -94,7 +94,7 @@ pub struct GameConfig {
     pub get_filenames : fn() -> &'static [&'static str]
 }
 
-pub const ALL_CONFIGS  : [&GameConfig;7]= [&TP, &TWW, &PH, &ST, &FSA, &ALBW, &TFH];
+pub const ALL_CONFIGS  : [&GameConfig;8]= [&TP, &TWW, &PH, &ST, &FSA, &ALBW, &TFH, &SS];
 
 pub const TWW: GameConfig = GameConfig {
     name: "The Wind Waker",
@@ -1193,6 +1193,182 @@ pub const TFH: GameConfig = GameConfig {
                 _=> "",
             }.to_string(),
             _=> "".to_string()
+        }
+    },
+
+    get_message_style : |_attribs: &MessageAttributes| {
+        let centered = false;
+        let color = String::new();
+        let bg_color = String::new();
+    
+        
+        
+        let style_id = String::new();
+
+        StyleInfo { centered, color, bg_color, alt_font : false, style_id }
+    }
+};
+
+
+pub const SS: GameConfig = GameConfig {
+    name: "Skyward Sword",
+    id: "ss",
+    logo : "https://www.nintendo.com/jp/character/zelda/history/img/branch-a/01/pc/logo.png",
+    big_endian : true,
+    get_languages : || {
+        const LANGUAGES : [(&str, &str);3] = [
+            ("jp", "Japanese"),
+            ("en", "English"),
+            ("fr", "French"),
+            // ("sp", "Spanish"),
+            // ("de", "German"),
+            // ("it" "Italian")
+        ];
+
+        &LANGUAGES
+    },
+    get_filenames : || {
+        const FILENAMES : [&str;79] = [
+"0-Common/001-Action.msbt",
+"0-Common/002-System.msbt",
+"0-Common/003-ItemGet.msbt",
+"0-Common/004-Object.msbt",
+"0-Common/005-Tutorial.msbt",
+"0-Common/006-1KenseiNormal.msbt",
+"0-Common/006-2KenseiNormal.msbt",
+"0-Common/006-3KenseiNormal.msbt",
+"0-Common/006-4KenseiNormal.msbt",
+"0-Common/006-5KenseiNormal.msbt",
+"0-Common/006-6KenseiNormal.msbt",
+"0-Common/006-7KenseiNormal.msbt",
+"0-Common/006-8KenseiNormal.msbt",
+"0-Common/006-9KenseiNormal.msbt",
+"0-Common/006-KenseiNormal.msbt",
+"0-Common/007-MapText.msbt",
+"0-Common/008-Hint.msbt",
+// "0-Common/word.msbt",
+"1-Town/100-Town.msbt",
+"1-Town/101-Shop.msbt",
+"1-Town/102-Zelda.msbt",
+"1-Town/103-DaiShinkan.msbt",
+"1-Town/104-Rival.msbt",
+"1-Town/105-Terry.msbt",
+"1-Town/106-DrugStore.msbt",
+"1-Town/107-Kanban.msbt",
+"1-Town/108-ShinkanA.msbt",
+"1-Town/109-TakeGoron.msbt",
+"1-Town/110-DivingGame.msbt",
+"1-Town/111-FortuneTeller.msbt",
+"1-Town/112-Trustee.msbt",
+"1-Town/113-RemodelStore.msbt",
+"1-Town/114-Friend.msbt",
+"1-Town/115-Town2.msbt",
+"1-Town/116-InsectGame.msbt",
+"1-Town/117-Pumpkin.msbt",
+"1-Town/118-Town3.msbt",
+"1-Town/119-Captain.msbt",
+"1-Town/120-Nushi.msbt",
+"1-Town/121-AkumaKun.msbt",
+"1-Town/122-Town4.msbt",
+"1-Town/123-Town5.msbt",
+"1-Town/124-Town6.msbt",
+"1-Town/125-D3.msbt",
+"1-Town/150-Siren.msbt",
+"1-Town/199-Demo.msbt",
+"2-Forest/200-Forest.msbt",
+"2-Forest/201-ForestD1.msbt",
+"2-Forest/202-ForestD2.msbt",
+"2-Forest/203-ForestF2.msbt",
+"2-Forest/204-ForestF3.msbt",
+"2-Forest/250-ForestSiren.msbt",
+"2-Forest/251-Salvage.msbt",
+"2-Forest/299-Demo.msbt",
+"3-Mountain/300-Mountain.msbt",
+"3-Mountain/301-MountainD1.msbt",
+"3-Mountain/302-Anahori.msbt",
+"3-Mountain/303-MountainF2.msbt",
+"3-Mountain/304-MountainD2.msbt",
+"3-Mountain/305-MountainF3.msbt",
+"3-Mountain/350-MountainSiren.msbt",
+"3-Mountain/351-Salvage.msbt",
+"3-Mountain/399-Demo.msbt",
+"4-Desert/400-Desert.msbt",
+"4-Desert/401-DesertD2.msbt",
+"4-Desert/402-DesertF2.msbt",
+"4-Desert/403-DesertD1.msbt",
+"4-Desert/404-DesertF3.msbt",
+"4-Desert/405-DesertD2Clear.msbt",
+"4-Desert/406-TrolleyRace.msbt",
+"4-Desert/450-DesertSiren.msbt",
+"4-Desert/451-Salvage.msbt",
+"4-Desert/460-RairyuMinigame.msbt",
+"4-Desert/499-Demo.msbt",
+"5-CenterField/500-CenterField.msbt",
+"5-CenterField/501-Inpa.msbt",
+"5-CenterField/502-CenterFieldBack.msbt",
+"5-CenterField/503-Goron.msbt",
+"5-CenterField/510-Salvage.msbt",
+"5-CenterField/599-Demo.msbt",
+        ];
+
+        &FILENAMES
+    },
+    get_color_hex: |id| {
+
+        if id == 0xFFFF { 
+            "#ffffff" 
+        }
+        else {
+            const COLORS_RGB: [&str; 15] = [
+                "#FF5050",
+                "#FF7878",
+                "#E6A000",
+                "#469BEB",
+                "#50DC41",
+                "#FF6400",
+                "#8C468C",
+                "#1EB91E",
+                "#009BA5",
+                "#F50A32",
+                "#919BA0",
+                "#EFEF00",
+                "#5F9669",
+                "#FFFFFF",
+                "#000000",
+            ];
+    
+            COLORS_RGB[id]
+        }
+    },
+    get_tag_type : |tag| {
+        match tag.group {
+            _ => get_tag_type_default_msbt(tag, true, encoding_rs::UTF_16BE)
+        }
+    },
+    get_tag_replacement : |tag| {
+        let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join("");
+        let default = format!("[Tag {} {} ]", match tag.group {
+            0x0 => String::from(match tag.number {
+                0 => "Ruby ",
+                1 => "Font ",
+                2 => "Size ",
+                3 => "Color ",
+                _ => ""
+            }),
+            
+            _ => format!("{}:{}", tag.group, tag.number)
+        }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
+
+        match tag.group {
+            0x1 => match tag.number {
+                0 | 1 | 2 | 3 => "   • ",
+                _ => "",
+            }.to_string(),
+            0x2 => match tag.number {
+                0 => "[Link]".to_string(),
+                _=> default,
+            },
+            _=> default,
         }
     },
 

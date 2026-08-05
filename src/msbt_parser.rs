@@ -43,7 +43,7 @@ struct TXT2Data {
 
 impl TXT2Data {
 
-    fn get_msg(&self, idx:usize, encoding : u8) -> MessageText {
+    fn get_msg(&self, idx:usize, encoding : &'static encoding_rs::Encoding) -> MessageText {
         
         if idx > self.offsets.len(){
             return Vec::new();
@@ -55,22 +55,19 @@ impl TXT2Data {
         }
 
         // TODO : generalise with bmg
-        
-        let encoding = match encoding {
-            0 => encoding_rs::UTF_8,
-            1 => encoding_rs::UTF_16LE, // LE as the only cases we have now are LE, might need to generalise this
-            _ => encoding_rs::UTF_8, // Default to WINDOWS_1252 if unknown
-        };
+    
 
         let mut it = self.data[offset..].iter();
         let mut end = false;
         let mut full_string = String::new();
         let mut text_parts : Vec<TextPart> = Vec::new();
 
+        let big_endian = encoding == encoding_rs::UTF_16BE;
+        let get_u16 = if big_endian { utils::get_u16_be } else {utils::get_u16_le};
 
         while !end {
             let mut stop_value = 0u16;
-            let str_bytes = if encoding == encoding_rs::UTF_16LE {
+            let str_bytes = if encoding == encoding_rs::UTF_16LE || encoding == encoding_rs::UTF_16BE {
                 
                 // is easier to try to iterate properly by step of 2 bytes without iterator typing weirdness
                 let mut str_end = false;
@@ -78,7 +75,7 @@ impl TXT2Data {
                 while !str_end {
                     let b1 = *it.next().unwrap();
                     let b2 = *it.next().unwrap();
-                    let v = utils::get_u16_le(&[b1,b2], 0);
+                    let v = get_u16(&[b1,b2], 0);
 
                     if v != 0x00000 && v != 0x000E {
                         str.push(b1);
@@ -101,7 +98,7 @@ impl TXT2Data {
             match stop_value {
                 0x00 => end = true,
                 0x0E => {
-                    let mut read_u16 = || {utils::get_u16_le(&it.by_ref().take(2).map(|b| *b).collect::<Vec<_>>(), 0)};
+                    let mut read_u16 = || {get_u16(&it.by_ref().take(2).map(|b| *b).collect::<Vec<_>>(), 0)};
                     let group = read_u16() as u8;
                     let number = read_u16();
                     let params_size = read_u16();
@@ -238,7 +235,6 @@ impl MSBTParser {
     fn parse_section(data : &[u8], big_endian : bool) -> Result<MSBTBlockData, MSBTParseError> {
 
         let get_u32 = if big_endian { utils::get_u32_be } else {utils::get_u32_le};
-        let get_u16 = if big_endian { utils::get_u16_be } else {utils::get_u16_le};
 
         let section_type = str::from_utf8(&data[0..4])?;
         let section_size = get_u32(&data, 4);
@@ -314,7 +310,7 @@ impl MSBTParser {
             let label = &lbl1.labels[idx];
 
             if let Some(MSBTBlockData::TXT2(txt2)) = self.get_block(MSBTData::TXT2) {
-                let text = txt2.get_msg(idx, self.get_header().encoding);
+                let text = txt2.get_msg(idx, self.get_encoding());
                 
                 MessageSingleLang {
                     id : idx +1,
@@ -422,7 +418,7 @@ pub fn print_msbt(path : &Path) {
         Ok(parser) => {
             parser.print();
             // parser.print_flow();
-            for i in 2..3 {
+            for i in 0..3 {
                 println!("Message {i} : {:?}", parser.get_msg(i).text);//parser.get_msg(0x66).text));
             }
         }
