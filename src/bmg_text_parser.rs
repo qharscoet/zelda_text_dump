@@ -2,7 +2,7 @@ use itertools::Itertools;
 use regex::Regex;
 use std::{fs::File, io::{self, BufRead, BufReader}, path::Path, sync::LazyLock};
 
-use crate::{message::{MessageParser,MessageAttributes, MessageSingleLang, Tag, TextPart}, utils::unpack_u16};
+use crate::{message::{MessageParser,MessageAttributes, MessageSingleLang, MessageId, Tag, TextPart}, utils::unpack_u16};
 
 static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"(?P<ID>[[:xdigit:]]+) (@(?P<slot>[[:xdigit:]]{4}) )?(?P<attribs>\[.+\]) = (?P<str>.+)?").unwrap());
 static RE_TAG: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\\[x|z]\{(.*?)\}").unwrap());
@@ -90,7 +90,7 @@ impl std::str::FromStr for MessageSingleLang {
                         text_parts = str_it.interleave(tags_it).collect::<Vec<_>>();
                 }
 
-                Ok(MessageSingleLang { text: text_parts, attribs, id })
+                Ok(MessageSingleLang { text: text_parts, attribs, id : MessageId::Int(id) })
             } else {
                 Err("Invalid ID")
             }

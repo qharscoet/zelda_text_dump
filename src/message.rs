@@ -34,19 +34,31 @@ impl fmt::Display for MessageAttributes {
     }
 }
 
+#[derive(Debug, Clone)]
+pub enum MessageId {
+    Int(usize),
+    Label(String),
+}
+
+impl Default for MessageId {
+    fn default() -> Self {
+        MessageId::Int(0)
+    }
+}
+
 
 pub type MessageText = Vec<TextPart>;
 pub struct Message {
     pub text : Vec<MessageText>,
     pub attribs : MessageAttributes,
-    pub id : usize
+    pub id : MessageId
 }
 
 #[derive(Default, Clone)]
 pub struct MessageSingleLang {
     pub text : MessageText,
     pub attribs : MessageAttributes,
-    pub id : usize
+    pub id : MessageId
 }
 
 
@@ -82,7 +94,7 @@ impl fmt::Debug for Message {
 
 impl Default for Message {
     fn default() -> Self {
-        Message { text: Default::default(), attribs: MessageAttributes::default(), id : 0}
+        Message { text: Default::default(), attribs: MessageAttributes::default(), id : MessageId::default()}
     }
 }
 

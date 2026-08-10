@@ -13,7 +13,7 @@ mod game_configs;
 
 use message::{Message, Tag, TextPart};
 
-use crate::{message::{MessageParser, MessageSingleLang}, game_configs::{GameConfig, StyleTagType, TagType}};
+use crate::{message::{MessageParser, MessageSingleLang, MessageId}, game_configs::{GameConfig, StyleTagType, TagType}};
 
 
 const BANK_COUNT : usize = 256;
@@ -269,7 +269,6 @@ impl Message {
     }
 
 }
-
 
 #[derive(Default, Debug)]
 struct BMGParser {
@@ -677,11 +676,14 @@ impl BMGParser {
             self.msgs.resize_with(bank_id + 1, || Vec::new());
         }
 
-        let idx = msg.id - 1;//if msg.id > 0 {} else {self.msgs[bank_id].len()};
+        let idx = match msg.id {
+           MessageId::Int(id) => id - 1,//if msg.id > 0 {} else {self.msgs[bank_id].len()};
+           MessageId::Label(_) => 0 
+        };
 
         if idx + 1> self.msgs[bank_id].len() { self.msgs[bank_id].resize_with(idx + 1, || Message::default() );}
         
-        self.msgs[bank_id][idx].id = msg.id;
+        self.msgs[bank_id][idx].id = msg.id.clone();
         
         if self.msgs[bank_id][idx].attribs.is_empty() {
             self.msgs[bank_id][idx].attribs = msg.attribs.clone();
@@ -810,7 +812,7 @@ fn generate_index(filepath : &Path) {
 
 fn main() {
 
-    generate_index(Path::new("./www/index.html"));
+    generate_index(Path::new("./index.html"));
 
     // for config in &[game_configs::ALBW] {
     for config in game_configs::ALL_CONFIGS {
@@ -818,12 +820,12 @@ fn main() {
         let id = config.id;
         let mut parser : BMGParser = Default::default();
         process_config(&mut parser, &config);
-        parser.export_html(Path::new(&format!("./www/{id}.html")), false, &config);
-        parser.export_csv(Path::new(&format!("./www/download/{id}.csv")), &config);
-        parser.export_xlsx(Path::new(&format!("./www/download/{id}.xlsx")), false, &config);
+        parser.export_html(Path::new(&format!("./{id}.html")), false, &config);
+        parser.export_csv(Path::new(&format!("./download/{id}.csv")), &config);
+        parser.export_xlsx(Path::new(&format!("./download/{id}.xlsx")), false, &config);
     }
 
 
-    //msbt_parser::print_msbt(Path::new("./res/albw/Japanese/Common.msbt"));
+    //msbt_parser::print_msbt(Path::new("./res/albw/English/Common.msbt"));
 
 }

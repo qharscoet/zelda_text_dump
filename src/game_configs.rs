@@ -1,3 +1,5 @@
+use std::fmt::format;
+
 use encoding_rs::Encoding;
 use itertools::Itertools;
 
@@ -1366,6 +1368,7 @@ pub const SS: GameConfig = GameConfig {
             }.to_string(),
             0x2 => match tag.number {
                 0 => "[Link]".to_string(),
+                4 => format!("[Button {}]", tag.payload[0]),
                 _=> default,
             },
             _=> default,
