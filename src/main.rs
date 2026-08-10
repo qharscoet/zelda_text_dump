@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fmt, fs::File, io::{self, Write}, path::Path};
+use std::{collections::HashMap, fmt, fs::File, hash::Hash, io::{self, Write}, path::Path};
 use itertools::Itertools;
 use rust_xlsxwriter::{Color, Format, FormatAlign};
 
@@ -140,7 +140,7 @@ impl Message {
                                 TagType::Replace => { res_str += &tag.get_simple_replacement(config); },
                                 TagType::Insert((bank_name, idx)) => {
                                     let s = if let Some(parser) = parent {
-                                        let bank = &parser.msgs[parser.bank_idxs[&bank_name]];
+                                        let bank = &parser.banks[parser.bank_idxs[&bank_name]].msgs;
                                         bank[idx].get_html_formatted(lang_id, ignore_tags, config, parent)
                                     } else {
                                         tag.get_simple_replacement(config).to_string()
@@ -217,7 +217,7 @@ impl Message {
                                 }
                                 TagType::Insert((bank_name, idx)) => {
                                     let s = if let Some(parser) = parent {
-                                        let bank: &Vec<Message> = &parser.msgs[parser.bank_idxs[&bank_name]];
+                                        let bank: &Vec<Message> = &parser.banks[parser.bank_idxs[&bank_name]].msgs;
                                         bank[idx].get_raw(lang_id, config, parent)
                                     } else {
                                         tag.get_simple_replacement(config).to_string()
@@ -252,7 +252,7 @@ impl Message {
                     match get_tag_type(&t) {
                         TagType::Insert((bank_name, idx)) => {
                             if let Some(parser) = parent {
-                                let bank: &Vec<Message> = &parser.msgs[parser.bank_idxs[&bank_name]];
+                                let bank: &Vec<Message> = &parser.banks[parser.bank_idxs[&bank_name]].msgs;
                                 bank[idx].get_raw(lang_id, config, parent)
                             } else {
                                 t.get_simple_replacement(config).to_string()
@@ -271,8 +271,14 @@ impl Message {
 }
 
 #[derive(Default, Debug)]
+struct MessageBank {
+    msgs : Vec<Message>,
+    msgs_idxs : HashMap<MessageId, usize>,
+}
+
+#[derive(Default, Debug)]
 struct BMGParser {
-    msgs : Vec<Vec<Message>>,
+    banks : Vec<MessageBank>,
     bank_idxs : HashMap<String, usize>,
     encoding : Option<&'static encoding_rs::Encoding>,
 }
@@ -281,8 +287,8 @@ impl BMGParser {
     
     #[allow(dead_code)]
     fn print(self) {
-        for (bank_id,msg_bank) in self.msgs.iter().enumerate() {
-            for (idx, msg) in msg_bank.iter().filter(|msg| !msg.is_empty()).enumerate() {
+        for (bank_id,msg_bank) in self.banks.iter().enumerate() {
+            for (idx, msg) in msg_bank.msgs.iter().filter(|msg| !msg.is_empty()).enumerate() {
                 println!("{} : {:#x} : {}", bank_id, idx, msg);
             }
         }
@@ -659,7 +665,7 @@ impl Exporter for XLSXExporter {
         
         match self.workbook.save(&self.filepath) {
             Ok(_) => {},
-            Err(e) => println!("Error saving : {e}")
+            Err(e) => println!("Error saving {} : {e}", self.filepath)
         };
     }
 }
@@ -672,33 +678,35 @@ impl BMGParser {
             return;
         }
 
-        if bank_id >= self.msgs.len() {
-            self.msgs.resize_with(bank_id + 1, || Vec::new());
+        if bank_id >= self.banks.len() {
+            self.banks.resize_with(bank_id + 1, || MessageBank::default());
         }
 
-        let idx = match msg.id {
-           MessageId::Int(id) => id - 1,//if msg.id > 0 {} else {self.msgs[bank_id].len()};
-           MessageId::Label(_) => 0 
-        };
+        let bank = &mut self.banks[bank_id];
 
-        if idx + 1> self.msgs[bank_id].len() { self.msgs[bank_id].resize_with(idx + 1, || Message::default() );}
+        let idx = *bank.msgs_idxs.entry(msg.id.clone()).or_insert(match msg.id {
+           MessageId::Int(id) => id - 1,
+           MessageId::Label(_) => bank.msgs.len() 
+        });
+
+        if idx + 1> bank.msgs.len() { bank.msgs.resize_with(idx + 1, || Message::default() );}
         
-        self.msgs[bank_id][idx].id = msg.id.clone();
+        bank.msgs[idx].id = msg.id.clone();
         
-        if self.msgs[bank_id][idx].attribs.is_empty() {
-            self.msgs[bank_id][idx].attribs = msg.attribs.clone();
+        if bank.msgs[idx].attribs.is_empty() {
+            bank.msgs[idx].attribs = msg.attribs.clone();
         }
         
         
-        if lang_idx >= self.msgs[bank_id][idx].text.len() { self.msgs[bank_id][idx].text.resize(lang_idx +1, Vec::new()); }
-        if !self.msgs[bank_id][idx].text[lang_idx].is_empty()
+        if lang_idx >= bank.msgs[idx].text.len() { bank.msgs[idx].text.resize(lang_idx +1, Vec::new()); }
+        if !bank.msgs[idx].text[lang_idx].is_empty()
         {
             println!("ALREADY USED : {}, {:#x}, lang {}", bank_id, idx, lang_idx);
-            println!("Prev : {}", self.msgs[bank_id][idx] );
+            println!("Prev : {}", bank.msgs[idx] );
             println!("New: {:?}", msg.text );
         } else 
         {
-            self.msgs[bank_id][idx].text[lang_idx] = msg.text.clone();
+            self.banks[bank_id].msgs[idx].text[lang_idx] = msg.text.clone();
         }  
     }
 
@@ -709,8 +717,8 @@ impl BMGParser {
         exporter.begin();
         exporter.set_headers();
 
-        for bank in &self.msgs {
-            for msg in bank.iter().filter(|msg| !msg.is_empty()) {
+        for bank in &self.banks {
+            for msg in bank.msgs.iter().filter(|msg| !msg.is_empty()) {
                 exporter.add_row(msg, ignore_tags, Some(&self));
             }
         }
@@ -724,8 +732,8 @@ impl BMGParser {
         exporter.begin();
         exporter.set_headers();
 
-        for bank in &self.msgs {
-            for msg in bank.iter().filter(|msg| !msg.is_empty()) {
+        for bank in &self.banks {
+            for msg in bank.msgs.iter().filter(|msg| !msg.is_empty()) {
                 exporter.add_row(msg, true, Some(&self));
             }
         }
@@ -739,8 +747,8 @@ impl BMGParser {
         exporter.begin();
         exporter.set_headers();
 
-        for bank in &self.msgs {
-            for msg in bank.iter().filter(|msg| !msg.is_empty()) {
+        for bank in &self.banks {
+            for msg in bank.msgs.iter().filter(|msg| !msg.is_empty()) {
                 exporter.add_row(msg, ignore_tags, Some(&self));
             }
         }
@@ -812,7 +820,7 @@ fn generate_index(filepath : &Path) {
 
 fn main() {
 
-    generate_index(Path::new("./index.html"));
+    generate_index(Path::new("./www/index.html"));
 
     // for config in &[game_configs::ALBW] {
     for config in game_configs::ALL_CONFIGS {
@@ -820,9 +828,9 @@ fn main() {
         let id = config.id;
         let mut parser : BMGParser = Default::default();
         process_config(&mut parser, &config);
-        parser.export_html(Path::new(&format!("./{id}.html")), false, &config);
-        parser.export_csv(Path::new(&format!("./download/{id}.csv")), &config);
-        parser.export_xlsx(Path::new(&format!("./download/{id}.xlsx")), false, &config);
+        parser.export_html(Path::new(&format!("./www/{id}.html")), false, &config);
+        parser.export_csv(Path::new(&format!("./www/download/{id}.csv")), &config);
+        parser.export_xlsx(Path::new(&format!("./www/download/{id}.xlsx")), false, &config);
     }
 
 

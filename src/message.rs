@@ -35,6 +35,7 @@ impl fmt::Display for MessageAttributes {
 }
 
 #[derive(Debug, Clone)]
+#[derive(Eq, Hash, PartialEq)]
 pub enum MessageId {
     Int(usize),
     Label(String),
