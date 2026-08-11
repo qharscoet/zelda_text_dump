@@ -1,0 +1,15 @@
+td {
+    position:relative;
+}
+
+nav {
+    z-index: 100;
+}
+
+.msg-id {
+    position:absolute;
+    top:0;
+    right:left;
+    font-size:x-small;
+    color:grey;
+}
