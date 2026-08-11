@@ -362,6 +362,14 @@ impl Exporter for HTMLExporter  {
             None => "fot-rodin-prondb"
         };
 
+        let hide_label_checkbox_style = match &self.config {
+            Some(conf) => match conf.id {
+                "albw" | "tfh" | "ss" => "",
+                _ => "style='display:none;'"
+            }
+            None => "style='display:none;'"
+        };
+
         let id = self.config.as_ref().map(|c| c.id).unwrap_or_default();
 
         let logo_url = self.config.as_ref().map(|conf| conf.logo).unwrap_or("https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Zelda_Logo.svg/1280px-Zelda_Logo.svg.png");
@@ -397,7 +405,11 @@ impl Exporter for HTMLExporter  {
     }}
 
     body.nofuri rt {{
-        display:none;
+        visibility:hidden;
+    }}
+
+    body.nolabel .msg-id {{
+        visibility:hidden;
     }}
 
 
@@ -415,7 +427,7 @@ impl Exporter for HTMLExporter  {
 td {{
     border: 1px solid white;
     border-radius: 10px;
-    padding:1em;
+    padding:1.5em 1em 1.5em 1em;
     }}
 
 thead tr {{
@@ -459,8 +471,12 @@ nav a:hover, nav a:active {{
   <img src=\"{logo_url}\"/>
 </header>
 <nav id=\"options\">
+<div style=\"display:inline-block;\">
     <input id=\"hide-furi\" type=\"checkbox\" name=\"HideFuri\" />
     <label for=\"HideFuri\">Hide Japanese Furigana</label>
+    <input id=\"hide-label\" type=\"checkbox\" name=\"HideLabel\" {hide_label_checkbox_style} />
+    <label for=\"HideLabel\" {hide_label_checkbox_style}>Hide message labels</label>
+</div>
     <a href=\"download/{id}.csv\">Download CSV</a>
     <a href=\"download/{id}.xlsx\">Download Excel</a>
 </nav>
@@ -528,6 +544,11 @@ nav a:hover, nav a:active {{
 const nofuriCheckbox = document.querySelector('#hide-furi');
     nofuriCheckbox.addEventListener('change', () => {
     document.querySelector('body').classList.toggle('nofuri', nofuriCheckbox.checked );
+});
+
+const nolabelCheckbox = document.querySelector('#hide-label');
+    nolabelCheckbox.addEventListener('change', () => {
+    document.querySelector('body').classList.toggle('nolabel', nolabelCheckbox.checked );
 });
 
 </script>
