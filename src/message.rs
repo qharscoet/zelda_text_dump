@@ -1,4 +1,4 @@
-use std::fmt;
+use std::fmt::{self, Display};
 
 use itertools::Itertools;
 
@@ -34,19 +34,41 @@ impl fmt::Display for MessageAttributes {
     }
 }
 
+#[derive(Debug, Clone)]
+#[derive(Eq, Hash, PartialEq)]
+pub enum MessageId {
+    Int(usize),
+    Label(String),
+}
+
+impl Display for MessageId {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            MessageId::Int(i) => write!(f, "{}", i),
+            MessageId::Label(s) => write!(f, "{}", s),
+        }
+    }
+}
+
+impl Default for MessageId {
+    fn default() -> Self {
+        MessageId::Int(0)
+    }
+}
+
 
 pub type MessageText = Vec<TextPart>;
 pub struct Message {
     pub text : Vec<MessageText>,
     pub attribs : MessageAttributes,
-    pub id : usize
+    pub id : MessageId
 }
 
 #[derive(Default, Clone)]
 pub struct MessageSingleLang {
     pub text : MessageText,
     pub attribs : MessageAttributes,
-    pub id : usize
+    pub id : MessageId
 }
 
 
@@ -82,7 +104,7 @@ impl fmt::Debug for Message {
 
 impl Default for Message {
     fn default() -> Self {
-        Message { text: Default::default(), attribs: MessageAttributes::default(), id : 0}
+        Message { text: Default::default(), attribs: MessageAttributes::default(), id : MessageId::default()}
     }
 }
 

@@ -4,7 +4,7 @@ use std::{
 
 use thiserror::Error;
 
-use crate::{message::{self, MessageAttributes, MessageParser, MessageSingleLang, MessageText, Tag, TextPart}, utils::{self}};
+use crate::{message::{self, MessageAttributes, MessageParser, MessageSingleLang, MessageText, MessageId, Tag, TextPart}, utils::{self}};
 
 
 #[derive(Error, Debug)]
@@ -456,7 +456,7 @@ impl BMGRawParser {
                  };
 
                 MessageSingleLang {
-                    id : id,
+                    id : MessageId::Int(id),
                     attribs : attribs,
                     text : data
                 }

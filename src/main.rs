@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fmt, fs::File, io::{self, Write}, path::Path};
+use std::{collections::HashMap, fmt, fs::File, hash::Hash, io::{self, Write}, path::Path};
 use itertools::Itertools;
 use rust_xlsxwriter::{Color, Format, FormatAlign};
 
@@ -13,7 +13,7 @@ mod game_configs;
 
 use message::{Message, Tag, TextPart};
 
-use crate::{message::{MessageParser, MessageSingleLang}, game_configs::{GameConfig, StyleTagType, TagType}};
+use crate::{game_configs::{GameConfig, StyleTagType, TagType}, message::{MessageId, MessageParser, MessageSingleLang, get_raw_msg}};
 
 
 const BANK_COUNT : usize = 256;
@@ -138,10 +138,17 @@ impl Message {
                                     }
                                 }
                                 TagType::Replace => { res_str += &tag.get_simple_replacement(config); },
-                                TagType::Insert((bank_name, idx)) => {
+                                TagType::Insert((bank_name, id)) => {
                                     let s = if let Some(parser) = parent {
-                                        let bank = &parser.msgs[parser.bank_idxs[&bank_name]];
-                                        bank[idx].get_html_formatted(lang_id, ignore_tags, config, parent)
+                                        let bank = &parser.banks[parser.bank_idxs[&bank_name]];
+
+                                        //We cheat a little bit for now by giving an int is not really the message id but the index itself
+                                        let idx = match id {
+                                            MessageId::Int(i) => i,
+                                            MessageId::Label(_) => bank.msgs_idxs[&id]
+                                        };
+
+                                        bank.msgs[idx].get_html_formatted(lang_id, ignore_tags, config, parent)
                                     } else {
                                         tag.get_simple_replacement(config).to_string()
                                     };
@@ -215,10 +222,15 @@ impl Message {
                                         segments.push((format, s)); 
                                     }
                                 }
-                                TagType::Insert((bank_name, idx)) => {
+                                TagType::Insert((bank_name, id)) => {
                                     let s = if let Some(parser) = parent {
-                                        let bank: &Vec<Message> = &parser.msgs[parser.bank_idxs[&bank_name]];
-                                        bank[idx].get_raw(lang_id, config, parent)
+                                        let bank = &parser.banks[parser.bank_idxs[&bank_name]];
+
+                                        let idx = match id {
+                                            MessageId::Int(i) => i,
+                                            MessageId::Label(_) => bank.msgs_idxs[&id]
+                                        };
+                                        bank.msgs[idx].get_raw(lang_id, config, parent)
                                     } else {
                                         tag.get_simple_replacement(config).to_string()
                                     };
@@ -250,10 +262,15 @@ impl Message {
                 TextPart::Tag(t) => {
                     let get_tag_type = config.map(|c| c.get_tag_type).unwrap_or(game_configs::get_tag_type_default);
                     match get_tag_type(&t) {
-                        TagType::Insert((bank_name, idx)) => {
+                        TagType::Insert((bank_name, id)) => {
                             if let Some(parser) = parent {
-                                let bank: &Vec<Message> = &parser.msgs[parser.bank_idxs[&bank_name]];
-                                bank[idx].get_raw(lang_id, config, parent)
+                                let bank = &parser.banks[parser.bank_idxs[&bank_name]];
+
+                                let idx = match id {
+                                    MessageId::Int(i) => i,
+                                    MessageId::Label(_) => bank.msgs_idxs[&id]
+                                };
+                                bank.msgs[idx].get_raw(lang_id, config, parent)
                             } else {
                                 t.get_simple_replacement(config).to_string()
                             }
@@ -270,10 +287,15 @@ impl Message {
 
 }
 
+#[derive(Default, Debug)]
+struct MessageBank {
+    msgs : Vec<Message>,
+    msgs_idxs : HashMap<MessageId, usize>,
+}
 
 #[derive(Default, Debug)]
 struct BMGParser {
-    msgs : Vec<Vec<Message>>,
+    banks : Vec<MessageBank>,
     bank_idxs : HashMap<String, usize>,
     encoding : Option<&'static encoding_rs::Encoding>,
 }
@@ -282,8 +304,8 @@ impl BMGParser {
     
     #[allow(dead_code)]
     fn print(self) {
-        for (bank_id,msg_bank) in self.msgs.iter().enumerate() {
-            for (idx, msg) in msg_bank.iter().filter(|msg| !msg.is_empty()).enumerate() {
+        for (bank_id,msg_bank) in self.banks.iter().enumerate() {
+            for (idx, msg) in msg_bank.msgs.iter().filter(|msg| !msg.is_empty()).enumerate() {
                 println!("{} : {:#x} : {}", bank_id, idx, msg);
             }
         }
@@ -340,6 +362,14 @@ impl Exporter for HTMLExporter  {
             None => "fot-rodin-prondb"
         };
 
+        let hide_label_checkbox_style = match &self.config {
+            Some(conf) => match conf.id {
+                "albw" | "tfh" | "ss" => "",
+                _ => "style='display:none;'"
+            }
+            None => "style='display:none;'"
+        };
+
         let id = self.config.as_ref().map(|c| c.id).unwrap_or_default();
 
         let logo_url = self.config.as_ref().map(|conf| conf.logo).unwrap_or("https://upload.wikimedia.org/wikipedia/commons/thumb/2/2a/Zelda_Logo.svg/1280px-Zelda_Logo.svg.png");
@@ -375,7 +405,11 @@ impl Exporter for HTMLExporter  {
     }}
 
     body.nofuri rt {{
-        display:none;
+        visibility:hidden;
+    }}
+
+    body.nolabel .msg-id {{
+        visibility:hidden;
     }}
 
 
@@ -393,7 +427,7 @@ impl Exporter for HTMLExporter  {
 td {{
     border: 1px solid white;
     border-radius: 10px;
-    padding:1em;
+    padding:1.5em 1em 1.5em 1em;
     }}
 
 thead tr {{
@@ -429,6 +463,7 @@ nav a:hover, nav a:active {{
   background-color: #0b5ed7;
 }}
 </style>
+<link href=\"styles/style.css\" rel=\"stylesheet\" />
 <link href=\"styles/{id}.css\" rel=\"stylesheet\" />
 </head>
 <body>
@@ -436,8 +471,12 @@ nav a:hover, nav a:active {{
   <img src=\"{logo_url}\"/>
 </header>
 <nav id=\"options\">
+<div style=\"display:inline-block;\">
     <input id=\"hide-furi\" type=\"checkbox\" name=\"HideFuri\" />
     <label for=\"HideFuri\">Hide Japanese Furigana</label>
+    <input id=\"hide-label\" type=\"checkbox\" name=\"HideLabel\" {hide_label_checkbox_style} />
+    <label for=\"HideLabel\" {hide_label_checkbox_style}>Hide message labels</label>
+</div>
     <a href=\"download/{id}.csv\">Download CSV</a>
     <a href=\"download/{id}.xlsx\">Download Excel</a>
 </nav>
@@ -483,7 +522,11 @@ nav a:hover, nav a:active {{
     
             let lang_count =  if let Some(config) = &self.config { (config.get_languages)().len()} else {0};
             for i in 0..lang_count {
-                s += &format!("<td>{}</td>\n", msg.get_html_formatted(i, ignore_tags, self.config.as_ref(), parent));
+                if matches!(msg.id, MessageId::Label(_)) {
+                    s += &format!("<td><div class='msg-id'>{}</div>{}</td>\n", msg.id, msg.get_html_formatted(i, ignore_tags, self.config.as_ref(), parent));
+                } else {
+                    s += &format!("<td>{}</td>\n", msg.get_html_formatted(i, ignore_tags, self.config.as_ref(), parent));
+                }
             }
     
             s += "</tr>";
@@ -501,6 +544,11 @@ nav a:hover, nav a:active {{
 const nofuriCheckbox = document.querySelector('#hide-furi');
     nofuriCheckbox.addEventListener('change', () => {
     document.querySelector('body').classList.toggle('nofuri', nofuriCheckbox.checked );
+});
+
+const nolabelCheckbox = document.querySelector('#hide-label');
+    nolabelCheckbox.addEventListener('change', () => {
+    document.querySelector('body').classList.toggle('nolabel', nolabelCheckbox.checked );
 });
 
 </script>
@@ -660,7 +708,7 @@ impl Exporter for XLSXExporter {
         
         match self.workbook.save(&self.filepath) {
             Ok(_) => {},
-            Err(e) => println!("Error saving : {e}")
+            Err(e) => println!("Error saving {} : {e}", self.filepath)
         };
     }
 }
@@ -669,34 +717,39 @@ impl Exporter for XLSXExporter {
 impl BMGParser {
     fn add_message(&mut self, msg: &MessageSingleLang, lang_idx : usize, bank_id : usize) {
 
-        if msg.is_empty() {
+        if msg.is_empty() && msg.id == MessageId::Int(0) { //if id is a label we want to keep it even if the message is empty to reserve the spot in the vec
             return;
         }
 
-        if bank_id >= self.msgs.len() {
-            self.msgs.resize_with(bank_id + 1, || Vec::new());
-        }
-
-        let idx = msg.id - 1;//if msg.id > 0 {} else {self.msgs[bank_id].len()};
-
-        if idx + 1> self.msgs[bank_id].len() { self.msgs[bank_id].resize_with(idx + 1, || Message::default() );}
-        
-        self.msgs[bank_id][idx].id = msg.id;
-        
-        if self.msgs[bank_id][idx].attribs.is_empty() {
-            self.msgs[bank_id][idx].attribs = msg.attribs.clone();
+        if bank_id >= self.banks.len() {
+            self.banks.resize_with(bank_id + 1, || MessageBank::default());
         }
         
+        let bank = &mut self.banks[bank_id];
+
+        let idx = *bank.msgs_idxs.entry(msg.id.clone()).or_insert(match msg.id {
+           MessageId::Int(id) => id - 1,
+           MessageId::Label(_) => bank.msgs.len() 
+        });
+
+        if idx + 1> bank.msgs.len() { bank.msgs.resize_with(idx + 1, || Message::default() );}
         
-        if lang_idx >= self.msgs[bank_id][idx].text.len() { self.msgs[bank_id][idx].text.resize(lang_idx +1, Vec::new()); }
-        if !self.msgs[bank_id][idx].text[lang_idx].is_empty()
+        bank.msgs[idx].id = msg.id.clone();
+        
+        if bank.msgs[idx].attribs.is_empty() {
+            bank.msgs[idx].attribs = msg.attribs.clone();
+        }
+        
+        
+        if lang_idx >= bank.msgs[idx].text.len() { bank.msgs[idx].text.resize(lang_idx +1, Vec::new()); }
+        if !bank.msgs[idx].text[lang_idx].is_empty()
         {
             println!("ALREADY USED : {}, {:#x}, lang {}", bank_id, idx, lang_idx);
-            println!("Prev : {}", self.msgs[bank_id][idx] );
+            println!("Prev : {}", bank.msgs[idx] );
             println!("New: {:?}", msg.text );
         } else 
         {
-            self.msgs[bank_id][idx].text[lang_idx] = msg.text.clone();
+            self.banks[bank_id].msgs[idx].text[lang_idx] = msg.text.clone();
         }  
     }
 
@@ -707,8 +760,8 @@ impl BMGParser {
         exporter.begin();
         exporter.set_headers();
 
-        for bank in &self.msgs {
-            for msg in bank.iter().filter(|msg| !msg.is_empty()) {
+        for bank in &self.banks {
+            for msg in bank.msgs.iter().filter(|msg| !msg.is_empty()) {
                 exporter.add_row(msg, ignore_tags, Some(&self));
             }
         }
@@ -722,8 +775,8 @@ impl BMGParser {
         exporter.begin();
         exporter.set_headers();
 
-        for bank in &self.msgs {
-            for msg in bank.iter().filter(|msg| !msg.is_empty()) {
+        for bank in &self.banks {
+            for msg in bank.msgs.iter().filter(|msg| !msg.is_empty()) {
                 exporter.add_row(msg, true, Some(&self));
             }
         }
@@ -737,8 +790,8 @@ impl BMGParser {
         exporter.begin();
         exporter.set_headers();
 
-        for bank in &self.msgs {
-            for msg in bank.iter().filter(|msg| !msg.is_empty()) {
+        for bank in &self.banks {
+            for msg in bank.msgs.iter().filter(|msg| !msg.is_empty()) {
                 exporter.add_row(msg, ignore_tags, Some(&self));
             }
         }
@@ -812,7 +865,7 @@ fn main() {
 
     generate_index(Path::new("./www/index.html"));
 
-    // for config in &[game_configs::ALBW] {
+    // for config in &[game_configs::SS] {
     for config in game_configs::ALL_CONFIGS {
         
         let id = config.id;
@@ -824,6 +877,6 @@ fn main() {
     }
 
 
-    //msbt_parser::print_msbt(Path::new("./res/albw/Japanese/Common.msbt"));
+    //msbt_parser::print_msbt(Path::new("./res/albw/English/Common.msbt"));
 
 }

@@ -2,7 +2,7 @@ use std::{cmp::min, env::temp_dir, fs::File, io::{self, Read}, ops::Range, path:
 
 use thiserror::Error;
 
-use crate::{message::{MessageParser, MessageSingleLang, MessageText, Tag, TextPart}, utils};
+use crate::{message::{MessageParser, MessageSingleLang, MessageText, MessageId, Tag, TextPart}, utils};
 
 #[derive(Error, Debug)]
 pub enum MSBTParseError {
@@ -251,20 +251,21 @@ impl MSBTParser {
 
                 let mut a : Vec<_>= section_data[0x04..].chunks_exact(8).take(label_groups as usize).flat_map(|bucket| {
                     let label_count = get_u32(bucket, 0x0) as usize;
-                    let offset = get_u32(bucket, 0x4) as usize;
+                    let mut offset = get_u32(bucket, 0x4) as usize;
 
                     let mut labels = Vec::new();
                     //labels.resize(label_count, String::new());
-                    
-
+                
                     for _ in 0..label_count {
                         let label_len = section_data[offset] as usize;
                         let label_range = (offset+1)..(offset+1+label_len);
 
                         let index = get_u32(section_data, label_range.end) as usize;
-                        let label = str::from_utf8(&section_data[label_range])?.to_string();
+                        let label = str::from_utf8(&section_data[label_range.clone()])?.to_string();
 
                         labels.push((label, index));
+
+                        offset = label_range.end + 4; //4 bytes for index
                     }
 
                     Ok::<Vec<(String, usize)>, MSBTParseError>(labels)
@@ -313,7 +314,7 @@ impl MSBTParser {
                 let text = txt2.get_msg(idx, self.get_encoding());
                 
                 MessageSingleLang {
-                    id : idx +1,
+                    id : MessageId::Label(label.clone()),
                     attribs : Default::default(),
                     text,
                 }

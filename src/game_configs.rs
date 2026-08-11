@@ -1,7 +1,9 @@
+use std::fmt::format;
+
 use encoding_rs::Encoding;
 use itertools::Itertools;
 
-use crate::{message::{MessageAttributes, Tag}, utils};
+use crate::{message::{MessageAttributes, MessageId, Tag}, utils::{self, get_u16_be}};
 
 #[derive(Default)]
 pub struct StyleInfo {
@@ -22,7 +24,7 @@ pub enum StyleTagType {
 pub enum TagType {
     Style(StyleTagType),
     Replace,
-    Insert((String, usize)) //Bank name, idx
+    Insert((String, MessageId)) //Bank name, id
 }
 
 
@@ -707,7 +709,13 @@ pub const FSA: GameConfig = GameConfig {
     get_tag_type : |tag| {
         match tag.group {
             0x2 => match tag.number {
-                0x1E => TagType::Style(StyleTagType::Color(tag.payload[0] as u16)),
+                0x1E => TagType::Style(StyleTagType::Color(
+                    if tag.payload[0] == 0 {
+                        0xFFFF
+                    } else {
+                        tag.payload[0] as u16
+                    }
+                )),
                 _ => TagType::Replace
             },
             _ => TagType::Replace
@@ -915,7 +923,7 @@ pub const ALBW: GameConfig = GameConfig {
                     _ => ""
                 };
 
-                TagType::Insert((bank_name.to_string(), idx))
+                TagType::Insert((bank_name.to_string(), MessageId::Int(idx)))
             },
             _ => get_tag_type_default_msbt(tag, false, encoding_rs::UTF_16LE)
         }
@@ -1120,9 +1128,9 @@ pub const TFH: GameConfig = GameConfig {
         match tag.group {
             0x1 => {
                 match tag.number {
-                    1 => TagType::Insert(("FieldName".to_string(), tag.payload[0] as usize)),
-                    2 => TagType::Insert(("ItemName".to_string(), tag.payload[0] as usize)),
-                    5 => TagType::Insert(("CostumeName".to_string(), tag.payload[0] as usize)),
+                    1 => TagType::Insert(("FieldName".to_string(), MessageId::Int(tag.payload[0] as usize))),
+                    2 => TagType::Insert(("ItemName".to_string(), MessageId::Int(tag.payload[0] as usize))),
+                    5 => TagType::Insert(("CostumeName".to_string(), MessageId::Int(tag.payload[0] as usize))),
                     _=> TagType::Replace,
                 }
             },
@@ -1228,7 +1236,7 @@ pub const SS: GameConfig = GameConfig {
         &LANGUAGES
     },
     get_filenames : || {
-        const FILENAMES : [&str;79] = [
+        const FILENAMES : [&str;80] = [
 "0-Common/001-Action.msbt",
 "0-Common/002-System.msbt",
 "0-Common/003-ItemGet.msbt",
@@ -1246,7 +1254,7 @@ pub const SS: GameConfig = GameConfig {
 "0-Common/006-KenseiNormal.msbt",
 "0-Common/007-MapText.msbt",
 "0-Common/008-Hint.msbt",
-// "0-Common/word.msbt",
+"0-Common/word.msbt",
 "1-Town/100-Town.msbt",
 "1-Town/101-Shop.msbt",
 "1-Town/102-Zelda.msbt",
@@ -1342,6 +1350,14 @@ pub const SS: GameConfig = GameConfig {
     },
     get_tag_type : |tag| {
         match tag.group {
+            0x02 => match tag.number {
+                0x1 => TagType::Insert((String::from("003-ItemGet"), MessageId::Label(format!("NAME_ITEM_{:03}", get_u16_be(&tag.payload, 0))))),
+                _ => TagType::Replace
+            },
+            0x03 => match tag.number {
+                0x3 | 0x04 => TagType::Insert((String::from("word"), MessageId::Label(format!("lang:word:{:03}:01", tag.payload[0])))),
+                _ => TagType::Replace
+            },
             _ => get_tag_type_default_msbt(tag, true, encoding_rs::UTF_16BE)
         }
     },
@@ -1360,13 +1376,22 @@ pub const SS: GameConfig = GameConfig {
         }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
 
         match tag.group {
+            0x0 => "".to_string(),
             0x1 => match tag.number {
                 0 | 1 | 2 | 3 => "   • ",
                 _ => "",
             }.to_string(),
             0x2 => match tag.number {
                 0 => "[Link]".to_string(),
+                2 => "[Var]".to_string(),
+                3 => "[Number]".to_string(), //TODO Params
+                4 => format!("[Button {}]", tag.payload[0]),
                 _=> default,
+            },
+            0x3 => match tag.number {
+                0 => "".to_string(), // TODO : exposant for 1er, 2e etc, do we handle it ?
+                1 => "".to_string(), // Some kind of text action, find out which, but surely invisible
+                _ => default,
             },
             _=> default,
         }
