@@ -506,8 +506,11 @@ nav a:hover, nav a:active {{
     
             let lang_count =  if let Some(config) = &self.config { (config.get_languages)().len()} else {0};
             for i in 0..lang_count {
-                // s += &format!("<td><div class='msg-id'>{}</div>{}</td>\n", msg.id, msg.get_html_formatted(i, ignore_tags, self.config.as_ref(), parent));
-                s += &format!("<td>{}</td>\n", msg.get_html_formatted(i, ignore_tags, self.config.as_ref(), parent));
+                if matches!(msg.id, MessageId::Label(_)) {
+                    s += &format!("<td><div class='msg-id'>{}</div>{}</td>\n", msg.id, msg.get_html_formatted(i, ignore_tags, self.config.as_ref(), parent));
+                } else {
+                    s += &format!("<td>{}</td>\n", msg.get_html_formatted(i, ignore_tags, self.config.as_ref(), parent));
+                }
             }
     
             s += "</tr>";
@@ -841,7 +844,7 @@ fn main() {
 
     generate_index(Path::new("./www/index.html"));
 
-    //for config in &[game_configs::ALBW] {
+    // for config in &[game_configs::SS] {
     for config in game_configs::ALL_CONFIGS {
         
         let id = config.id;
