@@ -30,7 +30,11 @@
     }
 
     body.nofuri rt {
-        display:none;
+        visibility:hidden;
+    }
+
+    body.nolabel .msg-id {
+        visibility:hidden;
     }
 
 
@@ -48,7 +52,7 @@
 td {
     border: 1px solid white;
     border-radius: 10px;
-    padding:1em;
+    padding:1.5em 1em 1.5em 1em;
     }
 
 thead tr {
@@ -84,6 +88,7 @@ nav a:hover, nav a:active {
   background-color: #0b5ed7;
 }
 </style>
+<link href="styles/style.css" rel="stylesheet" />
 <link href="styles/st.css" rel="stylesheet" />
 </head>
 <body>
@@ -91,8 +96,12 @@ nav a:hover, nav a:active {
   <img src="https://www.nintendo.com/jp/character/zelda/history/img/branch-d/03/pc/logo.png"/>
 </header>
 <nav id="options">
+<div style="display:inline-block;">
     <input id="hide-furi" type="checkbox" name="HideFuri" />
     <label for="HideFuri">Hide Japanese Furigana</label>
+    <input id="hide-label" type="checkbox" name="HideLabel" style='display:none;' />
+    <label for="HideLabel" style='display:none;'>Hide message labels</label>
+</div>
     <a href="download/st.csv">Download CSV</a>
     <a href="download/st.xlsx">Download Excel</a>
 </nav>
@@ -15991,6 +16000,11 @@ nav a:hover, nav a:active {
 const nofuriCheckbox = document.querySelector('#hide-furi');
     nofuriCheckbox.addEventListener('change', () => {
     document.querySelector('body').classList.toggle('nofuri', nofuriCheckbox.checked );
+});
+
+const nolabelCheckbox = document.querySelector('#hide-label');
+    nolabelCheckbox.addEventListener('change', () => {
+    document.querySelector('body').classList.toggle('nolabel', nolabelCheckbox.checked );
 });
 
 </script>

@@ -9,7 +9,7 @@ nav {
 .msg-id {
     position:absolute;
     top:0;
-    right:left;
-    font-size:x-small;
+    /* left:0; */
+    font-size:xx-small;
     color:grey;
 }
