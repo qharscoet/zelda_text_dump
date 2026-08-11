@@ -3,7 +3,7 @@ use std::fmt::format;
 use encoding_rs::Encoding;
 use itertools::Itertools;
 
-use crate::{message::{MessageAttributes, Tag}, utils};
+use crate::{message::{MessageAttributes, MessageId, Tag}, utils};
 
 #[derive(Default)]
 pub struct StyleInfo {
@@ -24,7 +24,7 @@ pub enum StyleTagType {
 pub enum TagType {
     Style(StyleTagType),
     Replace,
-    Insert((String, usize)) //Bank name, idx
+    Insert((String, MessageId)) //Bank name, id
 }
 
 
@@ -709,7 +709,13 @@ pub const FSA: GameConfig = GameConfig {
     get_tag_type : |tag| {
         match tag.group {
             0x2 => match tag.number {
-                0x1E => TagType::Style(StyleTagType::Color(tag.payload[0] as u16)),
+                0x1E => TagType::Style(StyleTagType::Color(
+                    if tag.payload[0] == 0 {
+                        0xFFFF
+                    } else {
+                        tag.payload[0] as u16
+                    }
+                )),
                 _ => TagType::Replace
             },
             _ => TagType::Replace
@@ -917,7 +923,7 @@ pub const ALBW: GameConfig = GameConfig {
                     _ => ""
                 };
 
-                TagType::Insert((bank_name.to_string(), idx))
+                TagType::Insert((bank_name.to_string(), MessageId::Int(idx)))
             },
             _ => get_tag_type_default_msbt(tag, false, encoding_rs::UTF_16LE)
         }
@@ -1122,9 +1128,9 @@ pub const TFH: GameConfig = GameConfig {
         match tag.group {
             0x1 => {
                 match tag.number {
-                    1 => TagType::Insert(("FieldName".to_string(), tag.payload[0] as usize)),
-                    2 => TagType::Insert(("ItemName".to_string(), tag.payload[0] as usize)),
-                    5 => TagType::Insert(("CostumeName".to_string(), tag.payload[0] as usize)),
+                    1 => TagType::Insert(("FieldName".to_string(), MessageId::Int(tag.payload[0] as usize))),
+                    2 => TagType::Insert(("ItemName".to_string(), MessageId::Int(tag.payload[0] as usize))),
+                    5 => TagType::Insert(("CostumeName".to_string(), MessageId::Int(tag.payload[0] as usize))),
                     _=> TagType::Replace,
                 }
             },

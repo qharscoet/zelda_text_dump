@@ -1,4 +1,4 @@
-use std::fmt;
+use std::fmt::{self, Display};
 
 use itertools::Itertools;
 
@@ -39,6 +39,15 @@ impl fmt::Display for MessageAttributes {
 pub enum MessageId {
     Int(usize),
     Label(String),
+}
+
+impl Display for MessageId {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            MessageId::Int(i) => write!(f, "{}", i),
+            MessageId::Label(s) => write!(f, "{}", s),
+        }
+    }
 }
 
 impl Default for MessageId {

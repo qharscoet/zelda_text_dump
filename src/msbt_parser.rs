@@ -314,7 +314,7 @@ impl MSBTParser {
                 let text = txt2.get_msg(idx, self.get_encoding());
                 
                 MessageSingleLang {
-                    id : MessageId::Int(idx +1),
+                    id : MessageId::Label(label.clone()),
                     attribs : Default::default(),
                     text,
                 }

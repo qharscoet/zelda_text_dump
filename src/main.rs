@@ -13,7 +13,7 @@ mod game_configs;
 
 use message::{Message, Tag, TextPart};
 
-use crate::{message::{MessageParser, MessageSingleLang, MessageId}, game_configs::{GameConfig, StyleTagType, TagType}};
+use crate::{game_configs::{GameConfig, StyleTagType, TagType}, message::{MessageId, MessageParser, MessageSingleLang, get_raw_msg}};
 
 
 const BANK_COUNT : usize = 256;
@@ -138,10 +138,17 @@ impl Message {
                                     }
                                 }
                                 TagType::Replace => { res_str += &tag.get_simple_replacement(config); },
-                                TagType::Insert((bank_name, idx)) => {
+                                TagType::Insert((bank_name, id)) => {
                                     let s = if let Some(parser) = parent {
-                                        let bank = &parser.banks[parser.bank_idxs[&bank_name]].msgs;
-                                        bank[idx].get_html_formatted(lang_id, ignore_tags, config, parent)
+                                        let bank = &parser.banks[parser.bank_idxs[&bank_name]];
+
+                                        //We cheat a little bit for now by giving an int is not really the message id but the index itself
+                                        let idx = match id {
+                                            MessageId::Int(i) => i,
+                                            MessageId::Label(_) => bank.msgs_idxs[&id]
+                                        };
+
+                                        bank.msgs[idx].get_html_formatted(lang_id, ignore_tags, config, parent)
                                     } else {
                                         tag.get_simple_replacement(config).to_string()
                                     };
@@ -215,10 +222,15 @@ impl Message {
                                         segments.push((format, s)); 
                                     }
                                 }
-                                TagType::Insert((bank_name, idx)) => {
+                                TagType::Insert((bank_name, id)) => {
                                     let s = if let Some(parser) = parent {
-                                        let bank: &Vec<Message> = &parser.banks[parser.bank_idxs[&bank_name]].msgs;
-                                        bank[idx].get_raw(lang_id, config, parent)
+                                        let bank = &parser.banks[parser.bank_idxs[&bank_name]];
+
+                                        let idx = match id {
+                                            MessageId::Int(i) => i,
+                                            MessageId::Label(_) => bank.msgs_idxs[&id]
+                                        };
+                                        bank.msgs[idx].get_raw(lang_id, config, parent)
                                     } else {
                                         tag.get_simple_replacement(config).to_string()
                                     };
@@ -250,10 +262,15 @@ impl Message {
                 TextPart::Tag(t) => {
                     let get_tag_type = config.map(|c| c.get_tag_type).unwrap_or(game_configs::get_tag_type_default);
                     match get_tag_type(&t) {
-                        TagType::Insert((bank_name, idx)) => {
+                        TagType::Insert((bank_name, id)) => {
                             if let Some(parser) = parent {
-                                let bank: &Vec<Message> = &parser.banks[parser.bank_idxs[&bank_name]].msgs;
-                                bank[idx].get_raw(lang_id, config, parent)
+                                let bank = &parser.banks[parser.bank_idxs[&bank_name]];
+
+                                let idx = match id {
+                                    MessageId::Int(i) => i,
+                                    MessageId::Label(_) => bank.msgs_idxs[&id]
+                                };
+                                bank.msgs[idx].get_raw(lang_id, config, parent)
                             } else {
                                 t.get_simple_replacement(config).to_string()
                             }
@@ -434,6 +451,7 @@ nav a:hover, nav a:active {{
   background-color: #0b5ed7;
 }}
 </style>
+<link href=\"styles/style.css\" rel=\"stylesheet\" />
 <link href=\"styles/{id}.css\" rel=\"stylesheet\" />
 </head>
 <body>
@@ -488,6 +506,7 @@ nav a:hover, nav a:active {{
     
             let lang_count =  if let Some(config) = &self.config { (config.get_languages)().len()} else {0};
             for i in 0..lang_count {
+                // s += &format!("<td><div class='msg-id'>{}</div>{}</td>\n", msg.id, msg.get_html_formatted(i, ignore_tags, self.config.as_ref(), parent));
                 s += &format!("<td>{}</td>\n", msg.get_html_formatted(i, ignore_tags, self.config.as_ref(), parent));
             }
     
@@ -674,14 +693,14 @@ impl Exporter for XLSXExporter {
 impl BMGParser {
     fn add_message(&mut self, msg: &MessageSingleLang, lang_idx : usize, bank_id : usize) {
 
-        if msg.is_empty() {
+        if msg.is_empty() && msg.id == MessageId::Int(0) { //if id is a label we want to keep it even if the message is empty to reserve the spot in the vec
             return;
         }
 
         if bank_id >= self.banks.len() {
             self.banks.resize_with(bank_id + 1, || MessageBank::default());
         }
-
+        
         let bank = &mut self.banks[bank_id];
 
         let idx = *bank.msgs_idxs.entry(msg.id.clone()).or_insert(match msg.id {
@@ -822,7 +841,7 @@ fn main() {
 
     generate_index(Path::new("./www/index.html"));
 
-    // for config in &[game_configs::ALBW] {
+    //for config in &[game_configs::ALBW] {
     for config in game_configs::ALL_CONFIGS {
         
         let id = config.id;
