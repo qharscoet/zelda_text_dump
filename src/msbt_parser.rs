@@ -17,7 +17,7 @@ pub enum MSBTParseError {
     OffsetOutOfBounds
 }
 
-#[derive(Default)]
+#[derive(Default, Debug)]
 struct LMSHeader {
     magic: String,
     big_endian : bool,
@@ -124,10 +124,15 @@ struct ATR1Data {
     strings : Vec<u8>
 }
 
+struct TSY1Data {
+    // TODO : implement TSY1 parsing
+}
+
 enum MSBTBlockData {
     LBL1(LBL1Data),
     TXT2(TXT2Data),
     ATR1(ATR1Data),
+    TSY1(TSY1Data),
 }
 
 struct MSBTBlock {
@@ -169,7 +174,13 @@ pub struct MSBTParser {
 impl MSBTParser {
     fn new(data: Vec<u8>) -> Self {
 
-        let parsed = MSBTParser::parse_data(&data).unwrap_or(MSBTData { header: Default::default(), blocks: [const {None}; MSBTData::SECTION_COUNT] });
+        let parsed = match MSBTParser::parse_data(&data) {
+            Ok(data) => data,
+            Err(e) => {
+                eprintln!("Error parsing MSBT data: {}", e);
+                MSBTData { header: Default::default(), blocks: [const {None}; MSBTData::SECTION_COUNT] }
+            },
+        };
 
         
        MSBTParser { _data : data, data_parsed: parsed}
@@ -205,7 +216,7 @@ impl MSBTParser {
                 }
             
                 let block_end = offset + 0x10 + section_size as usize; //0x10 is block header size
-                offset = ((block_end + 16) / 16) * 16; //next 16-bytes aligned address
+                offset = ((block_end + 15) / 16) * 16; //next 16-bytes aligned address
             } else {
                 println!("Invalid offset for section {i}");
             }
@@ -256,7 +267,7 @@ impl MSBTParser {
                     let mut labels = Vec::new();
                     //labels.resize(label_count, String::new());
                 
-                    for _ in 0..label_count {
+                    for i in 0..label_count {
                         let label_len = section_data[offset] as usize;
                         let label_range = (offset+1)..(offset+1+label_len);
 
@@ -270,10 +281,10 @@ impl MSBTParser {
 
                     Ok::<Vec<(String, usize)>, MSBTParseError>(labels)
                 }).flatten().collect();
-
+              
                 a.sort_by_key(|e| e.1);
                 let labels = a.iter().map(|e| e.0.clone()).collect();
-
+                
                 Ok(MSBTBlockData::LBL1(LBL1Data {
                     label_groups,
                     labels
@@ -299,6 +310,10 @@ impl MSBTParser {
                 Ok(MSBTBlockData::ATR1(ATR1Data{
                     attr_count,attr_size, attribs, strings
                 }))
+            },
+            "TSY1" => {
+                // TODO : implement TSY1 parsing
+                Ok(MSBTBlockData::TSY1(TSY1Data {}))
             },
             _ => Err(MSBTParseError::UnknownSectionID)
         }
@@ -371,10 +386,13 @@ impl MSBTParser {
                     for i in 0..3 {
                         println!("\t offset {} : {:X}", i, txt2_data.offsets[i]);
                     }
-                }
+                },
                 MSBTBlockData::ATR1(atr1_data) => {
                     println!("\tnumber of attribs {}", atr1_data.attr_count);
                     println!("\tattribs size {}", atr1_data.attr_size);
+                },
+                MSBTBlockData::TSY1(_) => {
+                    println!("\tEmpty TSY1 section");
                 }
             }
         }

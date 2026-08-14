@@ -96,7 +96,7 @@ pub struct GameConfig {
     pub get_filenames : fn() -> &'static [&'static str]
 }
 
-pub const ALL_CONFIGS  : [&GameConfig;8]= [&TP, &TWW, &PH, &ST, &FSA, &ALBW, &TFH, &SS];
+pub const ALL_CONFIGS  : [&GameConfig;10]= [&TP, &TPHD, &TWW, &TWWHD, &PH, &ST, &FSA, &ALBW, &TFH, &SS];
 
 pub const TWW: GameConfig = GameConfig {
     name: "The Wind Waker",
@@ -246,6 +246,175 @@ pub const TWW: GameConfig = GameConfig {
     }
 };
 
+pub const TWWHD: GameConfig = GameConfig {
+    name: "The Wind Waker HD",
+    id: "twwhd",
+    logo : "https://zelda.nintendo.com/assets/img/timeline/the-wind-waker/logo.png",
+    big_endian : true,
+    get_languages : || {
+        const LANGUAGES : [(&str, &str);1] = [
+            // ("jp", "Japanese"),
+            ("uk", "English"),
+            // ("fr", "French"),
+            // ("sp", "Spanish"),
+            // ("de", "German"),
+            // ("it" "Italian")
+        ];
+
+        &LANGUAGES
+    },
+    get_filenames : || {
+        const FILENAMES : [&str;68] = [
+            "dummyMiiverse.msbt",
+"message.msbt",
+"message2.msbt",
+"message3.msbt",
+"message4.msbt",
+"rubyString.msbt",
+"unitString.msbt",
+"BatonSignList_00.msbt",
+"CommandGuide_00.msbt",
+"E3SelectCourse_00.msbt",
+"E3ThankYou_00.msbt",
+"E3Title_00.msbt",
+"EndingEnd_00.msbt",
+"StaffRoll_00.msbt",
+"GameOver_00.msbt",
+"InformationDRC_00.msbt",
+"Information_00.msbt",
+"KeyboardTextArea_00.msbt",
+"ControlWindOK_00.msbt",
+"ControlWind_00.msbt",
+"Main_00.msbt",
+"SlideAssistTV_00.msbt",
+"EnemyTower_00.msbt",
+"Fairy_00.msbt",
+"GhostShip_00.msbt",
+"HeartIsland_00.msbt",
+"HeartSea_00.msbt",
+"Moon_00.msbt",
+"SecretEntrance_00.msbt",
+"Squid_00.msbt",
+"Submarine_00.msbt",
+"Terry_00.msbt",
+"TincleTower_00.msbt",
+"Triforce_00.msbt",
+"DungeonMapDown_00.msbt",
+"DungeonMapUp_00.msbt",
+"DungeonMap_00.msbt",
+"MenuBtns_00.msbt",
+"MenuItem_00.msbt",
+"MenuMap_00.msbt",
+"MenuMiiverseContent_00.msbt",
+"MenuMiiverseNewComment_00.msbt",
+"MenuMiiverseSetting_00.msbt",
+"MenuMiiverse_00.msbt",
+"WarpMap_00.msbt",
+"Auction_00.msbt",
+"BattleshipGame_00.msbt",
+"BoatRaceFailed_00.msbt",
+"BoatRaceResult_00.msbt",
+"BoatRaceStart_00.msbt",
+"CannonGame_00.msbt",
+"Pause_00.msbt",
+"PlaceName_00.msbt",
+"Opening_00.msbt",
+"SaveData_00.msbt",
+"SelectController_00.msbt",
+"StartSequeneBG_00.msbt",
+"Title_00.msbt",
+"MsgOnly_00.msbt",
+"MsgWindowEvent_00.msbt",
+"MsgWindowMain_00.msbt",
+"MsgWindowScroll_00.msbt",
+"SequenceOption_00.msbt",
+"SequenceWindow_00.msbt",
+"PictographBox_00.msbt",
+"PictographConfirm_00.msbt",
+"PictographList_00.msbt",
+"Telescope_00.msbt",
+        ];
+
+        &FILENAMES
+    },
+    get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
+        if id == 0xFFFF || id == 0x000 {  //Weird as TWWHD seems to use the 0 color as fallback to default but it's black ?
+            "#ffffff" 
+        } else {
+            const COLORS_RGB_TWWHD: [&str; 36] = [
+                "#000000",
+                "#FF1E00",
+                "#00FF64",
+                "#00C8FF",
+                "#F0C800",
+                "#00FFFF",
+                "#FF32FF",
+                "#808080",
+                "#FF8000",
+                "#000000",
+                "#B40000",
+                "#006432",
+                "#0000AA",
+                "#FA9600",
+                "#50C8C8",
+                "#6400FF",
+                "#505050",
+                "#FF5000",
+                "#000000",
+                "#B40000",
+                "#006432",
+                "#0000AA",
+                "#FA9600",
+                "#82FFFF",
+                "#6400FF",
+                "#505050",
+                "#FF5000",
+                "#000000",
+                "#FF1E00",
+                "#00FF64",
+                "#3250FF",
+                "#F0C800",
+                "#00FFFF",
+                "#6432FF",
+                "#808080",
+                "#FF8000",
+                ];
+        
+                COLORS_RGB_TWWHD[idx]
+
+        }
+    },
+    get_tag_type : |tag| {
+        get_tag_type_default_msbt(tag, true, encoding_rs::UTF_16BE)
+    },
+    get_tag_replacement : |tag| {
+        let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join("");
+        let default = format!("[Tag {} {} ]", match tag.group {
+            0x0 => String::from(match tag.number {
+                0 => "Ruby ",
+                1 => "Font ",
+                2 => "Size ",
+                3 => "Color ",
+                _ => ""
+            }),
+            
+            _ => format!("{}:{}", tag.group, tag.number)
+        }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
+
+        default
+    },
+
+    get_message_style : |attribs: &MessageAttributes| {
+        let centered = false;
+        let color = String::new();
+        let bg_color = String::new();
+        let style_id = String::new();
+
+        StyleInfo { centered, color, bg_color, alt_font : false, style_id }
+    }
+};
+
 pub const TP: GameConfig = GameConfig {
     name: "Twilight Princess",
     id:"tp",
@@ -275,6 +444,209 @@ pub const TP: GameConfig = GameConfig {
             "zel_07.bmg",
             "zel_08.bmg",
             "zel_99.bmg",
+        ];
+
+        &FILENAMES
+    },
+    get_color_hex: |id| {
+        let idx = if id == 0xFFFF { 0 } else {id};
+        const COLORS_RGB : [&str; 9] = [
+            "#ffffff",
+            "#f07878",
+            "#aadc8c",
+            "#a0b4dc",
+            "#dcdc82",
+            "#b4c8e6",
+            "#c8a0dc",
+            "#ffffff",
+            "#dcaa78",
+        ];
+
+        COLORS_RGB[idx]
+    },
+    get_tag_type : |tag| {
+        get_tag_type_default_inner(tag.group, tag.number, &tag.payload, true, encoding_rs::SHIFT_JIS)
+    },
+    get_tag_replacement : |tag| {
+        match tag.group {
+            0x00 => {
+                match tag.number {
+                    0x00 =>	"[Link]",
+                    0x08 => "• ",
+                    0x09 => "• ",
+                    0x0A => "[A] ",
+                    0x0B => "[B] ",
+                    0x0C => "[C] ",
+                    0x0D => "[L] ",
+                    0x0E => "[R] ",
+                    0x0F => "[X] ",
+                    0x10 => "[Y] ",
+                    0x11 => "[Z] ",
+                    0x12 => "[DPad] ",
+                    0x13 => "[Analog] ",
+                    0x14 => "🡄 ",
+                    0x15 => "🡆 ",
+                    0x16 => "🡅 ",
+                    0x17 => "🡇 ",
+                    0x18 => "[AnalogUp] ",
+                    0x19 => "[AnalogDown] ",
+                    0x1A => "[AnalogLeft] ",
+                    0x1B => "[AnalogRight] ",
+                    0x1C => "[AnalogVertical] ",
+                    0x1D => "[AnalogHorizontal] ",
+                    0x1E => " ",
+                    0x1F => " ",
+                    0x23 => "[RedTarget] ",
+                    0x24 => "[YellowTarget] ",
+                    0x2E => "[XorY] ",
+                    0x39 => "♥ ",
+                    0x22 =>	"[Epona]",
+                    0x29 =>	"[CurrentScent]",
+                    0x2B =>	"[WarpingTo]",
+                    0x2D =>	"[Bomb-Name]",
+                    0x31 =>	"[Bomb-Count]",
+                    0x32 =>	"[Bomb-Price]",
+                    0x35 =>	"[nop000035]",
+                    0x37 =>	"[Bombcap]",
+                    0x3B =>	"[ReturnedBug]",
+                    0x3C =>	"[LetterSender]",
+                    0x3E =>	"[CurrentLetterPage]",
+                    0x3F =>	"[MaxLetterPage]",
+                    _ => ""
+                }
+            },
+            0x03 => {
+                match tag.number {
+                    0x01 =>	"[WiiA]",
+                    0x02 =>	"[WiiB]",
+                    0x03 =>	"[WiiHome]",
+                    0x04 =>	"[WiiMinus]",
+                    0x05 =>	"[WiiPlus]",
+                    0x06 =>	"[Wii1]",
+                    0x07 =>	"[Wii2]",
+                    0x08 =>	"[WiiD-WE]",
+                    0x09 =>	"[WiiD-N]",
+                    0x0A =>	"[WiiD-S]",
+                    0x0B =>	"[WiiD-WE]",
+                    0x0C =>	"[WiiD-E]",
+                    0x0D =>	"[WiiD-W]",
+                    0x0E =>	"[Wiimote]",
+                    0x0F =>	"[WReticule]",
+                    0x10 =>	"[WNunchunk]",
+                    0x11 =>	"[Wiimote]",
+                    0x12 =>	"[Fairy]",
+                    0x13 =>	"[WiiC]",
+                    0x14 =>	"[WiiZ]",
+                    _ => ""
+                }
+            },
+            0x04 => {
+                match tag.number {
+                    0x00 =>	"巫",
+                    0x01 =>	"嗅",
+                    0x02 =>	"眷",
+                    0x03 =>	"蜀",
+                    0x04 =>	"蟲",
+                    0x05 =>	"裔",
+                    0x06 =>	"惧",
+                    0x07 =>	"綺",
+                    0x08 =>	"罠",
+                    0x09 =>	"祓",
+                    0x0A =>	"墟",
+                    0x0B =>	"絆",
+                    0x0C =>	"僭",
+                    0x0D =>	"憑",
+                    _ => ""
+                }
+            },
+            0x05 => {
+                match tag.number {
+                    0x00 =>	"[Time]",
+                    0x03 =>	if tag.payload[0] == 0  {"[ReturnedBugs]" } else {"[RemainingBugs]"},
+                    0x04 =>	"noop",
+                    0x07 =>	"[RiverPoints]",
+                    0x08 =>	"[FishLength]",
+                    0x09 =>	"[MartGoalLeft]",
+                    0x0A =>	"[LetterCount]",
+                    0x0B =>	"[PoesNeeded]",
+                    0x0C =>	if tag.payload[0] == 0 {"[LatestScore]" } else {"[HighScore]"},
+                    0x0D =>	"[FishCount]",
+                    0x0E =>	"[RollGoal]",
+                    _ => ""
+                }
+            },
+            0x06 => {
+                match tag.number {
+                    0x02 => "♂",	
+                    0x03 => "♀",	
+                    0x04 => "★",	
+                    0x05 => "※",	
+                    0x06 => "←",	
+                    0x07 => "→",	
+                    0x08 => "↑",	
+                    0x09 => "↓",	
+                    0x0A => "⧫",
+                    0x0B => " ",    
+                    _ => "",
+                }
+            },
+            _=> "",
+        }.to_string()
+    },
+
+    get_message_style : |attribs: &MessageAttributes| {
+        let mut centered = false;
+        let mut color = String::new();
+        let mut alt_font = false;
+
+        match attribs.payload[0x05] {
+            0x00 => {}, //TODO : add dark background
+            0x01 => {}, // no background
+            0x07 => centered = true,
+            0x0C => alt_font = true,
+            0x0D => color = String::from("#b4c8e6"),
+            0x0E => color = String::from("#aadc8c"),
+            0x13 => {centered = true; alt_font = true;},
+            _ => {}
+        }
+
+        let style_id = match attribs.payload[0x05] {
+            0x00 | 0x0D |0x0E => format!("display-{}", attribs.payload[0x05]),
+            _  => String::new()
+        };
+
+        StyleInfo { centered, color, bg_color : String::new(), alt_font, style_id }
+    }
+};
+
+pub const TPHD: GameConfig = GameConfig {
+    name: "Twilight Princess HD",
+    id:"tphd",
+    logo : "https://zelda.nintendo.com/assets/img/timeline/twilight-princess/logo.png",
+    big_endian : true,
+    get_languages : || {
+        const LANGUAGES : [(&str, &str);4] = [
+            ("jp", "Japanese"),
+            ("us", "US English"),
+            ("fr", "French"),
+            // ("sp", "Spanish"),
+            ("de", "German"),
+            // ("it" "Italian")
+        ];
+
+        &LANGUAGES
+    },
+    get_filenames : || {
+        const FILENAMES : [&str;9] = [
+            "zel_00.bmg",
+            "zel_01.bmg",
+            "zel_02.bmg",
+            "zel_03.bmg",
+            "zel_04.bmg",
+            "zel_05.bmg",
+            "zel_06.bmg",
+            "zel_07.bmg",
+            "zel_08.bmg",
         ];
 
         &FILENAMES
@@ -1401,9 +1773,6 @@ pub const SS: GameConfig = GameConfig {
         let centered = false;
         let color = String::new();
         let bg_color = String::new();
-    
-        
-        
         let style_id = String::new();
 
         StyleInfo { centered, color, bg_color, alt_font : false, style_id }

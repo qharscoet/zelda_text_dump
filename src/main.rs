@@ -345,7 +345,7 @@ impl Exporter for HTMLExporter  {
 
         let font =  match &self.config {
             Some(conf) => match conf.id {
-                "tp" => "fot-rodin-prondb",
+                "tp" | "tphd" => "fot-rodin-prondb",
                 "tww" | "ph" | "st" | "fsa" | "albw" | "tfh" => "rock",
                 _ => "fot-rodin-prondb"
             }
@@ -355,7 +355,7 @@ impl Exporter for HTMLExporter  {
 
         let ruby_font =  match &self.config {
             Some(conf) => match conf.id {
-                "tp" => "reishotai",
+                "tp" | "tphd" => "reishotai",
                 "tww" | "ph" | "st" | "fsa" | "albw" | "tfh"  => "fot-rodin-prondb",
                 _ => "fot-rodin-prondb"
             }
@@ -853,7 +853,7 @@ fn generate_index(filepath : &Path) {
 <div>");
 
         for conf in game_configs::ALL_CONFIGS {
-            let _ = f.write(format!("<a href=\"{}.html\"><img src=\"{}\"/></a>", conf.id, conf.logo).as_bytes());
+            let _ = f.write(format!("<a href=\"{}.html\"><img width=220 src=\"{}\"/></a>", conf.id, conf.logo).as_bytes());
         }
 
         let _ = f.write(b"</div></body>
@@ -865,7 +865,7 @@ fn main() {
 
     generate_index(Path::new("./www/index.html"));
 
-    // for config in &[game_configs::SS] {
+    //for config in &[game_configs::TWWHD] {
     for config in game_configs::ALL_CONFIGS {
         
         let id = config.id;
@@ -877,6 +877,6 @@ fn main() {
     }
 
 
-    //msbt_parser::print_msbt(Path::new("./res/albw/English/Common.msbt"));
+    //msbt_parser::print_msbt(Path::new("./res/twwhd/English/message.msbt"));
 
 }
