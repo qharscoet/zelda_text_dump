@@ -14090,6 +14090,25 @@ de prendre une telle décision.";
 "　 世界中の勇者達の聖地となっているようだ";"
   Heroes come from far away to see it.";"   Cet endroit est un lieu sacré pour
        les héros du monde entier.";
+"　　　　　　　セーブしますか?";"
+     Do you want to save the game?";"
+         Sauvegarder la partie ?";
+"はい";"Save";"Oui";
+"いいえ";"Don't save";"Non";
+"                    セーブ中です…
+              電源を切らないでください";"                      Saving...
+         Do not turn the power off.";"                Sauvegarde...
+       N'éteignez pas la console.";
+"               セーブが終了しました";"
+              Saved successfully.";"
+               Partie sauvegardée.";
+"　　　　　　セーブしませんでした";"
+          The game was not saved.";"
+   La partie n'a pas été sauvegardée.";
+"　　　　HOMEメニューに戻りたい時は
+　　　　　 　を押してください";"        Press  when you want to
+        return to the HOME Menu.";"        Appuyez sur  pour retourner
+                au menu HOME.";
 "裏からでは読めない……";"You can't read it from this side.";"Vous ne pouvez pas lire d'ici...";
 "求ム!! トーテム勇者!!
 

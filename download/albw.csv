@@ -3555,6 +3555,53 @@ mais pour le moment il me faut tenter
 de contenir son pouvoir.";"Über den Rest werden wir später
 sprechen... Mit meinen Kräften kann
 ich uns etwas Zeit gewinnen!";
+"[PlayerName]よ……
+
+今はかろうじてユガを抑えていますが
+私の力は、いつまでも続きません";"Ah, here we are... A moment more
+of safety, [PlayerName].
+
+Though Yuga is slipping his bonds,
+I will try to keep you safe from him
+as long as I can.";"[PlayerName]...
+
+
+J'ai peine à contenir le pouvoir de
+Yuga... Je ne tiendrai plus très 
+longtemps...";"[PlayerName]...
+
+
+Es kostet mich all meine Kraft,
+Yuga aufzuhalten. Sehr lange
+halte ich das nicht durch.";
+"ユガを倒すには
+あなたが真の勇者として目覚めること……";"I'm afraid I must ask you to do what
+I cannot—defeat the beast.
+
+To do that, you must awaken your
+full potential, Hero of Hyrule.";"Afin de vaincre Yuga, il te faut
+éveiller le héros véritable qui
+sommeille en toi...";"Wenn du ihn besiegen willst, musst
+du als der wahre Held erwachen!";
+"それには絵にされた七賢者を助けだし
+彼らの力を集結するしかありません";"I sense that the paintings of Hyrule's
+Seven Sages are being sent to the
+far corners of Lorule.
+You must steal those paintings back.
+The secret to Yuga's defeat lies in
+uniting your friends!";"Porte-toi au secours des Sept Sages
+prisonniers et réunis leurs pouvoirs.";"Befreie die Sieben Weisen aus den
+Gemälden, damit sie ihre Macht
+vereinen können!";
+"さぁ……行くのです
+あなたこそ真の勇者となる……人……
+……[PlayerName]……";"Farewell, Hero of Hyrule... We shall
+meet again...";"Va, [PlayerName]...
+Tu deviendras un héros véritable.
+C'est ton destin.";"Geh jetzt!
+Es ist dir bestimmt, der wahre
+Held zu werden...
+[PlayerName]...";
 "よく来てくれました
 勇気のトライフォースを得たのですね？";"You have done well to come so far,
 Hero of Hyrule. I trust you now have
@@ -6010,6 +6057,8 @@ hilfreich sein.";
 "……それでも私は幸せです";"Your thoughts are still appreciated.";"Tes moyens ne permettent pas à ton
 cœur généreux de s'exprimer...
 Mais l'intention est touchante.";"Was zählt, ist der Gedanke.";
+"「[ShadowLinkPlayerName]」に勝った！";"You beat [ShadowLinkPlayerName]!";"Vous avez vaincu [ShadowLinkPlayerName] !";"Du hast [ShadowLinkPlayerName]
+besiegt!";
 "このシャドウリンクとお別れしますか？[ChoiceN]";"Would you like to banish this
 Shadow Link?[ChoiceN]";"Voulez-vous refuser l'affrontement
 avec ce Link noir ?[ChoiceN]";"Möchtest du diesen Schatten-Link
@@ -9864,6 +9913,234 @@ Bitte, rette ihn!
 
 Dies sind die Worte von
 Hilda von Lorule...";
+"きゅ、救助隊か？
+
+……なんだ、ガキか
+……ダリ～なぁ
+どうせ意気揚々と森に入って
+遭難したクチだろ？ダセ～なぁ
+俺は違うぜ、帰るのがダルくなったから
+ここにいるだけだ
+……そうだお前
+お宝に興味ないか？";"So...they finally sent a rescue party,
+eh? Wait...you're no party—you're
+just a kid!
+Lemme guess, you came in here
+looking for some extreme fun in
+the great outdoors, huh?
+Yeah, I’ve been running crazy in
+these woods, running till I got
+dizzy. Trunking, I call it.
+I trunked and trunked ‘round these
+trees until I finally lost my way.
+Been sitting here ever since.
+But I found a great treasure in the
+woods. Maybe you'd care to take
+it off my hands...?";"C'est... C'est les secours ?
+
+
+... Ah, non, juste un gamin.
+... Pfff, c'est nul.
+
+J'suis sûr que t'es venu fanfaronner
+dans la forêt et que t'as fini par te
+perdre.
+Non, non, c'est pas ce qui m'est
+arrivé. Moi, si j'suis ici, c'est juste
+que j'ai la flemme de rentrer.
+... Mais dis-moi plutôt, est-ce que les
+trésors, ça t'intéresse ?";"Endlich... Rettung?!
+
+
+Hm, nur ein verirrtes Kind?
+Wie nervig...
+
+Wahrscheinlich bist du voller Taten-
+freude in den Wald stolziert, und jetzt
+findest du nicht mehr raus. Stimmt's?
+Bei mir ist das anders. Ich find's bloß
+zu nervig, wieder zurückzugehen.
+Nur darum bin ich noch hier.
+Sag mal, Kleiner...
+Hättest du vielleicht
+Interesse an einem Schatz?";
+"遭難中……じゃなくて散歩中に森で見つけた
+俺のとっておきのお宝だ
+888ルピーでゆずってやるよ
+ダリ～から早く決めてくれや[ChoiceN]";"It's a little something I picked up when
+I got stuck. I just decided to keep it.
+
+How's 888 Rupees sound? It's a steal
+of a deal.[ChoiceN]";"En cherchant mon chemin... euh, je
+veux dire, en me promenant, j'ai
+trouvé un trésor trop cool.
+J'veux bien te le laisser pour
+888 rubis. Décide-toi vite, j'ai pas
+toute la journée.[ChoiceN]";"Den hab ich selbst gefunden, als
+ich hier im Wald herumgeirrt... äh,
+ich meine herumspaziert bin.
+Für 888 Rubine gehört er dir.
+Los, entscheide dich schon und
+nerv nicht rum![ChoiceN]";
+"買います！";"Buy";"J'achète !";"Nehme ich!";
+"いらない！";"No";"Non, merci.";"Will ich nicht!";
+"ルピーも持ってないくせに
+何でも欲しがるんじゃねぇよ
+ダリ～やつだなぁ……
+
+こんなところでも金は大切なんだ
+
+金がないと、いざって時に
+助けも呼べねぇからな……";"Aw, c'mon, man. You know you don't
+have enough Rupees.
+
+In the end, cold, hard currency is
+what matters the most.
+
+I found that out the hard way. I used
+to think love was the most important
+thing in the world...
+When I was young, my favorite love
+song was a tune called "You're All the
+Rupees I Need."
+Nobody remembers that one... Shame.";"T'as pas assez de rubis. Tu veux tout
+avoir et rien payer, c'est ça ?
+
+Tu me fais perdre mon temps...
+
+
+Même ici, l'argent c'est important.
+
+
+Quand t'as pas d'argent, tu peux pas
+appeler les secours quand t'en as
+besoin...";"Wer keine Rubine hat, kriegt nichts!
+Du nervst, Kleiner!
+
+Selbst an einem Ort wie diesem ist
+Geld wichtig. Schreib dir das hinter
+deine langen Ohren!
+Wenn man keines hat, kommt selbst
+im Notfall keiner, um einen zu retten...";
+"それにしても、何か分かんないモンに
+手ぇ出すなんて……
+お前、けっこう怖いモン知らずだな
+
+でも、まあ、あまり他人を信用しすぎると
+ダリ～ことになんぜ";"Really? You'd just buy an unknown
+thing and blindly trust some stranger
+like that?!
+You shouldn't be so trusting, man.
+That's how I got like this...except
+minus the whole buying part.";"Dis donc, t'achètes souvent des trucs
+sans savoir ce que c'est, comme ça ?
+
+T'as vraiment peur de rien, toi.
+
+
+Mais fais quand même gaffe. Si tu fais
+trop confiance aux gens, il t'arrivera
+des trucs pas cool.";"Du kaufst einem Fremden einfach
+irgendwelche Sachen ab? Bist
+ja ziemlich unerschrocken!
+Du solltest nicht so ein Vertrauen
+in die Leute haben. Sonst kann es
+schnell nervig für dich werden.";
+"なんだよ、ビビッてんのか？
+ダリ～奴だなぁ
+お前も男なら、知らない奴から
+知らない物を買えるぐらい度胸持てよな！";"Nice call!
+
+
+Only a fool would buy an unknown
+item from a stranger! You're gonna
+turn out just fine, man. Just fine.";"Ben alors, t'as les jetons ?
+T'es pas drôle, toi.
+
+Si t'étais un homme, un vrai, t'aurais
+le cran d'acheter un truc que tu sais
+pas ce que c'est à un parfait inconnu !";"Hast du etwa Angst?
+Du nervst.
+
+Ein echter Kerl muss auch mal einfach
+einem Fremden seinen Schatz
+abkaufen, ohne zu wissen, was es ist.";
+"やっぱり俺のお宝、気になってんだろ？
+素直になれよ、ダリ～奴だなぁ";"A-ha. This treasure of mine has piqued
+your interest, eh?";"En fin de compte, il t'intéresse mon
+trésor, hein ? Allez, avoue. Fais pas
+tant de chichis.";"Bist du doch neugierig, worum es
+sich bei meinem Schatz handelt?
+Jetzt nerv nicht und entscheide dich!";
+"888ルピーでオレのお宝ゆずってやるよ
+[ChoiceN]";"So...888 Rupees? Buy it off me?[ChoiceN]";"888 rubis et il est à toi ![ChoiceN]";"Für 888 Rubine gebe ich
+dir meinen Schatz.[ChoiceN]";
+"買ってみる！";"Sure";"J'achète !";"Einverstanden!";
+"いらないって！";"No";"Mais non !";"Will ich nicht!";
+"……ダリ～けど
+久々に、人と話せてよかったよ
+……無事に森から出られたらいいな";"Sure was nice talkin' to someone...
+Good luck out there, kid. I got a
+feeling you're gonna need it.";"... Ça m'a fait plaisir de pouvoir faire
+la causette avec quelqu'un, ça faisait
+un bout de temps.
+... J'espère que t'arriveras à sortir de
+cette forêt en un seul morceau.";"Du nervst... Aber es war nett, nach so
+langer Zeit mal wieder mit jemandem
+zu reden.
+Ich hoffe, du schaffst es lebend aus
+diesem Wald hier raus.";
+"おい、お前！
+ビンがねぇじゃないか？
+ビンも持たずに森に入るなんて……
+そりゃ遭難もするぜ……
+俺のとっておきのお宝が欲しいなら
+ビンを持って出直してくるんだな
+ダリ～んだから、手間とらせんなよ！";"Wait... You don't have a bottle?
+
+
+No self-respecting adventurer would
+ever head up into the mountains
+without a bottle! Oh, my!
+Look, just turn around and get
+yourself a bottle, OK? Trust me, it'll
+be better off for everyone.";"Hé, dis donc ! T'as même pas de
+flacon ?
+
+Tu t'aventures dans la forêt sans
+flacon, toi ? Pas étonnant que tu
+galères...
+Si tu veux mon trésor super cool,
+reviens me voir avec un flacon.
+
+J'y crois pas, l'autre... Comment il me
+fait perdre mon temps !";"Hm? Moment mal...
+Du hast ja gar keine Flasche!
+
+Wenn man ohne Flasche in die Berge
+geht, kann man leicht in Not geraten...
+
+Bring das nächste Mal eine Flasche
+mit, wenn du meinen Schatz haben
+willst, du Nervbold!";
+"……ニイちゃんよ
+あいてるビンがないじゃないか？
+ダリ～んだから、手間かけさせんなよ！
+ビンを空にして、また来るんだな";"I can't sell it to you if you don't have
+an empty bottle, man... C'mon. Help
+me help you.
+That's too bad... If only there was
+some way you could suddenly make
+a bottle empty...";"... Dis donc, bonhomme, t'as pas de
+flacon vide !
+
+Mais comment tu me fais perdre mon
+temps ! Reviens quand t'auras vidé
+un flacon.";"...Du hast gar keine leere Flasche?
+
+
+Du nervst unglaublich! Mach eine
+Flasche leer und komm wieder!";
 "コッコヲ カツイデ 高イ所カラ飛ベ！";"Grab a Cucco and jump from on high!";"Attrape une cocotte et saute d'un
 endroit surélevé !";"Ah, ja! Das macht Spaß!
 Schnapp dir ein Huhn und spring
@@ -29964,6 +30241,108 @@ my stomach gets all oogie when it
 comes to heights.";"Argh... Mais avec ce maudit vertige,
 pas sûr que ça le fasse...";"Da fällt mir ein...
 Ich hab ja solche Höhenangst.";
+"……うんうん、ナルホド
+動く壁と、動く床をリズミカルに渡る……
+うん！ソレしかないっちょ！！！
+お宝はいただきだっちょ！！";"...Now, how's all this going to work?
+
+
+That block's moving between there...
+and there... Gotta time it right.
+
+Yeah, then that treasure will be mine!";"... Oui, oui, oui... Tout ça m'a l'air
+simple comme bonjour...
+
+Il suffit de passer des plateformes
+mouvantes aux murs mouvants
+avec le bon timing.
+Pas plus compliqué que ça !
+Ce trésor n'attend plus que moi...";"Alles bewegt sich...
+Aber mit dem richtigen Timing
+komme ich schon durch!
+Ja, das ist es! Der Schatz gehört so
+gut wie mir!";
+"そういえば、ボク……
+リズム感なかったっちょ……";"Dang. If I only had a sense of timing,
+that treasure would have been mine!";"Argh... Mais le sens du rythme et
+moi, ça fait deux...";"Mein Timing lässt leider
+zu wünschen übrig...";
+"…うんうん、ナルホド
+この部屋にある3つのスイッチを全部ON……
+うん！ソレしかないっちょ！！！
+…でも疲れたからちょっとお休みっちょ";"...Now, how's all this going to work?
+
+
+Step on the floor switch, then hit the
+two round switches...
+
+Well, that seems simple. Just need a
+bit of a breather first.";"... L'enfance de l'art, vraiment ! Il
+suffit de marcher sur un interrupteur,
+puis d'activer les deux autres !
+Ce sera une vraie partie de plaisir de
+récupérer ce trésor. Mais d'abord, un
+peu de repos bien mérité !";"Alle drei Schalter muss ich aktivieren!
+Ja, das ist es! Aber vorher erst mal ein
+Päuschen, ich bin etwas geschlaucht.";
+"いつになったら
+すごい金持ちになれるっちょ……";"Not getting rich today, I guess.
+But there's always tomorrow!";"Je vais vraiment finir scandaleusement
+riche, un de ces jours...";"Wann werde ich endlich reich?";
+"こ、この下はとんでもなく深そうだっちょ！
+お前もそう思うだっちょ？
+宝箱もあんな高いところにあるし
+ここはとっても立体的な場所だっちょね
+高低差がありすぎて、こわすぎるっちょ！！
+
+お宝はいただきだっちょ！
+って言えないっちょーー！！";"...Now, how's all this going to work?
+
+
+This place has so many levels... Time
+for some three-dimensional thinking.
+
+So once that's done, sure, that
+treasure will be mine!";"Ouh là, ça a l'air sacrément profond,
+vu d'ici... T'es pas d'accord ?
+
+Et ce coffre, perché tout là-haut...
+Le moins qu'on puisse dire, c'est
+que c'est vertigineux !
+Le moindre faux pas, et salut la
+compagnie ! Voilà une pensée
+fort peu réjouissante...
+Mais je veux ce trésor, et je l'aurai !
+Ou pas. Enfin peut-être. On va voir.";"Oh Mann, hier geht's ziemlich
+weit runter! Da kriegt man
+weiche Knie, was?
+So viele Ebenen...
+Und ganz oben ist die Schatztruhe!
+
+Sieht so aus, als würde man hier
+dreidimensional denken müssen.
+
+Der Schatz gehört mir!
+...Hoffe ich.";
+"世界中のお宝はボクのものだっちょ！
+そして、すごい金持ちになるっちょ！";"I bet I'll get lots of treasure somehow.
+I was born to be rich, rich, rich...!";"Un jour, je posséderai tous les trésors
+du monde. Et j'aurai de l'argent à ne
+plus savoir qu'en faire !";"Alle Schätze gehören mir... MIR!!!
+Ich werde so stinkreich sein, dass
+alle mir zu Füßen liegen!";
+"なんか最近、空っぽの宝箱が多いっちょ
+もしや、ボクの他にもお宝ハンターが！？";"There seem to be lots of empty
+chests around the kingdom.
+
+I'm starting to think I'm not the only
+treasure hunter hereabouts.";"C'est étonnant, tout de même, tous
+ces coffres vides, ces temps-ci...
+
+Se pourrait-il que je ne sois pas
+le seul sur le coup ?";"In letzter Zeit finde ich fast nur noch
+leere Schatztruhen... Gibt es etwa
+noch einen Schatzjäger außer mir?!";
 "……うんうん、ナルホド
 
 ここにコッコがいるってことは……
