@@ -97,7 +97,7 @@ pub struct GameConfig {
     pub get_filenames : fn() -> &'static [&'static str]
 }
 
-pub const ALL_CONFIGS  : [&GameConfig;11]= [&TP, &TPHD, &TWW, &TWWHD, &PH, &ST, &FSA, &ALBW, &TFH, &SS, &EOW];
+pub const ALL_CONFIGS  : [&GameConfig;12]= [&TP, &TPHD, &TWW, &TWWHD, &PH, &ST, &FSA, &ALBW, &TFH, &SS, &LSA_SW,&EOW];
 
 pub const TWW: GameConfig = GameConfig {
     name: "The Wind Waker",
@@ -2063,6 +2063,8 @@ pub const EOW: GameConfig = GameConfig {
                 1 => "Font ",
                 2 => "Size ",
                 3 => "Color ",
+                4 => "PageBreak",
+                5 => "Reference",
                 _ => ""
             }),
             
@@ -2071,16 +2073,175 @@ pub const EOW: GameConfig = GameConfig {
 
         match tag.group {
             0x1 => match tag.number {
+                0 => "[KeyWait]".to_string(),
+                1 => "[TimerWait]".to_string(), //time [UInt32]
+                2 => "[Sync]".to_string(),
+                3 => "[Selection]".to_string(),
                 4 => {
                     let condition = encoding_rs::UTF_8.decode(&tag.payload).0;
                     format!("[ConditionSelection : {}]", condition)
-                }
+                },
+                5 => "[Lump]".to_string(),
+                6 => "[AnyNumber]".to_string(), //index [Byte]
+                7 => "[AnyTimer]".to_string(), //index [Byte]
+                8 => "[AnyLabel]".to_string(), //index [Byte]
+                9 => "[CopiedActorName]".to_string(),
+                10 => "[Continue]".to_string(),
+                11 => "[KarakuriRepairCost]".to_string(),// index [Enum] {Rupee,Coupon}
                 12 => {
                     let condition = encoding_rs::UTF_8.decode(&tag.payload).0;
                     format!("[Condition : {}]", condition)
-                }
+                },
+                13 => "[PixelBlank]".to_string(), //pixel [UInt32]
+                14 => "[Elision]".to_string(), //original [String] elision [String]
+                15 => "[Patchim]".to_string(),// original [String] patchim [String]
+                16 => "[OptionBlank]".to_string(),
+                17 => "[CountN]".to_string(), //index [Byte] singular [String] plural [String]
+                18 => "[CountN_Ru]".to_string(), //index [Byte]sn [String]sg [String]pg [String]
+                19 => "[ToUpper]".to_string(),
+                20 => "[ToLower]".to_string(),
+                21 => "[ToUpperRange]".to_string(),
+                22 => "[ToLowerRange]".to_string(),
                 _=> default,
-            }
+            },
+            _=> default,
+        }
+    },
+
+    get_message_style : |_attribs: &MessageAttributes| {
+        let centered = false;
+        let color = String::new();
+        let bg_color = String::new();
+        let style_id = String::new();
+
+        StyleInfo { centered, color, bg_color, alt_font : false, style_id }
+    }
+};
+
+
+pub const LSA_SW: GameConfig = GameConfig {
+    name: "Link's Awakening",
+    id: "lsa_sw",
+    logo : "https://www.nintendo.com/jp/switch/ar3na/assets/images/index/mv/title01.png",
+    big_endian : true,
+    get_languages : || {
+        const LANGUAGES : [(&str, &str);3] = [
+            ("jp", "Japanese"),
+            ("en", "English"),
+            ("fr", "French"),
+            // ("sp", "Spanish"),
+            // ("de", "German"),
+            // ("it" "Italian")
+        ];
+
+        &LANGUAGES
+    },
+    get_filenames : || {
+        const FILENAMES : [&str;13] = [
+"Glossary.msbt",
+"Graphic.msbt",
+"Hint.msbt",
+"Npc.msbt",
+"Place.msbt",
+"Scenario.msbt",
+"StaffCredit.msbt",
+"SubEvent.msbt",
+"System.msbt",
+"Talker.msbt",
+"Telephone.msbt",
+"UI.msbt",
+"Warashibe.msbt",
+        ];
+
+        &FILENAMES
+    },
+    get_color_hex: |id| {
+
+        if id == 0xFFFF || id == 0x000 {
+            "#ffffff" 
+        }
+        else {
+            const COLORS_RGB: [&str; 10] = [
+                "#EDEDED",
+                "#00234F",
+                "#F9B100",
+                "#6CD2FF",
+                "#DF1000",
+                "#D9456D",
+                "#0095EF",
+                "#63E343",
+                "#62CFFF",
+                "#A0FFFF",
+            ];
+    
+            COLORS_RGB[id]
+        }
+    },
+    get_tag_type : |tag| {
+        match tag.group {
+            0x00 => match tag.number {
+                0x03 => {
+                    const COLORS_RGB: [u32; 10] = [0xEDEDEDFF,0x00234FFF,0xF9B100FF,0x6CD2FFFF,0xDF1000FF,0xD9456DFF,0x0095EFFF,0x63E343FF,0x62CFFFFF,0xA0FFFFFF];
+                    
+                    let value = get_u32_be(&tag.payload, 0);
+
+                    let idx = if value == 0x000000FF {
+                        0
+                    } else {
+                        COLORS_RGB.iter().position(|&v| v == value).unwrap()
+                    };
+                    
+                    TagType::Style(StyleTagType::Color(idx as u16))
+                },
+                _ => get_tag_type_default_msbt(tag, false, encoding_rs::UTF_8)
+            },
+            _ => get_tag_type_default_msbt(tag, false, encoding_rs::UTF_8)
+        }
+    },
+    get_tag_replacement : |tag| {
+        let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join("");
+        let default = format!("[Tag {} {} ]", match tag.group {
+            0x0 => String::from(match tag.number {
+                0 => "Ruby ",
+                1 => "Font ",
+                2 => "Size ",
+                3 => "Color ",
+                4 => "PageBreak",
+                5 => "Reference",
+                _ => ""
+            }),
+            
+            _ => format!("{}:{}", tag.group, tag.number)
+        }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
+
+        match tag.group {
+            0x1 => match tag.number {
+                0 =>  "[Emoji]", //type [Enum] {Yoshi,Ribbon,DogFood,Banana,Stick,Honeycomb,Pineapple,Hibiscus,Letter,Broom,Hook,Neck,Scale,Link,Marin,X,Skull,Ocarina,ArrowUp,ArrowDown,ArrowRight,ArrowLeft}
+                1 =>  "[HidIcon]", //type [Enum] {Decide,Cancel,ItemSlot1,ItemSlot2,ItemSetX,ItemSetY,FishingRod,Move,MoveLeft,MoveUp,MoveRight,MoveDown,Dash,Shield,OpenSubItem,OpenSubMap,PanelTabLeft,PanelTabRight,Back,Space,BackSpace,Pin,Memory,LocationName,DungeonInfo,PanelDelete,PuzzleMenu,Zoom,DungeonFloor,PanelRetire,MemoryTabRight,MemoryTabLeft,MemoryMessage,PanelCategoryRight,PanelCategoryLeft,PanelLevelRight,PanelLevelLeft,PanelReceiveDelete,PanelReceiveInfo,PanelHold,PanelRelease,PanelEditInfo,PanelStart,WarpLocationOff,SubItemToSystem,PanelSet,Dive,Sword,HoldBomb,DeleteX,DeleteL,DeleteR,DungeonFloorDown,CraneOperationX,CraneOperationA,FastSwim,GameStartL,GameStartR,FishingReel,PanelHint}
+                2 =>  "[LastDungeonRoute]", //index [Byte]
+                3 =>  "[PlayerName]",
+                4 =>  "[KeyWait]",
+                5 =>  "[TimerWait]", //time [UInt32]
+                6 =>  "[Sync]",
+                7 =>  "[Selection]",
+                8 =>  "[SelectPositive]",
+                9 =>  "[SelectNegative]",
+                10 =>  "[AnyString]", //index [Byte]
+                11 =>  "[Se]", //label [String]
+                12 =>  "[ButtonSelection]",
+                    // button1 [Enum] {Decide,Cancel,ItemSlot1,ItemSlot2,ItemSetX,ItemSetY,FishingRod,Move,MoveLeft,MoveUp,MoveRight,MoveDown,Dash,Shield,OpenSubItem,OpenSubMap,PanelTabLeft,PanelTabRight,Back,Space,BackSpace,Pin,Memory,LocationName,DungeonInfo,PanelDelete,PuzzleMenu,Zoom,DungeonFloor,PanelRetire,MemoryTabRight,MemoryTabLeft,MemoryMessage,PanelCategoryRight,PanelCategoryLeft,PanelLevelRight,PanelLevelLeft,PanelReceiveDelete,PanelReceiveInfo,PanelHold,PanelRelease,PanelEditInfo,PanelStart,WarpLocationOff,SubItemToSystem,PanelSet,Dive,Sword,HoldBomb,DeleteX,DeleteL,DeleteR,DungeonFloorDown,CraneOperationX,CraneOperationA,FastSwim,GameStartL,GameStartR,FishingReel,PanelHint}
+                    // button2 [Enum] {Decide,Cancel,ItemSlot1,ItemSlot2,ItemSetX,ItemSetY,FishingRod,Move,MoveLeft,MoveUp,MoveRight,MoveDown,Dash,Shield,OpenSubItem,OpenSubMap,PanelTabLeft,PanelTabRight,Back,Space,BackSpace,Pin,Memory,LocationName,DungeonInfo,PanelDelete,PuzzleMenu,Zoom,DungeonFloor,PanelRetire,MemoryTabRight,MemoryTabLeft,MemoryMessage,PanelCategoryRight,PanelCategoryLeft,PanelLevelRight,PanelLevelLeft,PanelReceiveDelete,PanelReceiveInfo,PanelHold,PanelRelease,PanelEditInfo,PanelStart,WarpLocationOff,SubItemToSystem,PanelSet,Dive,Sword,HoldBomb,DeleteX,DeleteL,DeleteR,DungeonFloorDown,CraneOperationX,CraneOperationA,FastSwim,GameStartL,GameStartR,FishingReel,PanelHint}
+                    // button3 [Enum] {Decide,Cancel,ItemSlot1,ItemSlot2,ItemSetX,ItemSetY,FishingRod,Move,MoveLeft,MoveUp,MoveRight,MoveDown,Dash,Shield,OpenSubItem,OpenSubMap,PanelTabLeft,PanelTabRight,Back,Space,BackSpace,Pin,Memory,LocationName,DungeonInfo,PanelDelete,PuzzleMenu,Zoom,DungeonFloor,PanelRetire,MemoryTabRight,MemoryTabLeft,MemoryMessage,PanelCategoryRight,PanelCategoryLeft,PanelLevelRight,PanelLevelLeft,PanelReceiveDelete,PanelReceiveInfo,PanelHold,PanelRelease,PanelEditInfo,PanelStart,WarpLocationOff,SubItemToSystem,PanelSet,Dive,Sword,HoldBomb,DeleteX,DeleteL,DeleteR,DungeonFloorDown,CraneOperationX,CraneOperationA,FastSwim,GameStartL,GameStartR,FishingReel,PanelHint}
+                    // num [Int32]
+                13 =>  "[FadeIn]", //time [UInt32]
+                14 =>  "[FadeOut]", //time [UInt32]
+                15 =>  "[Quake]",
+                16 =>  "[Lump]",
+                17 =>  "[IndefiniteArticle]", // index [Byte] str1 [String] str2 [String]
+                18 =>  "[Elision]", // original [String] elision [String]
+                19 =>  "[Patchim]", // original [String] patchim [String]
+                _=> "",
+            }.to_string(),
             _=> default,
         }
     },

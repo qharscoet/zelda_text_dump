@@ -364,7 +364,7 @@ impl Exporter for HTMLExporter  {
 
         let hide_label_checkbox_style = match &self.config {
             Some(conf) => match conf.id {
-                "albw" | "tfh" | "ss" | "twwhd" => "",
+                "albw" | "tfh" | "ss" | "twwhd" | "lsa_sw" | "eow" => "",
                 _ => "style='display:none;'"
             }
             None => "style='display:none;'"
