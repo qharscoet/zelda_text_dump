@@ -346,7 +346,7 @@ impl Exporter for HTMLExporter  {
         let font =  match &self.config {
             Some(conf) => match conf.id {
                 "tp" | "tphd" => "fot-rodin-prondb",
-                "tww" | "ph" | "st" | "fsa" | "albw" | "tfh" => "rock",
+                "tww" | "twwhd" | "ph" | "st" | "fsa" | "albw" | "tfh" => "rock",
                 _ => "fot-rodin-prondb"
             }
             None => "fot-rodin-prondb"
@@ -356,7 +356,7 @@ impl Exporter for HTMLExporter  {
         let ruby_font =  match &self.config {
             Some(conf) => match conf.id {
                 "tp" | "tphd" => "reishotai",
-                "tww" | "ph" | "st" | "fsa" | "albw" | "tfh"  => "fot-rodin-prondb",
+                "tww" | "twwhd"| "ph" | "st" | "fsa" | "albw" | "tfh"  => "fot-rodin-prondb",
                 _ => "fot-rodin-prondb"
             }
             None => "fot-rodin-prondb"
@@ -364,7 +364,7 @@ impl Exporter for HTMLExporter  {
 
         let hide_label_checkbox_style = match &self.config {
             Some(conf) => match conf.id {
-                "albw" | "tfh" | "ss" => "",
+                "albw" | "tfh" | "ss" | "twwhd" => "",
                 _ => "style='display:none;'"
             }
             None => "style='display:none;'"
@@ -866,17 +866,17 @@ fn main() {
     generate_index(Path::new("./www/index.html"));
 
     //for config in &[game_configs::TWWHD] {
-    for config in game_configs::ALL_CONFIGS {
+    // for config in game_configs::ALL_CONFIGS {
         
-        let id = config.id;
-        let mut parser : BMGParser = Default::default();
-        process_config(&mut parser, &config);
-        parser.export_html(Path::new(&format!("./www/{id}.html")), false, &config);
-        parser.export_csv(Path::new(&format!("./www/download/{id}.csv")), &config);
-        parser.export_xlsx(Path::new(&format!("./www/download/{id}.xlsx")), false, &config);
-    }
+    //     let id = config.id;
+    //     let mut parser : BMGParser = Default::default();
+    //     process_config(&mut parser, &config);
+    //     parser.export_html(Path::new(&format!("./www/{id}.html")), false, &config);
+    //     parser.export_csv(Path::new(&format!("./www/download/{id}.csv")), &config);
+    //     parser.export_xlsx(Path::new(&format!("./www/download/{id}.xlsx")), false, &config);
+    // }
 
 
-    //msbt_parser::print_msbt(Path::new("./res/twwhd/English/message.msbt"));
+    msbt_parser::print_msbt(Path::new("./res/twwhd/English/message.msbt"));
 
 }
