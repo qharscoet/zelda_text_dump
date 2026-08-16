@@ -468,7 +468,7 @@ nav a:hover, nav a:active {{
 </head>
 <body>
 <header>
-  <img src=\"{logo_url}\"/>
+  <img src=\"{logo_url}\" height=150/>
 </header>
 <nav id=\"options\">
 <div style=\"display:inline-block;\">
@@ -866,17 +866,17 @@ fn main() {
     generate_index(Path::new("./www/index.html"));
 
     //for config in &[game_configs::TWWHD] {
-    // for config in game_configs::ALL_CONFIGS {
+    for config in game_configs::ALL_CONFIGS {
         
-    //     let id = config.id;
-    //     let mut parser : BMGParser = Default::default();
-    //     process_config(&mut parser, &config);
-    //     parser.export_html(Path::new(&format!("./www/{id}.html")), false, &config);
-    //     parser.export_csv(Path::new(&format!("./www/download/{id}.csv")), &config);
-    //     parser.export_xlsx(Path::new(&format!("./www/download/{id}.xlsx")), false, &config);
-    // }
+        let id = config.id;
+        let mut parser : BMGParser = Default::default();
+        process_config(&mut parser, &config);
+        parser.export_html(Path::new(&format!("./www/{id}.html")), false, &config);
+        parser.export_csv(Path::new(&format!("./www/download/{id}.csv")), &config);
+        parser.export_xlsx(Path::new(&format!("./www/download/{id}.xlsx")), false, &config);
+    }
 
 
-    msbt_parser::print_msbt(Path::new("./res/twwhd/English/message.msbt"));
+    // msbt_parser::print_msbt(Path::new("./res/twwhd/English/message.msbt"));
 
 }

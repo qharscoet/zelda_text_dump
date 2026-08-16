@@ -3,7 +3,7 @@ use std::fmt::format;
 use encoding_rs::Encoding;
 use itertools::Itertools;
 
-use crate::{message::{MessageAttributes, MessageId, Tag}, utils::{self, get_u16_be}};
+use crate::{message::{MessageAttributes, MessageId, Tag}, utils::{self, get_u16_be, get_u32_be}};
 
 #[derive(Default)]
 pub struct StyleInfo {
@@ -97,7 +97,7 @@ pub struct GameConfig {
     pub get_filenames : fn() -> &'static [&'static str]
 }
 
-pub const ALL_CONFIGS  : [&GameConfig;10]= [&TP, &TPHD, &TWW, &TWWHD, &PH, &ST, &FSA, &ALBW, &TFH, &SS];
+pub const ALL_CONFIGS  : [&GameConfig;11]= [&TP, &TPHD, &TWW, &TWWHD, &PH, &ST, &FSA, &ALBW, &TFH, &SS, &EOW];
 
 pub const TWW: GameConfig = GameConfig {
     name: "The Wind Waker",
@@ -1882,6 +1882,205 @@ pub const SS: GameConfig = GameConfig {
                 1 => "".to_string(), // Some kind of text action, find out which, but surely invisible
                 _ => default,
             },
+            _=> default,
+        }
+    },
+
+    get_message_style : |_attribs: &MessageAttributes| {
+        let centered = false;
+        let color = String::new();
+        let bg_color = String::new();
+        let style_id = String::new();
+
+        StyleInfo { centered, color, bg_color, alt_font : false, style_id }
+    }
+};
+
+
+pub const EOW: GameConfig = GameConfig {
+    name: "Echoes of Wisdom",
+    id: "eow",
+    logo : "https://www.nintendo.com/jp/switch/bdgea/assets/img/top/mv_title.webp",
+    big_endian : true,
+    get_languages : || {
+        const LANGUAGES : [(&str, &str);3] = [
+            ("jp", "Japanese"),
+            ("en", "English"),
+            ("fr", "French"),
+            // ("sp", "Spanish"),
+            // ("de", "German"),
+            // ("it" "Italian")
+        ];
+
+        &LANGUAGES
+    },
+    get_filenames : || {
+        const FILENAMES : [&str;90] = [
+"CopyableActor.msbt",
+"EndCredits.msbt",
+"EnemyName.msbt",
+"ItemGet.msbt",
+"ItemWeapon.msbt",
+"MachineActor.msbt",
+"ShopKeeperTalk.msbt",
+"Signboard.msbt",
+"System.msbt",
+"Talker.msbt",
+"test.msbt",
+"glossary/Boss.msbt",
+"glossary/Character.msbt",
+"glossary/CopyableActor.msbt",
+"glossary/EdwardNoun.msbt",
+"glossary/Item.msbt",
+"glossary/Location.msbt",
+"glossary/Obj_Other.msbt",
+"glossary/Ui.msbt",
+"minigame/BattleChallenge.msbt",
+"minigame/GerudoMinigame.msbt",
+"minigame/HorseRace.msbt",
+"minigame/PickUpAcorns.msbt",
+"quest/QuestAreaA.msbt",
+"quest/QuestAreaB.msbt",
+"quest/QuestAreaC.msbt",
+"quest/QuestAreaD.msbt",
+"quest/QuestAreaF.msbt",
+"quest/QuestAreaG.msbt",
+"quest/QuestAreaPlains.msbt",
+"scenario/DekuMerchantTalk.msbt",
+"scenario/DekuTreeTalk.msbt",
+"scenario/GeneralTalkAnimal.msbt",
+"scenario/GeneralTalkDeku.msbt",
+"scenario/GeneralTalkGerudo.msbt",
+"scenario/GeneralTalkGoron.msbt",
+"scenario/GeneralTalkZoraRiver.msbt",
+"scenario/GeneralTalkZoraSea.msbt",
+"scenario/HylianGeneralTalk.msbt",
+"scenario/MachineEngineerTalk.msbt",
+"scenario/PartnerTalk.msbt",
+"scenario/StampmanTalk.msbt",
+"scenario/StoryAreaA.msbt",
+"scenario/StoryAreaB.msbt",
+"scenario/StoryAreaC.msbt",
+"scenario/StoryAreaD.msbt",
+"scenario/StoryAreaF.msbt",
+"scenario/StoryAreaG.msbt",
+"scenario/StoryAreaH.msbt",
+"scenario/StoryAreaHyruleCastle.msbt",
+"scenario/StoryAreaPlane.msbt",
+"ui/ActorSelect.msbt",
+"ui/Amiibo.msbt",
+"ui/BattleChallengeMenu.msbt",
+"ui/Buff.msbt",
+"ui/CopyDictionary.msbt",
+"ui/Dialog.msbt",
+"ui/DictionaryExplanation.msbt",
+"ui/DoAction.msbt",
+"ui/DressUpMenu.msbt",
+"ui/DungeonMap.msbt",
+"ui/GameOver.msbt",
+"ui/Hud.msbt",
+"ui/ItemMenu.msbt",
+"ui/LocationInfo.msbt",
+"ui/Map.msbt",
+"ui/Menu.msbt",
+"ui/MiniGame.msbt",
+"ui/Operation.msbt",
+"ui/Quest.msbt",
+"ui/ShopWindow.msbt",
+"ui/Smoothie.msbt",
+"ui/StampRally.msbt",
+"ui/StartGoal.msbt",
+"ui/SystemMenu.msbt",
+"ui/SystemMessage.msbt",
+"ui/Timer.msbt",
+"ui/Title.msbt",
+"ui/Tutorial.msbt",
+"ui/Quest/Area3Quest.msbt",
+"ui/Quest/AreaAQuest.msbt",
+"ui/Quest/AreaBQuest.msbt",
+"ui/Quest/AreaCQuest.msbt",
+"ui/Quest/AreaDQuest.msbt",
+"ui/Quest/AreaFQuest.msbt",
+"ui/Quest/AreaGQuest.msbt",
+"ui/Quest/AreaHQuest.msbt",
+"ui/Quest/AreaHyruleCastleQuest.msbt",
+"ui/Quest/AreaPlainsQuest.msbt",
+"ui/Quest/MinisterLeftInfo.msbt",
+        ];
+
+        &FILENAMES
+    },
+    get_color_hex: |id| {
+
+        if id == 0xFFFF || id == 0x000 {
+            "#ffffff" 
+        }
+        else {
+            const COLORS_RGB: [&str; 17] = [
+               "#000000",
+                "#FF0000",
+                "#00FF00",
+                "#0000FF",
+                "#00AEEF",
+                "#E4007F",
+                "#FEFF00",
+                "#E0E0E0",
+                "#000000",
+                "#FFFFFF",
+                "#E3230B",
+                "#FFFFFF",
+                "#FFF3E7",
+                "#E1D0F0",
+                "#FFFFFF",
+                "#000000",
+                "#DCDCDC",
+            ];
+    
+            COLORS_RGB[id]
+        }
+    },
+    get_tag_type : |tag| {
+        match tag.group {
+            0x00 => match tag.number {
+                0x03 => {
+                    const COLORS_RGB: [u32; 17] = [0x000000FF,0xFF0000FF,0x00FF00FF,0x0000FFFF,0x00AEEFFF,0xE4007FFF,0xFEFF00FF,0xE0E0E0FF,0x000000FF,0xFFFFFFFF,0xE3230BFF,0xFFFFFFFF,0xFFF3E7FF,0xE1D0F0FF,0xFFFFFFFF,0x000000FF,0xDCDCDC6E];
+                    
+                    let value = get_u32_be(&tag.payload, 0);
+                    let idx = COLORS_RGB.iter().position(|&v| v == value).unwrap();
+                    
+                    TagType::Style(StyleTagType::Color(idx as u16))
+                },
+                _ => get_tag_type_default_msbt(tag, false, encoding_rs::UTF_8)
+            },
+            _ => get_tag_type_default_msbt(tag, false, encoding_rs::UTF_8)
+        }
+    },
+    get_tag_replacement : |tag| {
+        let payload = tag.payload.iter().map(|b| format!("{:02X}", b)).join("");
+        let default = format!("[Tag {} {} ]", match tag.group {
+            0x0 => String::from(match tag.number {
+                0 => "Ruby ",
+                1 => "Font ",
+                2 => "Size ",
+                3 => "Color ",
+                _ => ""
+            }),
+            
+            _ => format!("{}:{}", tag.group, tag.number)
+        }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
+
+        match tag.group {
+            0x1 => match tag.number {
+                4 => {
+                    let condition = encoding_rs::UTF_8.decode(&tag.payload).0;
+                    format!("[ConditionSelection : {}]", condition)
+                }
+                12 => {
+                    let condition = encoding_rs::UTF_8.decode(&tag.payload).0;
+                    format!("[Condition : {}]", condition)
+                }
+                _=> default,
+            }
             _=> default,
         }
     },
