@@ -2,7 +2,7 @@ use std::{cmp::min, env::temp_dir, fs::File, io::{self, Read}, ops::Range, path:
 
 use thiserror::Error;
 
-use crate::{message::{MessageParser, MessageSingleLang, MessageText, MessageId, Tag, TextPart}, utils};
+use crate::{message::{MessageAttributes, MessageId, MessageParser, MessageSingleLang, MessageText, Tag, TextPart}, utils};
 
 #[derive(Error, Debug)]
 pub enum MSBTParseError {
@@ -120,8 +120,8 @@ impl TXT2Data {
 struct ATR1Data {
     attr_count : u32,
     attr_size : u32,
-    attribs : Vec<u8>,
-    strings : Vec<u8>
+    attribs : Vec<Vec<u8>>,
+    strings : Vec<Vec<u8>>
 }
 
 struct TSY1Data {
@@ -304,8 +304,24 @@ impl MSBTParser {
                 let attr_count = get_u32(section_data, 0);
                 let attr_size = get_u32(section_data, 0x4);
                 let total_size = attr_count as usize * attr_size as usize;
-                let attribs = Vec::from(&section_data[0x8..(0x8 + total_size)]);
-                let strings = Vec::from(&section_data[(0x08 + total_size)..]);
+                let attribs = if attr_size > 0 {
+                    Vec::from(&section_data[0x8..(0x8 + total_size)]).chunks_exact(attr_size as usize).map(|b| Vec::from(b)).collect()
+                } else {
+                    vec![vec![]; attr_count as usize]
+                };
+
+
+                let mut strings = Vec::new();
+                let mut curr_str = Vec::new();
+                for b in section_data[(0x08 + total_size)..].chunks_exact(2) {
+
+                    if b[0] != 0x00 || b[1] != 0x00 {
+                        curr_str.extend_from_slice(b);
+                    } else {
+                        strings.push(curr_str.clone());
+                        curr_str.clear();
+                    }
+                }
 
                 Ok(MSBTBlockData::ATR1(ATR1Data{
                     attr_count,attr_size, attribs, strings
@@ -327,10 +343,16 @@ impl MSBTParser {
 
             if let Some(MSBTBlockData::TXT2(txt2)) = self.get_block(MSBTData::TXT2) {
                 let text = txt2.get_msg(idx, self.get_encoding());
+
+                let attribs = if let Some(MSBTBlockData::ATR1(atr1)) = self.get_block(MSBTData::ATR1) {
+                    MessageAttributes{payload : atr1.attribs[idx].clone()}
+                } else {
+                    Default::default()
+                };
                 
                 MessageSingleLang {
                     id : MessageId::Label(label.clone()),
-                    attribs : Default::default(),
+                    attribs,
                     text,
                 }
             } else {
@@ -368,6 +390,8 @@ impl MSBTParser {
         println!("Blocks count: {}", header.blocks_cnt);
         println!("Encoding: {}", header.encoding);
 
+        let encoding = self.get_encoding();
+
 
         for section in self.get_blocks().iter().flatten() {
             println!("Section type: {}", section.block_type);
@@ -390,6 +414,10 @@ impl MSBTParser {
                 MSBTBlockData::ATR1(atr1_data) => {
                     println!("\tnumber of attribs {}", atr1_data.attr_count);
                     println!("\tattribs size {}", atr1_data.attr_size);
+
+                     for i in 0..5 {
+                        println!("\t string {i} : {}",encoding.decode(&atr1_data.strings[i]).0.to_string());
+                    }
                 },
                 MSBTBlockData::TSY1(_) => {
                     println!("\tEmpty TSY1 section");

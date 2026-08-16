@@ -72,6 +72,7 @@ fn get_tag_type_default_msbt(tag : &Tag, big_endian : bool, encoding : &'static 
                 let decoded_ruby = encoding.decode(&raw_bytes).0.to_string();
                 TagType::Style(StyleTagType::Ruby(over_count as u8, decoded_ruby))
             },
+            0x01 => TagType::Replace,
             0x02 => TagType::Style(StyleTagType::Size(get_u16(&tag.payload, 0))),
             0x03 => TagType::Style(StyleTagType::Color(get_u16(&tag.payload, 0))),
             _ => TagType::Replace,
@@ -249,13 +250,13 @@ pub const TWW: GameConfig = GameConfig {
 pub const TWWHD: GameConfig = GameConfig {
     name: "The Wind Waker HD",
     id: "twwhd",
-    logo : "https://zelda.nintendo.com/assets/img/timeline/the-wind-waker/logo.png",
+    logo : "https://www.nintendo.co.jp/wiiu/bczj/common/images/logo_zelda.png",
     big_endian : true,
     get_languages : || {
-        const LANGUAGES : [(&str, &str);1] = [
-            // ("jp", "Japanese"),
+        const LANGUAGES : [(&str, &str);3] = [
+            ("jp", "Japanese"),
             ("uk", "English"),
-            // ("fr", "French"),
+            ("fr", "French"),
             // ("sp", "Spanish"),
             // ("de", "German"),
             // ("it" "Italian")
@@ -402,14 +403,130 @@ pub const TWWHD: GameConfig = GameConfig {
             _ => format!("{}:{}", tag.group, tag.number)
         }, if !payload.is_empty() { format!("val={{{}}}", payload) } else { "".to_string()});
 
-        default
+        match tag.group {
+            0x0 => default,
+            0x1 => match tag.number {
+                7 | 8  => "\n",
+                9 | 10 => "   • ",
+                //11 => ToUpper ?
+                _ => "",
+            }.to_string(),
+            0x2 => match tag.number {
+                0..45 => match tag.number {
+                    0 => "[PlayerName]",
+                    1 => "[SeaBattleGameHighScoreShots]",
+                    2 => "[VaseCompensationRupees]",
+                    3 => "[AuctionGameName]",
+                    4 => "[AuctionGameItemName]",
+                    5 => "[AuctionGameBetRupees]",
+                    6 => "[AuctionGameFirstBetRupees]",
+                    7 => "[AuctionGameBidEntryRupees]",
+                    8 => "[SwordGameBlows]",
+                    9 => "[Password]",
+                    10 => "[SortedLetters]",
+                    11 => "[SortingPaymentRupees]",
+                    12 => "[LettersArrived]",
+                    13 => "[RemainingKoroks]",
+                    14 => "[ForestWaterTimer]",
+                    15 => "[BirdmanContestDistance]",
+                    16 => "[BirdmanHighScore]",
+                    17 => "[BeedleShopPoints]",
+                    18 => "[CurrentJoyPendants]",
+                    19 => "[JoyPendantsGiven]",
+                    20 => "[TownPigGameTimer]",
+                    21 => "[CoinGameTotalRupees]",
+                    22 => "[Bombs]",
+                    23 => "[Arrows]",
+                    24 => "[BestSortingRecord]",
+                    25 => "[MermanDirectHits]",
+                    26 => "[MermanGamePrizeRupees]",
+                    27 => "[BokobabaSeeds]",
+                    28 => "[SkullNecklaces]",
+                    29 => "[ChuJellies]",
+                    30 => "[JoyPendants]",
+                    31 => "[GoldenFeathers]",
+                    32 => "[KnightsCrests]",
+                    33 => "[BeedleTotalRupees]",
+                    34 => "[BokobabaSeedEntry]",
+                    35 => "[SkullNecklaceEntry]",
+                    36 => "[ChuJellyEntry]",
+                    37 => "[JoyPendantEntry]",
+                    38 => "[GoldenFeatherEntry]",
+                    39 => "[KnightsCrestEntry]",
+                    40 => "[Digit0]",
+                    41 => "[Digit1]",
+                    42 => "[Digit2]",
+                    43 => "[Digit3]",
+                    44 => "[Digit4]",
+                    _ => "",
+                }.to_string(),
+                _=> default,
+            },
+            0x3 => match tag.number {
+                0..42 => match tag.number { // Trick to not have to reapeat to_string everytime
+                    0 => "[A]",
+                    1 => "[B]",
+                    2 => "[C]",
+                    3 => "[L]",
+                    4 => "[R]",
+                    5 => "[X]",
+                    6 => "[Y]",
+                    7 => "[Z]",
+                    8 => "[LS]",
+                    9 => "[L-Arrow]",
+                    10 => "[R-Arrow]",
+                    11 => "[U-Arrow]",
+                    12 => "[D-Arrow]",
+                    13 => "[LS-Up]",
+                    14 => "[LS-Down]",
+                    15 => "[LS-Left]",
+                    16 => "[LS-Right]",
+                    17 => "[LS-UpDown]",
+                    18 => "[LS-LeftRight]",
+                    19 => "[A-Burst]",
+                    20 => "[TargetIcon]",
+                    21 => "[HeartIcon]",
+                    22 => "[MusicalNote]",
+                    23 => "[Plus]",
+                    24 => "[Minus]",
+                    25 => "[ZL]",
+                    26 => "[ZR]",
+                    27 => "[RS]",
+                    28 => "[RS-Up]",
+                    29 => "[RS-Down]",
+                    30 => "[RS-Left]",
+                    31 => "[RS-Right]",
+                    32 => "[RS-UpDown]",
+                    33 => "[RS-LeftRight]",
+                    34 => "[Juuji]",
+                    35 => "[JuujiUp]",
+                    36 => "[JuujiDown]",
+                    37 => "[JuujiLeft]",
+                    38 => "[juujiRight]",
+                    39 => "[PageTri]",
+                    40 => "[sail1]",
+                    41 => "[sail2]",
+                    _ => "",
+                }.to_string(),
+                _ => default,
+            },
+
+            0x4 => default, //SFX
+            0x5 => default, //Camera
+            0x6 => default, //Action
+            _=> default,
+        }
     },
 
     get_message_style : |attribs: &MessageAttributes| {
-        let centered = false;
+        let centered = attribs.payload[0x01] == 10;
         let color = String::new();
         let bg_color = String::new();
-        let style_id = String::new();
+
+        let style_id = match attribs.payload[0x01] {
+            10 => format!("display-{}", attribs.payload[0x01]),
+            _  => String::new()
+        };
 
         StyleInfo { centered, color, bg_color, alt_font : false, style_id }
     }
