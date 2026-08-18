@@ -406,7 +406,6 @@ impl BMGRawParser {
 
         let get_u32 = if big_endian { utils::get_u32_be } else {utils::get_u32_le};
 
-        println!("Number of sections : {}", header.sections_cnt);
         for i in 0..header.sections_cnt {
             if offset + 4 < data.len()
             {

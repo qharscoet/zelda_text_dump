@@ -293,15 +293,20 @@ struct MessageBank {
     msgs_idxs : HashMap<MessageId, usize>,
 }
 
-#[derive(Default, Debug)]
+
 struct BMGParser {
     banks : Vec<MessageBank>,
     bank_idxs : HashMap<String, usize>,
     encoding : Option<&'static encoding_rs::Encoding>,
+    config : GameConfig
 }
 
 impl BMGParser {
     
+    fn new(config: &GameConfig) -> Self {
+        BMGParser { banks: Vec::new(), bank_idxs: HashMap::new(), encoding: None, config : config.clone() }
+    }
+
     #[allow(dead_code)]
     fn print(self) {
         for (bank_id,msg_bank) in self.banks.iter().enumerate() {
@@ -313,7 +318,7 @@ impl BMGParser {
 }
 
 trait Exporter {
-    fn new(filepath: &Path) -> Self;
+    //fn new(filepath: &Path) -> Self;
     fn set_config(&mut self, config:&GameConfig);
     fn begin(&mut self);
     fn set_headers(&mut self);
@@ -326,7 +331,7 @@ struct HTMLExporter {
     config : Option<GameConfig>
 }
 
-impl Exporter for HTMLExporter  {
+impl HTMLExporter {
     fn new(filepath: &Path) -> Self {
         if let Ok(f) = File::create(filepath) {
             HTMLExporter { file: Some(f), config :None }
@@ -335,6 +340,9 @@ impl Exporter for HTMLExporter  {
             HTMLExporter {file: None, config : None}
         }
     }
+}
+
+impl Exporter for HTMLExporter  {
 
     fn set_config(&mut self, config : &GameConfig) {
         self.config = Some(config.clone());
@@ -564,8 +572,7 @@ struct CSVExporter {
     config : Option<GameConfig>
 }
 
-
-impl Exporter for CSVExporter {
+impl CSVExporter {
     fn new(filepath: &Path) -> Self {
         if let Ok(f) = File::create(filepath) {
             CSVExporter { file: Some(f), config : None }
@@ -574,6 +581,9 @@ impl Exporter for CSVExporter {
             CSVExporter {file: None, config: None}
         }
     }
+}
+
+impl Exporter for CSVExporter {
 
     fn set_config(&mut self, config : &GameConfig) {
         self.config = Some(config.clone());
@@ -624,11 +634,14 @@ struct XLSXExporter {
     config : Option<GameConfig>
 }
 
-impl Exporter for XLSXExporter {
+impl XLSXExporter {
     fn new(filepath: &Path) -> Self {
         println!("Creating XLSX file : {}", filepath.display());
         XLSXExporter { filepath: filepath.display().to_string(), workbook: rust_xlsxwriter::Workbook::new(), current_row : 0, config:None }
     }
+}
+
+impl Exporter for XLSXExporter {
 
     fn set_config(&mut self, config : &GameConfig) {
         self.config = Some(config.clone());
@@ -753,10 +766,19 @@ impl BMGParser {
         }  
     }
 
-    fn export_html(&self, filepath: &Path, ignore_tags : bool, config : &GameConfig) {
-        
-        let mut exporter = HTMLExporter::new(filepath);
-        exporter.set_config(config);
+    fn export(&self, filename: &Path, ignore_tags : bool) {
+
+        let mut exporter : Box<dyn Exporter> = match filename.extension().and_then(|s| s.to_str())  {
+            Some("html") => Box::new(HTMLExporter::new(filename)),
+            Some("csv") => Box::new(CSVExporter::new(filename)),
+            Some("xlsx") => Box::new(XLSXExporter::new(filename)),
+            _ => {
+                println!("Unknown export format");
+                return;
+            }
+        };
+
+        exporter.set_config(&self.config);
         exporter.begin();
         exporter.set_headers();
 
@@ -766,36 +788,7 @@ impl BMGParser {
             }
         }
         exporter.end();
-    }
 
-    fn export_csv(&self, filepath: &Path, config : &GameConfig) {
-        
-        let mut exporter = CSVExporter::new(filepath);
-        exporter.set_config(config);
-        exporter.begin();
-        exporter.set_headers();
-
-        for bank in &self.banks {
-            for msg in bank.msgs.iter().filter(|msg| !msg.is_empty()) {
-                exporter.add_row(msg, true, Some(&self));
-            }
-        }
-        exporter.end();
-    }
-
-
-    fn export_xlsx(&self, filepath: &Path, ignore_tags : bool, config : &GameConfig) {
-        let mut exporter = XLSXExporter::new(filepath);
-        exporter.set_config(config);
-        exporter.begin();
-        exporter.set_headers();
-
-        for bank in &self.banks {
-            for msg in bank.msgs.iter().filter(|msg| !msg.is_empty()) {
-                exporter.add_row(msg, ignore_tags, Some(&self));
-            }
-        }
-        exporter.end();
     }
 }
 
@@ -821,19 +814,23 @@ fn process_file(filename : &Path, lang_id : usize, bank_id : usize, parser : &mu
     Ok(())
 }
 
-fn process_config(parser : &mut BMGParser, config : &GameConfig)
-{
-    for (lang_idx, lang) in (config.get_languages)().iter().enumerate() {
 
-        let str_path = &format!("./res/{}/{}", config.id, lang.1);
-        let folder_path = Path::new(&str_path);
+impl BMGParser {
 
-        for (bank_id,&basename) in (config.get_filenames)().iter().enumerate() {
-            let path = folder_path.join(&basename);
-            match process_file(&path, lang_idx, bank_id, parser, config.big_endian)
-            {
-                Ok(_) => {},
-                Err(e) => println!("Error opening  {} : {}", path.display(), e)
+    fn process(&mut self)
+    {
+        for (lang_idx, lang) in (self.config.get_languages)().iter().enumerate() {
+    
+            let str_path = &format!("./res/{}/{}", self.config.id, lang.1);
+            let folder_path = Path::new(&str_path);
+    
+            for (bank_id,&basename) in (self.config.get_filenames)().iter().enumerate() {
+                let path = folder_path.join(&basename);
+                match process_file(&path, lang_idx, bank_id, self, self.config.big_endian)
+                {
+                    Ok(_) => {},
+                    Err(e) => println!("Error opening  {} : {}", path.display(), e)
+                }
             }
         }
     }
@@ -863,17 +860,17 @@ fn generate_index(filepath : &Path) {
 
 fn main() {
 
-    generate_index(Path::new("./www/index.html"));
+    let basepath = Path::new("./www");
 
+    generate_index(&basepath.join("index.html"));
     //for config in &[game_configs::TWWHD] {
     for config in game_configs::ALL_CONFIGS {
-        
         let id = config.id;
-        let mut parser : BMGParser = Default::default();
-        process_config(&mut parser, &config);
-        parser.export_html(Path::new(&format!("./www/{id}.html")), false, &config);
-        parser.export_csv(Path::new(&format!("./www/download/{id}.csv")), &config);
-        parser.export_xlsx(Path::new(&format!("./www/download/{id}.xlsx")), false, &config);
+        let mut parser : BMGParser = BMGParser::new(config);
+        parser.process();
+        parser.export(&basepath.join(&format!("{id}.html")), false);
+        parser.export(&basepath.join(&format!("download/{id}.csv")), true);
+        parser.export(&basepath.join(&format!("download/{id}.xlsx")), false);
     }
 
 
