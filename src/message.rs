@@ -4,7 +4,7 @@ use itertools::Itertools;
 
 use crate::{game_configs::GameConfig, utils::get_u16_be};
 
-#[derive(Debug, Default, Clone)]
+#[derive(Default, Clone)]
 pub struct MessageAttributes {
     pub payload : Vec<u8>,
 }
@@ -29,6 +29,13 @@ impl MessageAttributes {
 }
 
 impl fmt::Display for MessageAttributes {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let payload = self.payload.iter().map(|b| format!("{:02X}", b)).join("");
+        write!(f,"{}", payload)
+    }
+}
+
+impl fmt::Debug for MessageAttributes {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f,"{:X?}", self.payload)
     }

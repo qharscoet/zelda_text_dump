@@ -118,19 +118,6 @@ impl Message {
                                             current_size = new_size;
                                         },
                                         StyleTagType::Ruby(over_count, decoded_ruby) => {
-                                            // let over_count = tag.payload[0];
-                                            // let last_is_zero = tag.payload[tag.payload.len() -1] == 0x00;
-                                            // let slice_end = tag.payload.len() - (last_is_zero as usize);
-                                            // let raw_bytes = &tag.payload[1..slice_end];
-
-                                            // let encoding = config.map(|c| 
-                                            //     match c.id  {
-                                            //        "ph" | "st" => encoding_rs::UTF_16LE,
-                                            //        _ => encoding_rs::SHIFT_JIS, 
-                                            //     }).unwrap_or(encoding_rs::SHIFT_JIS);
-
-
-
                                             // let decoded_ruby = encoding.decode(&raw_bytes).0;
                                             needs_ruby = Some((over_count, decoded_ruby));
                                         },
@@ -275,11 +262,11 @@ impl Message {
                                 t.get_simple_replacement(config).to_string()
                             }
                         }
+                        TagType::Style(_) => String::new(),
                         _ => t.get_simple_replacement(config).to_string()
                     }
                 }
             }).join("")
-            // message::get_raw_msg(&self.text[lang_id], config)
         } else {
             String::new()
         }
@@ -727,6 +714,71 @@ impl Exporter for XLSXExporter {
 }
 
 
+struct JSONExporter {
+    file: Option<File>,
+    config : Option<GameConfig>
+}
+
+impl JSONExporter {
+    fn new(filepath: &Path) -> Self {
+        if let Ok(f) = File::create(filepath) {
+            JSONExporter { file: Some(f), config : None }
+        } else {
+            println!("Can't open {}", filepath.display());
+            JSONExporter {file: None, config: None}
+        }
+    }
+}
+
+impl Exporter for JSONExporter {
+
+    fn set_config(&mut self, config : &GameConfig) {
+        self.config = Some(config.clone());
+    }
+
+    fn begin(&mut self) {
+       
+    }
+
+    fn set_headers(&mut self) {
+    }
+
+    fn add_row(&mut self , msg : &Message, _ : bool, parent : Option<&BMGParser>) {
+        if let Some(f) = &mut self.file {
+            let mut s =  String::new();
+
+            s += "{\n";
+
+            if matches!(msg.id, MessageId::Label(_)) {
+                s += &format!("\t\"label\" : \"{}\", \n", msg.id);
+            }
+
+            s += &format!("\t\"attributes\" : \"{}\", \n", msg.attribs);
+
+            s += "\t\"text\" : {\n";
+    
+            let languages = if let Some(config) = &self.config { (config.get_languages)()} else {&[]};
+            for (idx, (_, name)) in languages.iter().enumerate() {
+                let msg_string = msg.get_raw(idx, self.config.as_ref(), parent);
+                
+                s += &format!("\t\t\"{}\" : \"{}\",\n", name, msg_string.replace("\n", "\\n").replace("\"", "\\\"") );
+            }
+            
+            s+= "\t},\n";
+
+            s += "\n},";
+
+            s += "\n";
+    
+            let _ = f.write(s.as_bytes());
+        }
+    }
+
+    fn end(&mut self) {
+        
+    }
+}
+
 impl BMGParser {
     fn add_message(&mut self, msg: &MessageSingleLang, lang_idx : usize, bank_id : usize) {
 
@@ -772,6 +824,7 @@ impl BMGParser {
             Some("html") => Box::new(HTMLExporter::new(filename)),
             Some("csv") => Box::new(CSVExporter::new(filename)),
             Some("xlsx") => Box::new(XLSXExporter::new(filename)),
+            Some("json") => Box::new(JSONExporter::new(filename)),
             _ => {
                 println!("Unknown export format");
                 return;
@@ -871,6 +924,7 @@ fn main() {
         parser.export(&basepath.join(&format!("{id}.html")), false);
         parser.export(&basepath.join(&format!("download/{id}.csv")), true);
         parser.export(&basepath.join(&format!("download/{id}.xlsx")), false);
+        parser.export(&basepath.join(&format!("download/{id}.json")), false);
     }
 
 
