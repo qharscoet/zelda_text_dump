@@ -565,7 +565,7 @@ impl CSVExporter {
             CSVExporter { file: Some(f), config : None }
         } else {
             println!("Can't open {}", filepath.display());
-            CSVExporter {file: None, config: None}
+            CSVExporter {file: None, config : None }
         }
     }
 }
@@ -716,16 +716,17 @@ impl Exporter for XLSXExporter {
 
 struct JSONExporter {
     file: Option<File>,
-    config : Option<GameConfig>
+    config : Option<GameConfig>,
+    is_first : bool,
 }
 
 impl JSONExporter {
     fn new(filepath: &Path) -> Self {
         if let Ok(f) = File::create(filepath) {
-            JSONExporter { file: Some(f), config : None }
+            JSONExporter { file: Some(f), config : None, is_first : true }
         } else {
             println!("Can't open {}", filepath.display());
-            JSONExporter {file: None, config: None}
+            JSONExporter {file: None, config: None, is_first : true }
         }
     }
 }
@@ -737,7 +738,14 @@ impl Exporter for JSONExporter {
     }
 
     fn begin(&mut self) {
-       
+        if let Some(f) = &mut self.file {
+            let mut s =  String::new();
+
+            s += "[\n";
+
+
+            let _ = f.write(s.as_bytes());
+        }
     }
 
     fn set_headers(&mut self) {
@@ -746,6 +754,12 @@ impl Exporter for JSONExporter {
     fn add_row(&mut self , msg : &Message, _ : bool, parent : Option<&BMGParser>) {
         if let Some(f) = &mut self.file {
             let mut s =  String::new();
+
+            if !self.is_first {
+                s += ",\n";
+            } else {
+                self.is_first = false;
+            }
 
             s += "{\n";
 
@@ -761,21 +775,31 @@ impl Exporter for JSONExporter {
             for (idx, (_, name)) in languages.iter().enumerate() {
                 let msg_string = msg.get_raw(idx, self.config.as_ref(), parent);
                 
-                s += &format!("\t\t\"{}\" : \"{}\",\n", name, msg_string.replace("\n", "\\n").replace("\"", "\\\"") );
+                // No trailing comma, fuck json
+                if idx < languages.len() - 1 {
+                    s += &format!("\t\t\"{}\" : \"{}\",\n", name, msg_string.replace("\n", "\\n").replace("\"", "\\\"") );
+                } else {
+                    s += &format!("\t\t\"{}\" : \"{}\"\n", name, msg_string.replace("\n", "\\n").replace("\"", "\\\"") );
+                }
             }
             
-            s+= "\t},\n";
+            s+= "\t}\n"; // text
 
-            s += "\n},";
-
-            s += "\n";
+            s += "\n}"; // object
     
             let _ = f.write(s.as_bytes());
         }
     }
 
     fn end(&mut self) {
-        
+        if let Some(f) = &mut self.file {
+            let mut s =  String::new();
+
+            s += "\n]\n";
+
+
+            let _ = f.write(s.as_bytes());
+        }
     }
 }
 
